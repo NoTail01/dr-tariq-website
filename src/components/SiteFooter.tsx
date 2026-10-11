@@ -1,13 +1,25 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 
+import BrandLogo from "@/components/BrandLogo";
+
 type Props = {
   brandName: string;
+  /** Professional title shown next to the emblem (already localized). */
+  brandTitle: string;
+  /** Transparent emblem for the dark footer background. */
+  logoSrcDark: string;
+  logoAlt: string;
   linksTitle: string;
   links: { href: string; label: string }[];
   developedNote: string;
   contactTitle: string;
-  contactText: string;
+  /** Localized address line (or null). */
+  address: string | null;
+  /** Localized phone line (or null). */
+  phoneLine: string | null;
+  /** Localized WhatsApp pending note (or null when unknown). */
+  whatsappNote: string | null;
   disclaimerTitle: string;
   disclaimer: string;
   rights: string;
@@ -17,22 +29,35 @@ type Props = {
 
 export default function SiteFooter({
   brandName,
+  brandTitle,
+  logoSrcDark,
+  logoAlt,
   linksTitle,
   links,
   developedNote,
   contactTitle,
-  contactText,
+  address,
+  phoneLine,
+  whatsappNote,
   disclaimerTitle,
   disclaimer,
   rights,
   year,
 }: Props) {
   return (
-    <footer className="mt-auto border-t border-brand-100 bg-navy-900 text-brand-100">
+    <footer className="mt-auto border-t border-brand-500/30 bg-navy-900 text-brand-100">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-3">
         <div>
-          <p className="text-lg font-bold break-words-safe text-white">{brandName}</p>
-          <p className="mt-3 text-sm leading-relaxed text-brand-100/80">{developedNote}</p>
+          <BrandLogo
+            name={brandName}
+            title={brandTitle}
+            emblemSrc={logoSrcDark}
+            emblemAlt={logoAlt}
+            tone="light"
+          />
+          <p className="mt-4 text-sm leading-relaxed text-brand-100/80 break-words-safe">
+            {developedNote}
+          </p>
         </div>
 
         <nav aria-label={linksTitle}>
@@ -53,7 +78,17 @@ export default function SiteFooter({
 
         <div>
           <p className="text-sm font-bold tracking-wide text-white uppercase">{contactTitle}</p>
-          <p className="mt-4 text-sm text-brand-100/80">{contactText}</p>
+          <p className="mt-4 text-sm text-brand-100/80 break-words-safe">
+            {address ?? developedNote}
+          </p>
+          {phoneLine ? (
+            <p className="mt-3 text-sm font-semibold text-white break-words-safe" dir="ltr">
+              {phoneLine}
+            </p>
+          ) : null}
+          {whatsappNote ? (
+            <p className="mt-2 text-xs text-amber-300/90 break-words-safe">{whatsappNote}</p>
+          ) : null}
 
           <div className="mt-6 rounded-xl border border-amber-400/40 bg-navy-800 p-4">
             <p className="text-xs font-bold tracking-wide text-amber-300 uppercase">

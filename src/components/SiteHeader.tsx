@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useId, useState } from "react";
 
+import BrandLogo from "@/components/BrandLogo";
 import { localizePath, switchLocalePath, type Locale } from "@/i18n/config";
 
 type NavLabels = {
@@ -20,6 +21,10 @@ type Props = {
   locale: Locale;
   labels: NavLabels;
   brandName: string;
+  /** Logo emblem asset for light backgrounds. */
+  logoSrc: string;
+  /** Alt text for the emblem (already localized). */
+  logoAlt: string;
   bookCta: string;
   switchLanguage: string;
   switchLanguageLabel: string;
@@ -37,6 +42,8 @@ function SiteHeaderInner({
   locale,
   labels,
   brandName,
+  logoSrc,
+  logoAlt,
   bookCta,
   switchLanguage,
   switchLanguageLabel,
@@ -65,15 +72,12 @@ function SiteHeaderInner({
           href={localizePath(locale, "/")}
           className="flex items-center gap-2 font-bold text-navy-900 break-words-safe"
         >
-          <span
-            aria-hidden="true"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-navy-900 text-sm font-bold text-white"
-          >
-            DT
-          </span>
-          <span className="max-w-[46vw] text-sm leading-tight sm:max-w-none sm:text-base">
-            {brandName}
-          </span>
+          <BrandLogo
+            name={brandName}
+            emblemSrc={logoSrc}
+            emblemAlt={logoAlt}
+            compact
+          />
         </Link>
 
         <nav aria-label={labels.skipToContent} className="hidden lg:block">

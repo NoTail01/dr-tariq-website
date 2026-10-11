@@ -7,11 +7,30 @@ export const en = {
   meta: {
     siteName: "Dr Tariq Abu Hweij",
     titleTemplate: "%s | Dr Tariq Abu Hweij",
-    defaultTitle: "Dr Tariq Abu Hweij — Doctor's website",
+    defaultTitle: "Dr Tariq Abu Hweij | Internal Medicine & Nephrology in Amman",
     defaultDescription:
-      "Official website of Dr Tariq Abu Hweij: doctor introduction, articles, and appointment requests.",
-    specialtyPlaceholder: "Specialty details are being verified",
-    devPlaceholder: "Development placeholder",
+      "Official website of Dr Tariq Abu Hweij, consultant in internal medicine, nephrology, kidney transplantation and hypertension in Amman. Verified qualifications, specialties, and booking.",
+    seo: {
+      home: {
+        title: "Dr Tariq Abu Hweij | Internal Medicine & Nephrology in Amman",
+        description:
+          "Official website of Dr Tariq Abu Hweij, consultant in internal medicine, nephrology, kidney transplantation and hypertension in Amman. Verified qualifications, specialties, and booking.",
+      },
+      about: {
+        title: "About Dr Tariq Abu Hweij — Qualifications & Specialties | Amman Clinic",
+        description:
+          "Biography and verified qualifications of Dr Tariq Abu Hweij: Jordanian Board in Internal Medicine, Jordanian Board in Nephrology, and German Board. Consultant in internal medicine and nephrology in Amman.",
+      },
+      blog: {
+        title: "Blog — Dr Tariq Abu Hweij",
+        description: "Articles on kidney and internal medicine by Dr Tariq Abu Hweij, in Arabic and English.",
+      },
+      book: {
+        title: "Book an Appointment — Dr Tariq Abu Hweij's Clinic in Amman",
+        description:
+          "Call the clinic to book an appointment with Dr Tariq Abu Hweij in Amman. Mobile and landline numbers, clinic location and map.",
+      },
+    },
   },
   nav: {
     home: "Home",
@@ -42,62 +61,83 @@ export const en = {
     goHome: "Go to the home page",
     verified: "Verified",
     unverified: "Not verified yet",
+    portraitAlt: "Dr Tariq Abu Hweij",
   },
   home: {
-    heroKicker: "Doctor's website",
+    heroKicker: "Consultant in Internal Medicine & Nephrology",
     heroTitle: "Dr Tariq Abu Hweij",
+    heroTitleNote:
+      "Consultant in Internal Medicine, Nephrology, Kidney Transplantation and Hypertension",
     heroLead:
-      "Learn about Dr Tariq Abu Hweij, read published articles, and send an appointment request — all in Arabic and English.",
-    heroPrimary: "Book an appointment",
+      "The clinic of Dr Tariq Abu Hweij, consultant in internal medicine and nephrology in Amman — behind the Specialty Hospital, Al-Riyad Medical Complex, first floor.",
+    heroPrimary: "Book an Appointment",
     heroSecondary: "About the doctor",
-    heroDevNote:
-      "Professional photo, specialty, and clinic details are not yet verified. They appear as marked development placeholders.",
     aboutTitle: "About the doctor",
     aboutText:
-      "A short biography, verified qualifications, and specialties will be published here as soon as they are confirmed by source documents.",
+      "Dr Tariq Abu Hweij holds the Jordanian Board in Internal Medicine and the Jordanian Board in Nephrology, as well as the German Board. Read the full profile for qualifications, memberships and specialties.",
     aboutLink: "Read the full profile",
-    servicesTitle: "Specialties & services",
-    servicesDevNote:
-      "The list of specialties and services has not been confirmed yet, so no service is published as final.",
+    qualificationsTitle: "Qualifications",
+    qualificationsIntro: "Board certifications verified on the hospital doctor profile page.",
+    membershipsTitle: "Memberships",
+    membershipsIntro: "Memberships are published exactly as stated by each source.",
+    servicesTitle: "Specialties",
+    servicesIntro:
+      "Informational overview of the doctor's listed specialty areas. Kidney transplantation is a field of expertise; surgical procedures are not performed at this clinic.",
     services: [
-      { title: "Specialty to be confirmed", text: "Awaiting verified source information." },
-      { title: "Services to be confirmed", text: "Awaiting verified source information." },
-      { title: "Clinic details to be confirmed", text: "Awaiting verified source information." },
+      {
+        title: "Internal medicine",
+        text: "Diagnosis and follow-up of internal medicine conditions in adults.",
+      },
+      {
+        title: "Nephrology",
+        text: "Diagnosis and follow-up of kidney conditions.",
+      },
+      {
+        title: "Kidney transplantation",
+        text: "A listed field of expertise — transplantation consultations are not surgical procedures at this clinic.",
+      },
+      {
+        title: "Hypertension",
+        text: "Diagnosis and follow-up of high blood pressure.",
+      },
     ],
     articlesTitle: "Latest articles",
     articlesText: "Newest published articles from the blog.",
     articlesEmpty: "No articles have been published yet.",
     contactTitle: "Clinic & contact",
-    contactText:
-      "Phone numbers, address, and working hours are published only after they are verified with the clinic.",
-    contactPlaceholder: "Contact details pending verification",
-    mapPlaceholder: "Map will appear once a verified address is available",
+    contactText: "Call the clinic to book an appointment or ask about consultation times.",
+    contactPlaceholder: "Contact details will be published here.",
+    locationTitle: "Dr Tariq Abu Hweij's Clinic Location in Amman",
+    locationText:
+      "Find Dr Tariq Abu Hweij's clinic in Amman: view the map or call the clinic to ask about appointments. The clinic is behind the Specialty Hospital, Al-Riyad Medical Complex, first floor.",
+    openInMaps: "Open in Google Maps",
+    mapTitle: "Map of Dr Tariq Abu Hweij's clinic in Amman",
     finalCtaTitle: "Ready to book?",
-    finalCtaText: "Send an appointment request or check the available contact channels.",
+    finalCtaText: "Call the clinic to book an appointment with Dr Tariq Abu Hweij in Amman.",
   },
   about: {
     title: "About the Doctor",
     description: "Biography, verified qualifications, and specialties of Dr Tariq Abu Hweij.",
     bioTitle: "Biography",
-    bioDevNote:
-      "Biography text is a development placeholder. Replace it only with confirmed biographical information.",
-    bioPlaceholder:
-      "The verified biography will be published here. No education, experience, or affiliation claims are shown until they are confirmed by a source.",
-    portraitAlt: "Portrait placeholder of Dr Tariq Abu Hweij",
-    portraitNote: "Authentic portrait pending — this frame is a marked development placeholder.",
+    portraitNote: "Dr Tariq Abu Hweij — consultant in internal medicine and nephrology.",
     qualificationsTitle: "Qualifications",
-    qualificationsDevNote: "No verified qualification documents are available yet.",
-    qualifications: [
-      "University degree — awaiting verified document",
-      "Board or specialist certification — awaiting verified document",
-      "Professional registration — awaiting verified document",
+    qualificationsIntro:
+      "Certifications as listed on the Specialty Hospital doctor profile page.",
+    qualificationsNote:
+      "The German Board is listed on the hospital page without naming its exact specialty or issuing organization; none is added here.",
+    membershipsTitle: "Memberships",
+    membershipsNotes: [
+      "Member of the German Association for Internal Medicine and Cardiology — as stated on the supplied clinic branding.",
+      "Member of the German Medical Association and the Jordanian Medical Association — as listed on the Specialty Hospital doctor profile page.",
     ],
-    specialtiesTitle: "Specialties & services",
-    specialtiesDevNote: "Specialties are not verified yet and are not published as final.",
-    specialties: ["Specialty to be confirmed"],
+    specialtiesTitle: "Specialty areas",
+    specialtiesIntro:
+      "Informational sections based on the professional title printed on the clinic's supplied branding.",
+    languagesTitle: "Languages",
+    languagesIntro: "Languages listed on the hospital doctor profile page.",
     sourcesTitle: "Source of published information",
     sourcesText:
-      "Every published fact about the doctor must be traceable to a source. See the SOURCES.md file in the project repository.",
+      "Every published fact about the doctor is traceable to a source: the Specialty Hospital doctor profile page and the clinic's supplied brand image. See SOURCES.md in the project repository.",
   },
   blog: {
     title: "Blog",
@@ -120,22 +160,26 @@ export const en = {
     title: "Book Now",
     description: "Request an appointment with Dr Tariq Abu Hweij.",
     intro:
-      "Choose one of the options below. Contact channels are activated only after the clinic confirms them.",
+      "Appointments are arranged by calling the clinic directly. The numbers below are the clinic's published contact lines.",
     optionsTitle: "Contact options",
-    callTitle: "By phone",
-    callText: "A verified phone number will appear here.",
-    callAction: "Call the clinic",
+    mobileTitle: "Mobile",
+    mobileText: "Mobile number as published on the clinic's branding.",
+    landlineTitle: "Clinic landline",
+    landlineText: "Clinic landline as published on the clinic's branding.",
+    callAction: "Call",
     whatsappTitle: "WhatsApp",
-    whatsappText: "A verified WhatsApp number will appear here.",
+    whatsappText:
+      "WhatsApp has not been confirmed for the clinic's mobile number yet, so this channel stays inactive. The prepared link is wa.me/962799101101 and will be activated after confirmation.",
+    whatsappPending: "WhatsApp not confirmed yet — channel inactive",
     whatsappAction: "Open WhatsApp",
     emailTitle: "By email",
-    emailText: "A verified email address will appear here.",
+    emailText: "No public email address has been supplied yet.",
     emailAction: "Send an email",
     requestTitle: "Appointment request",
     requestText: "Send a request with your preferred time. We only need minimal contact details.",
     disabledNotice: "This channel is inactive until verified details are provided.",
     formNotice:
-      "Local demo: this form does not send anything anywhere. No data leaves your computer.",
+      "Local demo: this form does not send anything anywhere. No data leaves your computer. The only working booking channel today is a phone call to the clinic.",
     privacyNotice:
       "Please do not include medical history or any sensitive health information in this form.",
     fields: {
@@ -178,10 +222,10 @@ export const en = {
   },
   footer: {
     rights: "All rights reserved.",
-    developedNote: "Website under development — content is verified before publication.",
+    developedNote: "Internal medicine and nephrology clinic — Amman.",
     quickLinks: "Quick links",
     contact: "Contact",
-    noContactYet: "Verified contact details coming soon.",
+    noContactYet: "Contact details will be published here.",
     disclaimerTitle: "Medical disclaimer",
     disclaimer:
       "The content on this website is for general information only and does not replace a personal medical consultation.",

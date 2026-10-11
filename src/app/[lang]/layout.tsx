@@ -13,6 +13,7 @@ import { isLocale, localeInfo, locales, localizePath, type Locale } from "@/i18n
 import { getAnalyticsConfig } from "@/lib/analytics";
 import { plexArabic } from "@/lib/font";
 import { readSettings } from "@/lib/settings";
+import { SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -30,6 +31,7 @@ export async function generateMetadata({
   const config = getAnalyticsConfig();
 
   return {
+    metadataBase: new URL(SITE_URL),
     title: {
       default: dict.meta.defaultTitle,
       template: dict.meta.titleTemplate,
@@ -42,7 +44,7 @@ export async function generateMetadata({
 }
 
 export const viewport: Viewport = {
-  themeColor: "#08213f",
+  themeColor: "#0097f3",
   width: "device-width",
   initialScale: 1,
 };
@@ -84,8 +86,18 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
     { href: localizePath(locale, "/book"), label: dict.nav.book },
   ];
 
+  // Phone line shown in the footer: both published clinic lines.
+  const phoneLine = [settings.contact.phone, settings.contact.landline]
+    .filter((value): value is string => Boolean(value))
+    .join("  ·  ");
+
   return (
-    <html lang={info.htmlLang} dir={info.dir} className={`${plexArabic.variable} antialiased`}>
+    <html
+      lang={info.htmlLang}
+      dir={info.dir}
+      data-scroll-behavior="smooth"
+      className={`${plexArabic.variable} antialiased`}
+    >
       <body className="flex min-h-screen flex-col">
         <a
           href="#main-content"
@@ -98,6 +110,8 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
           locale={locale}
           labels={navLabels}
           brandName={settings.siteName[locale]}
+          logoSrc={settings.branding.logoUrl ?? "/images/logo-emblem.png"}
+          logoAlt={dict.common.portraitAlt}
           bookCta={dict.common.bookingCta}
           switchLanguage={dict.nav.switchLanguage}
           switchLanguageLabel={dict.nav.switchLanguageLabel}
@@ -109,11 +123,16 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
 
         <SiteFooter
           brandName={settings.siteName[locale]}
+          brandTitle={settings.tagline[locale]}
+          logoSrcDark={settings.branding.logoUrlDark ?? "/images/logo-emblem-transparent.png"}
+          logoAlt={dict.common.portraitAlt}
           linksTitle={dict.footer.quickLinks}
           links={quickLinks}
           developedNote={settings.footerNote[locale] || dict.footer.developedNote}
           contactTitle={dict.footer.contact}
-          contactText={settings.contact.address?.[locale] ?? dict.footer.noContactYet}
+          address={settings.contact.address?.[locale] ?? null}
+          phoneLine={phoneLine || null}
+          whatsappNote={settings.contact.whatsappEnabled ? null : dict.book.whatsappPending}
           disclaimerTitle={dict.footer.disclaimerTitle}
           disclaimer={dict.footer.disclaimer}
           rights={dict.footer.rights}

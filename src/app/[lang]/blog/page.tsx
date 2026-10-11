@@ -31,8 +31,8 @@ export async function generateMetadata({
   return pageMetadata({
     locale: lang,
     path: "/blog",
-    title: dict.blog.title,
-    description: dict.blog.description,
+    title: dict.meta.seo.blog.title,
+    description: dict.meta.seo.blog.description,
   });
 }
 

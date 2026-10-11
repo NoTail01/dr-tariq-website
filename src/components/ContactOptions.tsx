@@ -1,24 +1,33 @@
-import type { Localized } from "@/lib/article-types";
+import { phoneLink } from "@/lib/settings";
+
+export type ContactInfo = {
+  phone: string | null;
+  phoneIntl: string | null;
+  landline: string | null;
+  landlineIntl: string | null;
+  whatsapp: string | null;
+  whatsappEnabled: boolean;
+  email: string | null;
+  address: { ar: string; en: string } | null;
+  workingHours: { ar: string; en: string } | null;
+  mapsEmbedUrl: string | null;
+  mapsPlaceUrl: string | null;
+};
 
 type Labels = {
-  callTitle: string;
-  callText: string;
+  mobileTitle: string;
+  mobileText: string;
+  landlineTitle: string;
+  landlineText: string;
   callAction: string;
   whatsappTitle: string;
   whatsappText: string;
+  whatsappPending: string;
   whatsappAction: string;
   emailTitle: string;
   emailText: string;
   emailAction: string;
   disabledNotice: string;
-};
-
-type Contact = {
-  phone: string | null;
-  whatsapp: string | null;
-  email: string | null;
-  address: Localized | null;
-  workingHours: Localized | null;
 };
 
 const iconClass = "h-6 w-6 text-brand-600";
@@ -65,17 +74,23 @@ function ChannelIcon({ kind }: { kind: "phone" | "whatsapp" | "mail" }) {
 function Card({
   title,
   text,
+  sub,
   actionLabel,
   href,
   kind,
   disabledLabel,
+  pendingLabel,
 }: {
   title: string;
+  /** Description or number line shown in the card. */
   text: string;
+  /** Optional second line (e.g. the number under a description). */
+  sub?: string;
   actionLabel?: string;
   href?: string;
   kind: "phone" | "whatsapp" | "mail";
   disabledLabel: string;
+  pendingLabel?: string;
 }) {
   const active = Boolean(href);
 
@@ -98,7 +113,16 @@ function Card({
         <h3 className="text-lg font-bold text-navy-900 break-words-safe">{title}</h3>
       </div>
 
-      <p className="mt-4 flex-1 text-sm leading-relaxed text-ink-500 break-words-safe">{text}</p>
+      {sub ? (
+        <>
+          <p className="mt-4 flex-1 text-sm leading-relaxed text-ink-500 break-words-safe">{text}</p>
+          <p className="mt-2 text-base font-bold text-navy-900 break-words-safe" dir="ltr">
+            {sub}
+          </p>
+        </>
+      ) : (
+        <p className="mt-4 flex-1 text-sm leading-relaxed text-ink-500 break-words-safe">{text}</p>
+      )}
 
       {active && actionLabel && href ? (
         <a
@@ -110,47 +134,68 @@ function Card({
       ) : (
         <p className="mt-5 inline-flex w-fit items-center gap-2 rounded-full border border-amber-300 bg-amber-50 px-4 py-2 text-xs font-semibold text-amber-800">
           <span aria-hidden="true">🔒</span>
-          {disabledLabel}
+          {pendingLabel ?? disabledLabel}
         </p>
       )}
     </div>
   );
 }
 
+/** Local/national number with its international form shown between parentheses. */
+function numberText(national: string | null, intl: string | null): string {
+  if (!national) return "";
+  return intl && intl !== national ? `${national} · ${intl}` : national;
+}
+
 /**
- * Call / WhatsApp / e-mail options.
- * A channel is only active when a verified address exists in settings;
- * otherwise the card is visibly inactive — no number is ever invented.
+ * Call options for the clinic's published lines.
+ *
+ * A channel is only active when the number exists — mobile and landline are
+ * published on the clinic's supplied branding. WhatsApp stays inactive
+ * (marked as unconfirmed) until `whatsappEnabled` is switched on in settings.
  */
 export default function ContactOptions({
   contact,
   labels,
 }: {
-  contact: Contact;
+  contact: ContactInfo;
   labels: Labels;
 }) {
-  const phoneHref = contact.phone ? `tel:${contact.phone.replace(/[^\d+]/g, "")}` : undefined;
-  const digits = contact.whatsapp ? contact.whatsapp.replace(/[^\d]/g, "") : null;
-  const whatsappHref = digits ? `https://wa.me/${digits}` : undefined;
+  const mobileHref = phoneLink(contact.phone, contact.phoneIntl);
+  const landlineHref = phoneLink(contact.landline, contact.landlineIntl);
+  const whatsappDigits = contact.whatsapp ? contact.whatsapp.replace(/[^\d]/g, "") : null;
+  const whatsappHref =
+    contact.whatsappEnabled && whatsappDigits ? `https://wa.me/${whatsappDigits}` : undefined;
   const mailHref = contact.email ? `mailto:${contact.email}` : undefined;
 
   return (
     <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       <Card
         kind="phone"
-        title={labels.callTitle}
-        text={contact.phone ? contact.phone : labels.callText}
+        title={labels.mobileTitle}
+        text={labels.mobileText}
+        sub={numberText(contact.phone, contact.phoneIntl)}
         actionLabel={labels.callAction}
-        href={phoneHref}
+        href={mobileHref ?? undefined}
+        disabledLabel={labels.disabledNotice}
+      />
+      <Card
+        kind="phone"
+        title={labels.landlineTitle}
+        text={labels.landlineText}
+        sub={numberText(contact.landline, contact.landlineIntl)}
+        actionLabel={labels.callAction}
+        href={landlineHref ?? undefined}
         disabledLabel={labels.disabledNotice}
       />
       <Card
         kind="whatsapp"
         title={labels.whatsappTitle}
-        text={contact.whatsapp ? contact.whatsapp : labels.whatsappText}
+        text={labels.whatsappText}
         actionLabel={labels.whatsappAction}
         href={whatsappHref}
         disabledLabel={labels.disabledNotice}
+        pendingLabel={labels.whatsappPending}
       />
       <Card
         kind="mail"

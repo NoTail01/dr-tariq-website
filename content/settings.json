@@ -1,23 +1,43 @@
 {
-  "siteName": { "ar": "د. طارق أبو هويجة", "en": "Dr Tariq Abu Hweij" },
-  "tagline": { "ar": "", "en": "" },
+  "siteName": {
+    "ar": "الدكتور طارق أبو حويج",
+    "en": "Dr Tariq Abu Hweij"
+  },
+  "tagline": {
+    "ar": "استشاري أمراض الباطنية والكلى وزراعة الكلى وضغط الدم",
+    "en": "Consultant in Internal Medicine, Nephrology, Kidney Transplantation and Hypertension"
+  },
   "contact": {
-    "phone": null,
-    "whatsapp": null,
+    "phone": "0799101101",
+    "phoneIntl": "+962799101101",
+    "landline": "065685354",
+    "landlineIntl": "+96265685354",
+    "whatsapp": "+962799101101",
+    "whatsappEnabled": false,
     "email": null,
-    "address": null,
-    "workingHours": null
+    "address": {
+      "ar": "خلف المستشفى التخصصي، مجمع الرياض الطبي، الطابق الأول",
+      "en": "Behind the Specialty Hospital, Al-Riyad Medical Complex, First Floor"
+    },
+    "workingHours": null,
+    "mapsEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3384.41496130395!2d35.900507410814285!3d31.976764724344026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151ca194f8b5c4f5%3A0x590913a16577b185!2z2LnZitin2K_YqSDYp9mE2K_Zg9iq2YjYsSDYt9in2LHZgiDYo9io2Ygg2K3ZiNmK2Kw!5e0!3m2!1sen!2sus!4v1791705629007!5m2!1sen!2sus",
+    "mapsPlaceUrl": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x151ca194f8b5c4f5:0x590913a16577b185"
   },
   "social": {
-    "facebook": null,
+    "facebook": "https://www.facebook.com/DrTariqAbuHweij/",
     "instagram": null,
     "x": null,
     "linkedin": null,
     "youtube": null
   },
-  "footerNote": {
-    "ar": "الموقع قيد التطوير — يُنشر المحتوى بعد التحقق منه.",
-    "en": "Website under development — content is verified before publication."
+  "branding": {
+    "brandColor": "#0097F3",
+    "logoUrl": "/images/logo-emblem.png",
+    "logoUrlDark": "/images/logo-emblem-transparent.png"
   },
-  "updatedAt": "2026-10-08T00:00:00.000Z"
+  "footerNote": {
+    "ar": "عيادة الدكتور طارق أبو حويج — أمراض الباطنية والكلى في عمّان.",
+    "en": "Dr Tariq Abu Hweij's clinic — internal medicine and nephrology in Amman."
+  },
+  "updatedAt": "2026-10-11T00:00:00.000Z"
 }

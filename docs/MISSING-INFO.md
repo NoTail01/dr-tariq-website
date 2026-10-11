@@ -1,35 +1,67 @@
-# Missing information checklist
+# Launch checklist — remaining confirmations
 
-Everything the clinic must confirm before it can be published. Until an item
-is confirmed, it stays `null` in `src/content/doctor.ts` and renders as a
-clearly marked development placeholder — see `src/content/SOURCES.md` for the
-rule that no medical fact may appear without a verified source.
+The doctor's identity, supplied photographs, branding, contact details and
+Google Maps embed are now implemented from verified sources. The items below
+still require confirmation before public launch. None of them blocks local
+development or the GitHub push.
 
-| # | Item | Needed for |
+## 1. Address conflict — decision required
+
+Two different locations are on record:
+
+| Source | Wording | Status |
 | --- | --- | --- |
-| 1 | Specialty (AR + EN) | Hero, metadata, SEO |
-| 2 | Biography (AR + EN) | About page, blog byline |
-| 3 | Qualifications / degrees | About page |
-| 4 | Years of experience | About page |
-| 5 | Affiliations / memberships | About page |
-| 6 | Services offered | Home, about, booking copy |
-| 7 | Clinic address (AR + EN) | Contact section, schema.org |
-| 8 | Phone number | Booking actions (currently inactive) |
-| 9 | WhatsApp number | Booking actions (currently inactive) |
-| 10 | Public email address | Contact + booking |
-| 11 | Working hours | Contact section |
-| 12 | Authentic portrait photo | Hero/about placeholders |
-| 13 | Logo / brand assets (colors, fonts) | Header/footer branding |
+| Supplied brand image | خلف المستشفى التخصصي، مجمع الرياض الطبي، الطابق الأول | **Published on the site** (client-supplied wording) |
+| Secondary directory (bizmideast.com) | مجمع بركة بلازا، الطابق B1، مقابل المستشفى التخصصي | Recorded here only — **not published** |
 
-## How to fill items in
+- **Action:** confirm the current clinic building and floor with the clinic.
+- The two addresses must never be combined; the published wording stays as
+  supplied until the clinic confirms a change in writing.
 
-1. Add the value to the table in `src/content/SOURCES.md` with its source and date.
-2. Update the corresponding field in `src/content/doctor.ts`.
-3. `npm run test` must stay green and `npm run build` must succeed.
-4. Placeholder components (`src/components/PlaceholderImage.tsx`) disappear by
-   themselves once the underlying field is non-null.
+## 2. WhatsApp availability
 
-## Current blocked behaviour
+- The mobile number 0799101101 / +962799101101 is **not confirmed** to be
+  WhatsApp-enabled.
+- The prepared link `https://wa.me/962799101101` is stored in settings and the
+  channel is visibly disabled ("WhatsApp not confirmed yet").
+- **Action:** flip `contact.whatsappEnabled` to `true` in the admin dashboard
+  (Settings) after the clinic confirms.
 
-- Booking "call" and "WhatsApp" buttons stay inactive until items 8–9 arrive.
-- Without item 1 the hero greeting is the only personalized content.
+## 3. Opening hours
+
+- No verified opening hours exist in any source. The directory's hours are
+  unconfirmed and are not published.
+- **Action:** collect confirmed hours (AR + EN) and set them in Settings.
+
+## 4. Original logo file
+
+- The current emblem is a faithful crop of the supplied brand reference image
+  (`public/images/logo-emblem.png` + transparent variant). The original
+  reference file is preserved unmodified.
+- **Action:** if the clinic supplies the original transparent logo
+  (SVG/PNG), replace `branding.logoUrl` / `branding.logoUrlDark` in Settings —
+  no code change needed. The crop looks sharp at navbar sizes, so the crop is
+  provisionally acceptable.
+
+## 5. Final domain
+
+- The site builds locally; `NEXT_PUBLIC_SITE_URL` still defaults to
+  `http://localhost:3000`.
+- **Action:** set `NEXT_PUBLIC_SITE_URL` to the final domain (used for
+  canonical URLs, sitemap, Open Graph) before launch.
+
+## 6. Supabase + production admin configuration
+
+- Booking submissions and image uploads remain local-only; the request form
+  states clearly that nothing is sent.
+- **Action:** activate the backend per `docs/SUPABASE.md`
+  (`appointment_requests` table, Storage, admin auth), then set
+  `ADMIN_TOKEN` for the production dashboard.
+
+## 7. Optional content confirmations
+
+- English translation of the hospital page title "استشاري أمراض الكلى"
+  (the site publishes the fuller title from the supplied branding).
+- A public email address, if the clinic wants an email channel.
+- Specialty Hospital association (the hospital page implies but does not
+  state the clinic's relationship to it) — not published.

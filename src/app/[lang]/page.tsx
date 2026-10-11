@@ -3,13 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import ArticleCard from "@/components/ArticleCard";
-import { DevBadge, PlaceholderImage } from "@/components/PlaceholderImage";
+import ClinicMap from "@/components/ClinicMap";
+import DoctorPortrait from "@/components/DoctorPortrait";
 import { CtaBand, EmptyState, Section, SectionHeading } from "@/components/Layout";
 import Reveal from "@/components/Reveal";
+import { doctor } from "@/content/doctor";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale, localizePath, type Locale } from "@/i18n/config";
 import { getVisibleArticles } from "@/lib/articles";
-import { doctor } from "@/content/doctor";
 import { pageMetadata } from "@/lib/seo";
 import { readSettings } from "@/lib/settings";
 import { getSiteMode, SITE_URL } from "@/lib/site";
@@ -26,8 +27,9 @@ export async function generateMetadata({
   return pageMetadata({
     locale: lang,
     path: "/",
-    title: dict.meta.defaultTitle,
-    description: dict.meta.defaultDescription,
+    title: dict.meta.seo.home.title,
+    description: dict.meta.seo.home.description,
+    image: "/images/dr-tariq-portrait.png",
   });
 }
 
@@ -56,13 +58,31 @@ export default async function HomePage({
     },
   };
 
-  // Structured data uses only verified facts: the name.
+  // Structured data uses only verified/supplied facts: identity, title and
+  // specialties from the brand image; qualifications from the hospital page.
+  // No address (conflicting sources), no geo coordinates, no ratings.
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Physician",
     name: doctor.fullName[locale],
+    jobTitle: doctor.professionalTitle[locale],
     url: `${SITE_URL}${localizePath(locale, "/")}`,
+    image: `${SITE_URL}/images/dr-tariq-portrait.png`,
     inLanguage: locale,
+    medicalSpecialty: ["InternalMedicine", "Nephrology", "Hypertension"],
+    knowsLanguage: doctor.languagesSource
+      ? locale === "ar"
+        ? doctor.languages
+        : doctor.languagesEn
+      : undefined,
+    availableService: doctor.specialties.map((specialty) => ({
+      "@type": "MedicalProcedure",
+      name: specialty[locale],
+    })),
+    workLocation: {
+      "@type": "MedicalClinic",
+      name: dict.home.contactTitle,
+    },
   };
 
   return (
@@ -84,8 +104,8 @@ export default async function HomePage({
             <h1 className="mt-3 text-4xl leading-tight font-bold text-navy-900 break-words-safe sm:text-6xl">
               {dict.home.heroTitle}
             </h1>
-            <p className="mt-4 inline-flex rounded-full border border-brand-200 bg-white px-4 py-1.5 text-sm font-semibold text-brand-700">
-              {dict.meta.specialtyPlaceholder}
+            <p className="mt-4 inline-flex rounded-full border border-brand-200 bg-white px-4 py-1.5 text-sm font-semibold text-brand-700 break-words-safe">
+              {dict.home.heroTitleNote}
             </p>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-500 break-words-safe">
               {dict.home.heroLead}
@@ -94,7 +114,7 @@ export default async function HomePage({
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href={localizePath(locale, "/book")}
-                className="rounded-full bg-brand-600 px-7 py-3.5 text-sm font-bold text-white shadow-[0_12px_30px_-12px_rgba(23,103,196,0.9)] transition-transform hover:-translate-y-0.5 hover:bg-brand-700"
+                className="rounded-full bg-brand-600 px-7 py-3.5 text-sm font-bold text-white shadow-[0_12px_30px_-12px_rgba(11,116,201,0.9)] transition-transform hover:-translate-y-0.5 hover:bg-brand-700"
               >
                 {dict.home.heroPrimary}
               </Link>
@@ -105,23 +125,21 @@ export default async function HomePage({
                 {dict.home.heroSecondary}
               </Link>
             </div>
-
-            <div className="mt-8 flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4">
-              <DevBadge label={dict.common.devNoticeBadge} />
-              <p className="flex-1 text-sm leading-relaxed text-amber-900 break-words-safe">
-                {dict.home.heroDevNote}
-              </p>
-            </div>
           </Reveal>
 
           <Reveal delay={120}>
-            <PlaceholderImage
-              alt={dict.about.portraitAlt}
-              note={dict.about.portraitNote}
-              badgeLabel={dict.common.devNoticeBadge}
-              aspect="aspect-[4/5]"
-              className="mx-auto max-w-sm"
-            />
+            <figure className="mx-auto max-w-sm">
+              <div className="aspect-[4/5] w-full overflow-hidden rounded-2xl border border-brand-100 bg-brand-50 shadow-[0_24px_60px_-32px_rgba(8,33,63,0.45)]">
+                <DoctorPortrait
+                  alt={dict.common.portraitAlt}
+                  priority
+                  sizes="(min-width: 1024px) 38vw, (min-width: 640px) 60vw, 90vw"
+                />
+              </div>
+              <figcaption className="mt-3 text-center text-sm text-ink-500 break-words-safe">
+                {dict.home.heroTitleNote}
+              </figcaption>
+            </figure>
           </Reveal>
         </div>
       </section>
@@ -147,17 +165,17 @@ export default async function HomePage({
           <Reveal delay={100}>
             <div className="rounded-3xl border border-brand-100 bg-brand-50/70 p-6 sm:p-8">
               <p className="text-sm font-bold tracking-wide text-brand-700 uppercase">
-                {dict.about.qualificationsTitle}
+                {dict.home.qualificationsTitle}
               </p>
-              <p className="mt-3 text-sm text-ink-500">{dict.about.qualificationsDevNote}</p>
+              <p className="mt-3 text-sm text-ink-500">{dict.home.qualificationsIntro}</p>
               <ul className="mt-5 space-y-3">
-                {dict.about.qualifications.map((item) => (
+                {doctor.qualifications.map((item) => (
                   <li
-                    key={item}
+                    key={item.en}
                     className="flex items-start gap-3 rounded-xl bg-white p-3 text-sm text-ink-700"
                   >
-                    <span aria-hidden="true" className="text-amber-500">⏳</span>
-                    <span className="break-words-safe">{item}</span>
+                    <span aria-hidden="true" className="text-brand-600">✓</span>
+                    <span className="break-words-safe">{item[locale]}</span>
                   </li>
                 ))}
               </ul>
@@ -166,21 +184,26 @@ export default async function HomePage({
         </div>
       </Section>
 
-      {/* ---------------- Specialties / services ---------------- */}
+      {/* ---------------- Specialties ---------------- */}
       <Section tone="soft">
         <Reveal>
           <SectionHeading
             kicker={dict.nav.about}
             title={dict.home.servicesTitle}
-            intro={dict.home.servicesDevNote}
+            intro={dict.home.servicesIntro}
           />
         </Reveal>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {dict.home.services.map((service, index) => (
             <Reveal key={service.title} delay={index * 80}>
-              <div className="h-full rounded-2xl border border-dashed border-brand-300 bg-white p-6">
-                <DevBadge label={dict.common.awaitingVerification} />
+              <div className="h-full rounded-2xl border border-brand-100 bg-white p-6">
+                <span
+                  aria-hidden="true"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-100 text-brand-700"
+                >
+                  ✚
+                </span>
                 <h3 className="mt-4 text-lg font-bold text-navy-900 break-words-safe">
                   {service.title}
                 </h3>
@@ -206,10 +229,10 @@ export default async function HomePage({
         {articles.length === 0 ? (
           <div className="mt-8">
             <EmptyState
-              title={dict.blog.emptyTitle}
-              text={dict.home.articlesEmpty}
-              actionLabel={dict.nav.blog}
-              actionHref={localizePath(locale, "/blog")}
+              title={dict.home.articlesEmpty}
+              text={dict.home.articlesText}
+              actionLabel={dict.nav.book}
+              actionHref={localizePath(locale, "/book")}
             />
           </div>
         ) : (
@@ -246,42 +269,62 @@ export default async function HomePage({
             <dl className="mt-8 space-y-4">
               <div className="rounded-2xl border border-brand-100 bg-white p-4">
                 <dt className="text-xs font-bold tracking-wide text-brand-700 uppercase">
-                  {dict.book.callTitle}
+                  {dict.book.mobileTitle}
                 </dt>
-                <dd className="mt-1.5 text-sm text-ink-500 break-words-safe">
-                  {settings.contact.phone ?? dict.home.contactPlaceholder}
+                <dd className="mt-1.5 text-sm text-ink-700 break-words-safe">
+                  {settings.contact.phone ? (
+                    <a
+                      href={`tel:${(settings.contact.phoneIntl ?? settings.contact.phone).replace(/[^\d+]/g, "")}`}
+                      className="font-semibold text-navy-900 hover:text-brand-700"
+                      dir="ltr"
+                    >
+                      {settings.contact.phone}
+                    </a>
+                  ) : (
+                    dict.home.contactPlaceholder
+                  )}
                 </dd>
               </div>
               <div className="rounded-2xl border border-brand-100 bg-white p-4">
                 <dt className="text-xs font-bold tracking-wide text-brand-700 uppercase">
-                  {dict.about.title}
+                  {dict.book.landlineTitle}
                 </dt>
-                <dd className="mt-1.5 text-sm text-ink-500 break-words-safe">
+                <dd className="mt-1.5 text-sm text-ink-700 break-words-safe">
+                  {settings.contact.landline ? (
+                    <a
+                      href={`tel:${(settings.contact.landlineIntl ?? settings.contact.landline).replace(/[^\d+]/g, "")}`}
+                      className="font-semibold text-navy-900 hover:text-brand-700"
+                      dir="ltr"
+                    >
+                      {settings.contact.landline}
+                    </a>
+                  ) : (
+                    dict.home.contactPlaceholder
+                  )}
+                </dd>
+              </div>
+              <div className="rounded-2xl border border-brand-100 bg-white p-4">
+                <dt className="text-xs font-bold tracking-wide text-brand-700 uppercase">
+                  {dict.home.locationTitle}
+                </dt>
+                <dd className="mt-1.5 text-sm text-ink-700 break-words-safe">
                   {settings.contact.address?.[locale] ?? dict.home.contactPlaceholder}
-                </dd>
-              </div>
-              <div className="rounded-2xl border border-brand-100 bg-white p-4">
-                <dt className="text-xs font-bold tracking-wide text-brand-700 uppercase">
-                  {dict.book.optionsTitle}
-                </dt>
-                <dd className="mt-1.5 text-sm text-ink-500 break-words-safe">
-                  {settings.contact.workingHours?.[locale] ?? dict.home.contactPlaceholder}
                 </dd>
               </div>
             </dl>
           </Reveal>
 
           <Reveal delay={100}>
-            <div
-              role="img"
-              aria-label={dict.home.mapPlaceholder}
-              className="flex min-h-64 w-full flex-col items-center justify-center gap-3 rounded-3xl border-2 border-dashed border-brand-300 bg-white p-8 text-center"
-            >
-              <DevBadge label={dict.common.devNoticeBadge} />
-              <p className="max-w-xs text-sm text-ink-500 break-words-safe">
-                {dict.home.mapPlaceholder}
-              </p>
-            </div>
+            <ClinicMap
+              embedUrl={settings.contact.mapsEmbedUrl}
+              placeUrl={settings.contact.mapsPlaceUrl}
+              address={settings.contact.address?.[locale] ?? null}
+              heading={dict.home.locationTitle}
+              intro={dict.home.locationText}
+              openLabel={dict.home.openInMaps}
+              mapTitle={dict.home.mapTitle}
+              addressLabel={dict.home.contactTitle}
+            />
           </Reveal>
         </div>
       </Section>

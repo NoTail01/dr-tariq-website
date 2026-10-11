@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import BookForm from "@/components/BookForm";
+import ClinicMap from "@/components/ClinicMap";
 import ContactOptions from "@/components/ContactOptions";
 import { Section, SectionHeading } from "@/components/Layout";
 import Reveal from "@/components/Reveal";
@@ -27,8 +28,8 @@ export async function generateMetadata({
   return pageMetadata({
     locale: lang,
     path: "/book",
-    title: dict.book.title,
-    description: dict.book.description,
+    title: dict.meta.seo.book.title,
+    description: dict.meta.seo.book.description,
   });
 }
 
@@ -41,11 +42,14 @@ export default async function BookPage({ params }: PageProps<"/[lang]/book">) {
   const settings = await readSettings();
 
   const channelLabels = {
-    callTitle: dict.book.callTitle,
-    callText: dict.book.callText,
+    mobileTitle: dict.book.mobileTitle,
+    mobileText: dict.book.mobileText,
+    landlineTitle: dict.book.landlineTitle,
+    landlineText: dict.book.landlineText,
     callAction: dict.book.callAction,
     whatsappTitle: dict.book.whatsappTitle,
     whatsappText: dict.book.whatsappText,
+    whatsappPending: dict.book.whatsappPending,
     whatsappAction: dict.book.whatsappAction,
     emailTitle: dict.book.emailTitle,
     emailText: dict.book.emailText,
@@ -77,7 +81,24 @@ export default async function BookPage({ params }: PageProps<"/[lang]/book">) {
         </div>
       </Section>
 
+      {/* ---------------- Location + map ---------------- */}
       <Section tone="soft">
+        <Reveal>
+          <ClinicMap
+            embedUrl={settings.contact.mapsEmbedUrl}
+            placeUrl={settings.contact.mapsPlaceUrl}
+            address={settings.contact.address?.[locale] ?? null}
+            heading={dict.home.locationTitle}
+            intro={dict.home.locationText}
+            openLabel={dict.home.openInMaps}
+            mapTitle={dict.home.mapTitle}
+            addressLabel={dict.book.optionsTitle}
+          />
+        </Reveal>
+      </Section>
+
+      {/* ---------------- Demo request form ---------------- */}
+      <Section tone="white">
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
           <Reveal>
             <SectionHeading

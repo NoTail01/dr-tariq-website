@@ -1,4 +1,10 @@
-/** Clearly marked development placeholder — never used for real photos. */
+/**
+ * `DevBadge` marks demo/development content (e.g. demo articles).
+ *
+ * `PlaceholderImage` remains available for fields that ever go unverified
+ * again; the doctor's portrait is now the authentic supplied photograph,
+ * so no placeholder frame is shown anywhere on the public site.
+ */
 export function DevBadge({ label }: { label: string }) {
   return (
     <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300 bg-amber-50 px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-amber-800 uppercase">

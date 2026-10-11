@@ -163,23 +163,69 @@ export default function SettingsPage() {
         </h2>
         <div className="mt-4 grid gap-5 sm:grid-cols-3">
           <TextField
-            label="Phone"
+            label="Mobile (national)"
             dir="ltr"
             type="tel"
             value={settings.contact.phone ?? ""}
             onChange={(value) => update({ contact: { ...settings.contact, phone: value || null } })}
-            hint="Leave empty until the clinic confirms it."
+            hint="As printed on the clinic branding, e.g. 0799101101."
           />
           <TextField
-            label="WhatsApp"
+            label="Mobile (international)"
+            dir="ltr"
+            type="tel"
+            value={settings.contact.phoneIntl ?? ""}
+            onChange={(value) =>
+              update({ contact: { ...settings.contact, phoneIntl: value || null } })
+            }
+            hint="Used for the tel: link, e.g. +962799101101."
+          />
+          <TextField
+            label="Clinic landline (national)"
+            dir="ltr"
+            type="tel"
+            value={settings.contact.landline ?? ""}
+            onChange={(value) =>
+              update({ contact: { ...settings.contact, landline: value || null } })
+            }
+            hint="As printed on the clinic branding, e.g. 065685354."
+          />
+          <TextField
+            label="Clinic landline (international)"
+            dir="ltr"
+            type="tel"
+            value={settings.contact.landlineIntl ?? ""}
+            onChange={(value) =>
+              update({ contact: { ...settings.contact, landlineIntl: value || null } })
+            }
+            hint="Used for the tel: link, e.g. +96265685354."
+          />
+          <TextField
+            label="WhatsApp number"
             dir="ltr"
             type="tel"
             value={settings.contact.whatsapp ?? ""}
             onChange={(value) =>
               update({ contact: { ...settings.contact, whatsapp: value || null } })
             }
-            hint="Digits only, with country code."
+            hint="Prepared link: https://wa.me/962799101101. Stored but NOT active until confirmed."
           />
+          <div className="flex items-center gap-3 self-end pb-1.5">
+            <input
+              id="whatsapp-enabled"
+              type="checkbox"
+              className="h-4 w-4 rounded border-slate-300"
+              checked={settings.contact.whatsappEnabled}
+              onChange={(event) =>
+                update({
+                  contact: { ...settings.contact, whatsappEnabled: event.target.checked },
+                })
+              }
+            />
+            <label htmlFor="whatsapp-enabled" className="text-sm font-semibold text-navy-900">
+              WhatsApp confirmed — activate channel
+            </label>
+          </div>
           <TextField
             label="Email"
             dir="ltr"
@@ -269,6 +315,74 @@ export default function SettingsPage() {
             />
           ))}
         </div>
+      </section>
+
+      <section className="rounded-2xl border border-slate-200 bg-white p-6">
+        <h2 className="text-xs font-bold tracking-wide text-slate-600 uppercase">
+          Google Maps (exact client-supplied embed)
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Only google.com/maps/embed URLs are accepted — never a generated search URL. The
+          &ldquo;Open in Google Maps&rdquo; link must target the same place as the embed.
+        </p>
+        <div className="mt-4 grid gap-5">
+          <TextField
+            label="Maps embed URL"
+            dir="ltr"
+            value={settings.contact.mapsEmbedUrl ?? ""}
+            onChange={(value) =>
+              update({ contact: { ...settings.contact, mapsEmbedUrl: value || null } })
+            }
+            hint="The exact embed supplied by the client."
+          />
+          <TextField
+            label="Open-in-Maps URL"
+            dir="ltr"
+            value={settings.contact.mapsPlaceUrl ?? ""}
+            onChange={(value) =>
+              update({ contact: { ...settings.contact, mapsPlaceUrl: value || null } })
+            }
+            hint="Same place feature as the embed (no invented place IDs, no coordinates)."
+          />
+        </div>
+      </section>
+
+      <section className="rounded-2xl border border-slate-200 bg-white p-6">
+        <h2 className="text-xs font-bold tracking-wide text-slate-600 uppercase">Branding</h2>
+        <div className="mt-4 grid gap-5 sm:grid-cols-2">
+          <TextField
+            label="Primary brand color (hex)"
+            dir="ltr"
+            value={settings.branding.brandColor}
+            onChange={(value) =>
+              update({ branding: { ...settings.branding, brandColor: value } })
+            }
+            hint="Sampled from the supplied brand reference: #0097F3."
+          />
+          <TextField
+            label="Emblem (light backgrounds)"
+            dir="ltr"
+            value={settings.branding.logoUrl ?? ""}
+            onChange={(value) =>
+              update({ branding: { ...settings.branding, logoUrl: value || null } })
+            }
+            hint="Local path, e.g. /images/logo-emblem.png"
+          />
+          <TextField
+            label="Emblem (dark backgrounds)"
+            dir="ltr"
+            value={settings.branding.logoUrlDark ?? ""}
+            onChange={(value) =>
+              update({ branding: { ...settings.branding, logoUrlDark: value || null } })
+            }
+            hint="Local path, e.g. /images/logo-emblem-transparent.png"
+          />
+        </div>
+        <p className="mt-4 text-xs leading-relaxed text-slate-500">
+          The emblem is a faithful crop of the supplied brand reference image. Never replace it
+          with an unrelated icon; the original transparent logo (if supplied) replaces these
+          crops 1:1.
+        </p>
       </section>
 
       {notice ? (

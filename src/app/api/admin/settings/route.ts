@@ -35,6 +35,27 @@ function nullableUrl(value: unknown): string | null {
   return /^https?:\/\//i.test(result) ? result : null;
 }
 
+/** Google Maps embed URL — only google.com/maps/embed URLs are accepted. */
+function mapsEmbed(value: unknown): string | null {
+  const result = str(value, 1200);
+  if (!result) return null;
+  try {
+    const parsed = new URL(result);
+    const host = parsed.hostname.replace(/^www\./, "");
+    const isEmbed = parsed.pathname.startsWith("/maps/embed");
+    return host === "google.com" && isEmbed ? result : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Local asset path (e.g. /images/logo-emblem.png) or an absolute URL. */
+function assetPath(value: unknown): string | null {
+  const result = str(value, LIMITS.url);
+  if (!result) return null;
+  return /^\/(?!\/)/.test(result) || /^https?:\/\//i.test(result) ? result : null;
+}
+
 /** GET /api/admin/settings — site settings (authenticated only). */
 export async function GET() {
   const denied = await guardAdmin();
@@ -68,16 +89,25 @@ export async function PATCH(request: Request) {
 
   const contactRaw = (raw.contact ?? {}) as Record<string, unknown>;
   const socialRaw = (raw.social ?? {}) as Record<string, unknown>;
+  const brandingRaw = (raw.branding ?? {}) as Record<string, unknown>;
+  const currentBranding = current.branding ?? defaultSettings.branding;
 
   const next: Settings = {
     siteName: localized(raw.siteName ?? current.siteName, LIMITS.text) || defaultSettings.siteName,
     tagline: localized(raw.tagline ?? current.tagline, LIMITS.long),
     contact: {
       phone: nullableContact(contactRaw.phone, "phone"),
+      phoneIntl: nullableContact(contactRaw.phoneIntl, "phone"),
+      landline: nullableContact(contactRaw.landline, "phone"),
+      landlineIntl: nullableContact(contactRaw.landlineIntl, "phone"),
       whatsapp: nullableContact(contactRaw.whatsapp, "whatsapp"),
+      // Never activated implicitly: only an explicit boolean turns it on.
+      whatsappEnabled: contactRaw.whatsappEnabled === true,
       email: nullableContact(contactRaw.email, "email"),
       address: nullableLocalized(contactRaw.address, LIMITS.long),
       workingHours: nullableLocalized(contactRaw.workingHours, LIMITS.long),
+      mapsEmbedUrl: mapsEmbed(contactRaw.mapsEmbedUrl),
+      mapsPlaceUrl: nullableUrl(contactRaw.mapsPlaceUrl),
     },
     social: {
       facebook: nullableUrl(socialRaw.facebook),
@@ -85,6 +115,13 @@ export async function PATCH(request: Request) {
       x: nullableUrl(socialRaw.x),
       linkedin: nullableUrl(socialRaw.linkedin),
       youtube: nullableUrl(socialRaw.youtube),
+    },
+    branding: {
+      brandColor: /^#[0-9a-fA-F]{6}$/.test(str(brandingRaw.brandColor, 7))
+        ? str(brandingRaw.brandColor, 7)
+        : currentBranding.brandColor,
+      logoUrl: assetPath(brandingRaw.logoUrl),
+      logoUrlDark: assetPath(brandingRaw.logoUrlDark),
     },
     footerNote: localized(raw.footerNote ?? current.footerNote, LIMITS.long),
     updatedAt: current.updatedAt,

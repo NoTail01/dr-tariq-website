@@ -28,10 +28,31 @@ npm run dev
 | `npm run lint` | ESLint |
 | `npm run test` | Vitest suite |
 
+## Identity & content policy
+
+All doctor facts are verified against sources listed in
+`src/content/SOURCES.md` (Specialty Hospital doctor profile + the supplied
+brand reference image). Nothing is invented: the German Board is published
+without naming its specialty, the WhatsApp channel stays disabled until
+confirmed, and no reviews or success rates are ever published.
+
+## Supplied assets
+
+| File | Use |
+| --- | --- |
+| `public/images/dr-tariq-portrait.png` | Authentic portrait (home + about), served unmodified |
+| `public/images/dr-tariq-brand-reference.png` | Original brand reference — preserved, never used directly as a logo |
+| `public/images/logo-emblem.png` | Faithful crop of the kidney emblem (navbar badge) |
+| `public/images/logo-emblem-transparent.png` | Same emblem, transparent background (footer) |
+| `public/images/dr-tariq-portrait-800.webp` | Optional optimized derivative |
+
+The brand palette (`#0097F3` and accessible shades) was sampled from the
+brand reference and lives in `src/app/globals.css` as `brand-*` tokens.
+
 ## Documentation
 
 - `src/content/SOURCES.md` — source ledger; no medical fact ships without one.
-- `docs/MISSING-INFO.md` — what the clinic must still confirm.
+- `docs/MISSING-INFO.md` — launch checklist (address conflict, WhatsApp, hours, logo, domain, backend).
 - `docs/GOOGLE.md` — optional GA4 / GTM / Search Console / Maps setup.
 - `docs/SUPABASE.md` — activating the booking/storage/auth backend.
 
