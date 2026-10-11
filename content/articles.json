@@ -1,0 +1,98 @@
+[
+  {
+    "id": "demo-article-001",
+    "status": "published",
+    "isDemo": true,
+    "slug": { "ar": "demo-blog-article", "en": "demo-blog-article" },
+    "title": {
+      "ar": "مقال تجريبي: هكذا تظهر المقالات في المدونة",
+      "en": "Demo article: how posts appear in the blog"
+    },
+    "excerpt": {
+      "ar": "نموذج تجريبي يوضّح شكل المقال المنشور في المدونة. ليس محتوى طبياً ولا يُنشر في نسخة الإنتاج.",
+      "en": "A demo entry that shows what a published post looks like. It is not medical content and is hidden in production."
+    },
+    "body": {
+      "ar": "هذا مقال **تجريبي** بالكامل، مُعدّ لعرض شكل وتنسيق المدونة أثناء التطوير فقط.\n\n## لماذا يظهر هذا المقال؟\n\nحتى تتمكن من معاينة شكل المدونة قبل وصول المقالات الحقيقية، يعرض الموقع هذا النموذج أثناء التطوير فقط. المقال:\n\n- مُعلَّم بوضوح بأنه تجريبي\n- مستثنى من خريطة الموقع (sitemap)\n- محميّ بوسم `noindex`\n- مخفيّ تماماً في نسخة الإنتاج\n\n## ما الذي يُنشر فعلياً؟\n\nلا يُنشر أي محتوى طبي إلا بعد مراجعته والتأكد من مصدره. تتم كتابة المقالات الحقيقية من لوحة التحكم الخاصة بالموقع ثم تُراجَع قبل الظهور للزوار.\n\n## نصائح للكتابة\n\n- استخدم فقرات قصيرة سهلة القراءة\n- أضف عناوين أقسام واضحة\n- أدرج المصدر عند ذكر معلومة واقعية",
+      "en": "This is a completely **demo** article, created only to preview the blog layout during development.\n\n## Why does this post exist?\n\nSo you can see what the blog looks like before real articles arrive, the site shows this sample in development mode only. This post is:\n\n- Clearly labelled as a demo\n- Excluded from the sitemap\n- Tagged with `noindex`\n- Completely hidden in production builds\n\n## What actually gets published?\n\nNo medical content is published unless it has been reviewed and traced to a source. Real articles are written from the site dashboard and reviewed before visitors can see them.\n\n## Writing tips\n\n- Keep paragraphs short and readable\n- Add clear section headings\n- Include the source whenever you state a factual claim"
+    },
+    "category": "demo",
+    "coverImage": null,
+    "seo": {
+      "title": {
+        "ar": "مقال تجريبي للمدونة | د. طارق أبو هويجة",
+        "en": "Demo blog article | Dr Tariq Abu Hweij"
+      },
+      "description": {
+        "ar": "نموذج تجريبي يوضّح شكل المقال المنشور في المدونة أثناء التطوير.",
+        "en": "A demo entry showing what a published blog post looks like during development."
+      }
+    },
+    "author": { "ar": "فريق الموقع (نموذج تجريبي)", "en": "Site team (demo)" },
+    "sourceUrl": null,
+    "publishedAt": "2026-10-08T09:00:00.000Z",
+    "updatedAt": "2026-10-08T09:00:00.000Z"
+  },
+  {
+    "id": "demo-article-002",
+    "status": "published",
+    "isDemo": true,
+    "slug": { "ar": "demo-preview-and-seo", "en": "demo-preview-and-seo" },
+    "title": {
+      "ar": "معاينة المقال وبياناته قبل النشر",
+      "en": "Previewing an article and its metadata before publishing"
+    },
+    "excerpt": {
+      "ar": "نموذج تجريبي يشرح كيف تُعاين المقالات وتُضبط بياناتها لمحركات البحث من لوحة التحكم.",
+      "en": "A demo post explaining how articles are previewed and how their search metadata is set in the dashboard."
+    },
+    "body": {
+      "ar": "هذا المقال أيضاً **تجريبي**، ويشرح آلية العمل داخل لوحة التحكم الخاصة بالموقع.\n\n## الخطوات داخل لوحة التحكم\n\n- إنشاء مقال جديد بالعربية والإنجليزية معاً\n- كتابة المقتطف وعنوان الصفحة ووصفها لمحركات البحث\n- المعاينة قبل النشر لأي لغة\n- حفظ المسودة ثم النشر عندما يكتمل المحتوى\n\n## المعاينة والمسودات\n\nالمسودات لا تظهر للزوار إطلاقاً. المعاينة متاحة فقط داخل لوحة التحكم، ويمكن استخدامها للتأكد من الشكل النهائي قبل النشر.\n\n## تحسين الظهور في البحث\n\nلكل مقال عنوان ووصف منفصلان بالعربية والإنجليزية، ويظهر الرابط البديل بين اللغتين تلقائياً في رأس الصفحة.",
+      "en": "This is also a **demo** article that explains how the site dashboard works.\n\n## Steps in the dashboard\n\n- Create a new article in Arabic and English at the same time\n- Write the excerpt, SEO title and SEO description\n- Preview either language before publishing\n- Save as a draft, then publish when the content is complete\n\n## Previews and drafts\n\nDrafts are never visible to visitors. Previewing is available inside the dashboard only, so the final layout can be checked before publishing.\n\n## Search visibility\n\nEvery article carries separate Arabic and English titles and descriptions, and the alternate language URL is added to the page head automatically."
+    },
+    "category": "demo",
+    "coverImage": null,
+    "seo": {
+      "title": {
+        "ar": "معاينة المقال وبياناته قبل النشر | د. طارق أبو هويجة",
+        "en": "Previewing an article before publishing | Dr Tariq Abu Hweij"
+      },
+      "description": {
+        "ar": "شرح تجريبي لمعاينة المقالات وإعداد بياناتSEO من لوحة التحكم.",
+        "en": "A demo walkthrough of article previews and search metadata in the dashboard."
+      }
+    },
+    "author": { "ar": "فريق الموقع (نموذج تجريبي)", "en": "Site team (demo)" },
+    "sourceUrl": null,
+    "publishedAt": "2026-10-07T09:00:00.000Z",
+    "updatedAt": "2026-10-07T09:00:00.000Z"
+  },
+  {
+    "id": "demo-article-003",
+    "status": "draft",
+    "isDemo": true,
+    "slug": { "ar": "demo-draft", "en": "demo-draft" },
+    "title": {
+      "ar": "مسودة تجريبية — لا تظهر للزوار",
+      "en": "Demo draft — never shown to visitors"
+    },
+    "excerpt": {
+      "ar": "هذه مسودة داخل لوحة التحكم فقط.",
+      "en": "This draft exists inside the dashboard only."
+    },
+    "body": {
+      "ar": "هذه مسودة تجريبية. المسودات لا تظهر في المدونة ولا في خريطة الموقع ولا لمحركات البحث.",
+      "en": "This is a demo draft. Drafts never appear in the blog, the sitemap, or search engines."
+    },
+    "category": "demo",
+    "coverImage": null,
+    "seo": {
+      "title": { "ar": "", "en": "" },
+      "description": { "ar": "", "en": "" }
+    },
+    "author": { "ar": "فريق الموقع (نموذج تجريبي)", "en": "Site team (demo)" },
+    "sourceUrl": null,
+    "publishedAt": null,
+    "updatedAt": "2026-10-08T09:30:00.000Z"
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permissions": [
+    { "action": "*", "resource": "*", "effect": "allow" },
+    { "action": "shell", "resource": "*push --force*", "effect": "deny" },
+    { "action": "shell", "resource": "*push -f *", "effect": "deny" },
+    { "action": "shell", "resource": "*force-push*", "effect": "deny" },
+    { "action": "shell", "resource": "*git reset --hard*", "effect": "deny" },
+    { "action": "shell", "resource": "*rm -rf *", "effect": "deny" },
+    { "action": "shell", "resource": "sudo *", "effect": "deny" },
+    { "action": "read", "resource": "*.env", "effect": "ask" },
+    { "action": "read", "resource": "*.env.*", "effect": "ask" },
+    { "action": "read", "resource": "*.env.example", "effect": "allow" },
+    { "action": "question", "resource": "*", "effect": "allow" }
+  ]
+}

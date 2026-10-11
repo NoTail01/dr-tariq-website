@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dr Tariq Abu Hweij — website
 
-## Getting Started
+Bilingual (Arabic / English) website for Dr Tariq Abu Hweij, built with Next.js.
 
-First, run the development server:
+- **Public site** — `/en` (LTR) and `/ar` (RTL): home, about, blog, booking.
+  Root `/` redirects to the preferred language.
+- **Admin dashboard** — `/admin`: article editor, settings, media uploads.
+  Open in `next dev`; disabled in production unless `ADMIN_TOKEN` is set.
+- **Backend-optional** — booking submissions and uploads run locally until
+  Supabase credentials are configured (`docs/SUPABASE.md`).
+
+## Getting started
 
 ```bash
+cp .env.example .env.local   # optional — everything works without it
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Site: http://localhost:3000
+- Dashboard (development only): http://localhost:3000/admin
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Development server |
+| `npm run build` / `npm run start` | Production build / server |
+| `npm run lint` | ESLint |
+| `npm run test` | Vitest suite |
 
-## Learn More
+## Documentation
 
-To learn more about Next.js, take a look at the following resources:
+- `src/content/SOURCES.md` — source ledger; no medical fact ships without one.
+- `docs/MISSING-INFO.md` — what the clinic must still confirm.
+- `docs/GOOGLE.md` — optional GA4 / GTM / Search Console / Maps setup.
+- `docs/SUPABASE.md` — activating the booking/storage/auth backend.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Hosting
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The repository is hosted on GitHub at
+`github.com/NoTail01/dr-tariq-website`. **No deployment pipeline is configured
+or connected** — builds are run locally with `npm run build` and reviewed
+before publishing.

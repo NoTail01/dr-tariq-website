@@ -1,0 +1,23 @@
+{
+  "siteName": { "ar": "د. طارق أبو هويجة", "en": "Dr Tariq Abu Hweij" },
+  "tagline": { "ar": "", "en": "" },
+  "contact": {
+    "phone": null,
+    "whatsapp": null,
+    "email": null,
+    "address": null,
+    "workingHours": null
+  },
+  "social": {
+    "facebook": null,
+    "instagram": null,
+    "x": null,
+    "linkedin": null,
+    "youtube": null
+  },
+  "footerNote": {
+    "ar": "الموقع قيد التطوير — يُنشر المحتوى بعد التحقق منه.",
+    "en": "Website under development — content is verified before publication."
+  },
+  "updatedAt": "2026-10-08T00:00:00.000Z"
+}
