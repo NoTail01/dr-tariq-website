@@ -30,18 +30,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const articleEntries: MetadataRoute.Sitemap = articles
     .filter((article) => !article.isDemo && article.publishedAt)
     .flatMap((article) =>
-      (["ar", "en"] as const).map((locale) => ({
-        url: `${SITE_URL}/${locale}/blog/${article.slug[locale]}`,
-        lastModified: new Date(article.updatedAt),
-        changeFrequency: "weekly" as const,
-        priority: 0.6,
-        alternates: {
-          languages: {
-            ar: `${SITE_URL}/ar/blog/${article.slug.ar}`,
-            en: `${SITE_URL}/en/blog/${article.slug.en}`,
+      (["ar", "en"] as const)
+        .filter((locale) => article.slug[locale].length > 0)
+        .map((locale) => ({
+          url: `${SITE_URL}/${locale}/blog/${article.slug[locale]}`,
+          lastModified: new Date(article.updatedAt),
+          changeFrequency: "weekly" as const,
+          priority: 0.6,
+          alternates: {
+            languages: {
+              ar: `${SITE_URL}/ar/blog/${article.slug.ar}`,
+              en: `${SITE_URL}/en/blog/${article.slug.en}`,
+            },
           },
-        },
-      })),
+        })),
     );
 
   return [...staticEntries, ...articleEntries];

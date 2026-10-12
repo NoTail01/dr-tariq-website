@@ -12,6 +12,7 @@ import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale, localeInfo, locales, localizePath, type Locale } from "@/i18n/config";
 import { getAnalyticsConfig } from "@/lib/analytics";
 import { plexArabic } from "@/lib/font";
+import { phoneLink } from "@/lib/settings";
 import { readSettings } from "@/lib/settings";
 import { SITE_URL } from "@/lib/site";
 
@@ -86,10 +87,11 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
     { href: localizePath(locale, "/book"), label: dict.nav.book },
   ];
 
-  // Phone line shown in the footer: both published clinic lines.
-  const phoneLine = [settings.contact.phone, settings.contact.landline]
-    .filter((value): value is string => Boolean(value))
-    .join("  ·  ");
+  // Phone lines shown in the footer: both published clinic lines.
+  const phoneEntries = [
+    { label: settings.contact.phone, href: phoneLink(settings.contact.phone, settings.contact.phoneIntl) },
+    { label: settings.contact.landline, href: phoneLink(settings.contact.landline, settings.contact.landlineIntl) },
+  ].filter((entry): entry is { label: string; href: string } => Boolean(entry.label && entry.href));
 
   return (
     <html
@@ -131,7 +133,7 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
           developedNote={settings.footerNote[locale] || dict.footer.developedNote}
           contactTitle={dict.footer.contact}
           address={settings.contact.address?.[locale] ?? null}
-          phoneLine={phoneLine || null}
+          phones={phoneEntries}
           whatsappNote={settings.contact.whatsappEnabled ? null : dict.book.whatsappPending}
           disclaimerTitle={dict.footer.disclaimerTitle}
           disclaimer={dict.footer.disclaimer}

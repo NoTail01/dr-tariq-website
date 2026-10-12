@@ -7,6 +7,26 @@
     "ar": "استشاري أمراض الباطنية والكلى وزراعة الكلى وضغط الدم",
     "en": "Consultant in Internal Medicine, Nephrology, Kidney Transplantation and Hypertension"
   },
+  "doctor": {
+    "biography": {
+      "ar": "الدكتور طارق أبو حويج، استشاري أمراض الباطنية والكلى وزراعة الكلى وضغط الدم. حاصل على البورد الأردني في الأمراض الباطنية والبورد الأردني في أمراض الكلى، إضافة إلى البورد الألماني. يعالج حالات أمراض الباطنية والكلى، وهو عضو الجمعية الألمانية لأمراض الباطنية والقلب، وعضو نقابتي الأطباء الألمانية والأردنية. تجري العيادة خلف المستشفى التخصصي في مجمع الرياض الطبي — الطابق الأول.",
+      "en": "Dr Tariq Abu Hweij is a consultant in internal medicine, nephrology, kidney transplantation and hypertension. He holds the Jordanian Board in Internal Medicine and the Jordanian Board in Nephrology, as well as the German Board. He treats internal medicine and kidney cases, is a member of the German Association for Internal Medicine and Cardiology, and a member of the German and Jordanian medical associations. The clinic is located behind the Specialty Hospital in Al-Riyad Medical Complex, first floor."
+    },
+    "qualifications": [
+      {
+        "ar": "البورد الأردني في الأمراض الباطنية",
+        "en": "Jordanian Board in Internal Medicine"
+      },
+      {
+        "ar": "البورد الأردني في أمراض الكلى",
+        "en": "Jordanian Board in Nephrology"
+      },
+      {
+        "ar": "البورد الألماني",
+        "en": "German Board"
+      }
+    ]
+  },
   "contact": {
     "phone": "0799101101",
     "phoneIntl": "+962799101101",
@@ -20,7 +40,7 @@
       "en": "Behind the Specialty Hospital, Al-Riyad Medical Complex, First Floor"
     },
     "workingHours": null,
-    "mapsEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3384.41496130395!2d35.900507410814285!3d31.976764724344026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151ca194f8b5c4f5%3A0x590913a16577b185!2z2LnZitin2K_YqSDYp9mE2K_Zg9iq2YjYsSDYt9in2LHZgiDYo9io2Ygg2K3ZiNmK2Kw!5e0!3m2!1sen!2sus!4v1791705629007!5m2!1sen!2sus",
+    "mapsEmbedUrl": null,
     "mapsPlaceUrl": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x151ca194f8b5c4f5:0x590913a16577b185"
   },
   "social": {
@@ -39,5 +59,5 @@
     "ar": "عيادة الدكتور طارق أبو حويج — أمراض الباطنية والكلى في عمّان.",
     "en": "Dr Tariq Abu Hweij's clinic — internal medicine and nephrology in Amman."
   },
-  "updatedAt": "2026-10-11T00:00:00.000Z"
+  "updatedAt": "2026-10-12T08:29:58.305Z"
 }

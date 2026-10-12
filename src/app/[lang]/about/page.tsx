@@ -9,6 +9,7 @@ import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale, localizePath, type Locale } from "@/i18n/config";
 import { locales } from "@/i18n/config";
 import { pageMetadata } from "@/lib/seo";
+import { readSettings } from "@/lib/settings";
 
 /** Both locales are known at build time so the page is prerendered. */
 export function generateStaticParams() {
@@ -39,6 +40,15 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
 
   const locale = lang as Locale;
   const dict = await getDictionary(locale);
+  const settings = await readSettings();
+
+  // Biography and qualifications are editable from the dashboard; the
+  // verified content file remains the fallback for fresh installs.
+  const biography = settings.doctor.biography[locale] || doctor.biography[locale];
+  const qualifications =
+    settings.doctor.qualifications.length > 0
+      ? settings.doctor.qualifications
+      : doctor.qualifications;
 
   return (
     <>
@@ -73,7 +83,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
             <div>
               <h2 className="text-2xl font-bold text-navy-900">{dict.about.bioTitle}</h2>
               <p className="mt-3 leading-relaxed text-ink-700 break-words-safe">
-                {doctor.biography[locale]}
+                {biography}
               </p>
             </div>
 
@@ -81,7 +91,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
               <h2 className="text-xl font-bold text-navy-900">{dict.about.qualificationsTitle}</h2>
               <p className="mt-2 text-sm text-ink-500">{dict.about.qualificationsIntro}</p>
               <ul className="mt-5 space-y-3">
-                {doctor.qualifications.map((item) => (
+                {qualifications.map((item) => (
                   <li
                     key={item.en}
                     className="flex items-start gap-3 rounded-xl bg-white p-3.5 text-sm text-ink-700"

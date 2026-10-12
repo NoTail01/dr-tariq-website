@@ -139,11 +139,6 @@ export default function BookForm({ labels }: { labels: Labels }) {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
-      <div className="rounded-xl border border-amber-300 bg-amber-50 p-4">
-        <p className="text-sm font-semibold text-amber-900">{labels.formNotice}</p>
-        <p className="mt-1.5 text-sm text-amber-800">{labels.privacyNotice}</p>
-      </div>
-
       {errors._ ? (
         <p className={errorClass} role="alert">
           {labels.validation[errors._ as BookingErrorKey]}
@@ -261,7 +256,7 @@ export default function BookForm({ labels }: { labels: Labels }) {
             value="yes"
             aria-invalid={Boolean(errors.consent)}
             aria-describedby={errors.consent ? "err-consent" : undefined}
-            className="mt-0.5 h-5 w-5 shrink-0 accent-[#1767c4]"
+            className="mt-0.5 h-5 w-5 shrink-0 accent-[#0b74c9]"
           />
           <span>{labels.consent}</span>
         </label>

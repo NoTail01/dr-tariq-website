@@ -12,6 +12,7 @@ import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale, localizePath, type Locale } from "@/i18n/config";
 import { getVisibleArticles } from "@/lib/articles";
 import { pageMetadata } from "@/lib/seo";
+import { phoneLink } from "@/lib/settings";
 import { readSettings } from "@/lib/settings";
 import { getSiteMode, SITE_URL } from "@/lib/site";
 
@@ -51,12 +52,22 @@ export default async function HomePage({
     byAuthor: dict.blog.byAuthor,
     demoBadge: dict.common.demoBadge,
     demoArticleBadge: dict.blog.demoArticleBadge,
+    notInLanguage: dict.blog.notInLanguage,
+    readInArabic: dict.blog.readInArabic,
+    readInEnglish: dict.blog.readInEnglish,
     category: {
       demo: dict.blog.categoryDemo,
       guides: dict.blog.categoryGuides,
       news: dict.blog.categoryNews,
     },
   };
+
+  // Qualifications are editable from the dashboard (clinic is the source
+  // after editing); the verified content file is the fallback.
+  const qualifications =
+    settings.doctor.qualifications.length > 0
+      ? settings.doctor.qualifications
+      : doctor.qualifications;
 
   // Structured data uses only verified/supplied facts: identity, title and
   // specialties from the brand image; qualifications from the hospital page.
@@ -136,9 +147,6 @@ export default async function HomePage({
                   sizes="(min-width: 1024px) 38vw, (min-width: 640px) 60vw, 90vw"
                 />
               </div>
-              <figcaption className="mt-3 text-center text-sm text-ink-500 break-words-safe">
-                {dict.home.heroTitleNote}
-              </figcaption>
             </figure>
           </Reveal>
         </div>
@@ -149,13 +157,12 @@ export default async function HomePage({
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <Reveal>
             <SectionHeading
-              kicker={dict.nav.about}
               title={dict.home.aboutTitle}
               intro={dict.home.aboutText}
             />
             <Link
               href={localizePath(locale, "/about")}
-              className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-brand-700 transition-colors hover:text-brand-600"
+              className="mt-6 inline-flex items-center gap-2 rounded-lg py-1.5 text-sm font-bold text-brand-700 transition-colors hover:text-brand-600"
             >
               {dict.home.aboutLink}
               <span aria-hidden="true" className="rtl:rotate-180">→</span>
@@ -169,7 +176,7 @@ export default async function HomePage({
               </p>
               <p className="mt-3 text-sm text-ink-500">{dict.home.qualificationsIntro}</p>
               <ul className="mt-5 space-y-3">
-                {doctor.qualifications.map((item) => (
+                {qualifications.map((item) => (
                   <li
                     key={item.en}
                     className="flex items-start gap-3 rounded-xl bg-white p-3 text-sm text-ink-700"
@@ -188,7 +195,7 @@ export default async function HomePage({
       <Section tone="soft">
         <Reveal>
           <SectionHeading
-            kicker={dict.nav.about}
+            kicker={dict.home.specialtiesKicker}
             title={dict.home.servicesTitle}
             intro={dict.home.servicesIntro}
           />
@@ -248,7 +255,7 @@ export default async function HomePage({
         <div className="mt-8">
           <Link
             href={localizePath(locale, "/blog")}
-            className="inline-flex items-center gap-2 text-sm font-bold text-brand-700 transition-colors hover:text-brand-600"
+            className="inline-flex items-center gap-2 rounded-lg py-1.5 text-sm font-bold text-brand-700 transition-colors hover:text-brand-600"
           >
             {dict.common.readMore}
             <span aria-hidden="true" className="rtl:rotate-180">→</span>
@@ -274,8 +281,8 @@ export default async function HomePage({
                 <dd className="mt-1.5 text-sm text-ink-700 break-words-safe">
                   {settings.contact.phone ? (
                     <a
-                      href={`tel:${(settings.contact.phoneIntl ?? settings.contact.phone).replace(/[^\d+]/g, "")}`}
-                      className="font-semibold text-navy-900 hover:text-brand-700"
+                      href={phoneLink(settings.contact.phone, settings.contact.phoneIntl) ?? "#"}
+                      className="inline-flex min-h-11 items-center text-lg font-bold text-navy-900 hover:text-brand-700"
                       dir="ltr"
                     >
                       {settings.contact.phone}
@@ -292,8 +299,8 @@ export default async function HomePage({
                 <dd className="mt-1.5 text-sm text-ink-700 break-words-safe">
                   {settings.contact.landline ? (
                     <a
-                      href={`tel:${(settings.contact.landlineIntl ?? settings.contact.landline).replace(/[^\d+]/g, "")}`}
-                      className="font-semibold text-navy-900 hover:text-brand-700"
+                      href={phoneLink(settings.contact.landline, settings.contact.landlineIntl) ?? "#"}
+                      className="inline-flex min-h-11 items-center text-lg font-bold text-navy-900 hover:text-brand-700"
                       dir="ltr"
                     >
                       {settings.contact.landline}
@@ -305,9 +312,9 @@ export default async function HomePage({
               </div>
               <div className="rounded-2xl border border-brand-100 bg-white p-4">
                 <dt className="text-xs font-bold tracking-wide text-brand-700 uppercase">
-                  {dict.home.locationTitle}
+                  {dict.home.locationCardLabel}
                 </dt>
-                <dd className="mt-1.5 text-sm text-ink-700 break-words-safe">
+                <dd className="mt-1.5 text-sm leading-relaxed text-ink-700 break-words-safe">
                   {settings.contact.address?.[locale] ?? dict.home.contactPlaceholder}
                 </dd>
               </div>

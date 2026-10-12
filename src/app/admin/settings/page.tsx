@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 
 import { apiGet, apiSend } from "@/components/admin/api";
+import { useDashboardLocale } from "@/components/admin/useDashboardLocale";
 import type { Settings } from "@/lib/settings";
 
 type SettingsResponse = { ok: boolean; settings: Settings };
@@ -45,16 +46,33 @@ function TextField({
 }
 
 export default function SettingsPage() {
+  const { t } = useDashboardLocale();
   const [settings, setSettings] = useState<Settings | null>(null);
+  const [savedSnapshot, setSavedSnapshot] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     apiGet<SettingsResponse>("/api/admin/settings")
-      .then((data) => setSettings(data.settings))
-      .catch(() => setError("Settings are unavailable. Check that you are signed in."));
-  }, []);
+      .then((data) => {
+        setSettings(data.settings);
+        setSavedSnapshot(JSON.stringify(data.settings));
+      })
+      .catch(() => setError(t.common.unavailable));
+  }, [t]);
+
+  // Warn before losing unsaved edits on tab close / reload.
+  const dirty = Boolean(settings) && JSON.stringify(settings) !== savedSnapshot;
+  useEffect(() => {
+    if (!dirty) return;
+    function onBeforeUnload(event: BeforeUnloadEvent) {
+      event.preventDefault();
+    }
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [dirty]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -71,10 +89,16 @@ export default function SettingsPage() {
         settings,
       );
       setSettings(data.settings);
-      setNotice("Settings saved.");
+      setSavedSnapshot(JSON.stringify(data.settings));
+      setNotice(t.settings.saved);
+      formRef.current?.scrollIntoView({ block: "nearest" });
     } catch (caught) {
       const apiError = caught as { errors?: Record<string, string> };
-      setError(apiError.errors ? Object.values(apiError.errors).join(" ") : "Could not save the settings.");
+      setError(
+        apiError.errors
+          ? Object.values(apiError.errors).join(" ")
+          : t.common.saveFailed,
+      );
     } finally {
       setSaving(false);
     }
@@ -99,57 +123,203 @@ export default function SettingsPage() {
 
   const update = (patch: Partial<Settings>) => setSettings((current) => ({ ...current!, ...patch }));
 
+  const qualifications = settings.doctor.qualifications;
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form ref={formRef} onSubmit={handleSubmit} className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-navy-900">Site settings</h1>
-        <p className="mt-1 text-sm text-slate-500">
-          Empty contact fields stay inactive on the website — no number or address is ever
-          invented.
-        </p>
+        <h1 className="text-2xl font-bold text-navy-900">{t.settings.title}</h1>
+        <p className="mt-1 text-sm text-slate-500">{t.settings.subtitle}</p>
       </div>
+
+      {/* Unsaved-changes banner — the save button only reports success
+          after the server confirms the write. */}
+      {dirty ? (
+        <p
+          role="status"
+          className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm font-semibold text-amber-900"
+        >
+          ⚠ {t.settings.unsaved} — {t.settings.unsavedHint}
+        </p>
+      ) : null}
 
       {error ? (
         <p className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
           {error}
         </p>
       ) : null}
+      {notice ? (
+        <p
+          role="status"
+          className="rounded-xl border border-green-200 bg-green-50 p-4 text-sm font-medium text-green-800"
+        >
+          ✓ {notice}
+        </p>
+      ) : null}
 
+      {/* ---------------- Doctor profile ---------------- */}
       <section className="rounded-2xl border border-slate-200 bg-white p-6">
-        <h2 className="text-xs font-bold tracking-wide text-slate-600 uppercase">Identity</h2>
+        <h2 className="text-xs font-bold tracking-wide text-slate-600 uppercase">
+          {t.settings.doctor}
+        </h2>
+        <p className="mt-1 text-xs leading-relaxed text-slate-500">{t.settings.doctorHint}</p>
+
+        <div className="mt-4 grid gap-5">
+          <div>
+            <label htmlFor="bio-ar" className="text-sm font-semibold text-navy-900">
+              {t.settings.bioAr}
+            </label>
+            <textarea
+              id="bio-ar"
+              dir="rtl"
+              rows={6}
+              className={`${inputClass} resize-y leading-relaxed`}
+              value={settings.doctor.biography.ar}
+              onChange={(event) =>
+                update({
+                  doctor: {
+                    ...settings.doctor,
+                    biography: { ...settings.doctor.biography, ar: event.target.value },
+                  },
+                })
+              }
+            />
+          </div>
+          <div>
+            <label htmlFor="bio-en" className="text-sm font-semibold text-navy-900">
+              {t.settings.bioEn}
+            </label>
+            <textarea
+              id="bio-en"
+              dir="ltr"
+              rows={6}
+              className={`${inputClass} resize-y leading-relaxed`}
+              value={settings.doctor.biography.en}
+              onChange={(event) =>
+                update({
+                  doctor: {
+                    ...settings.doctor,
+                    biography: { ...settings.doctor.biography, en: event.target.value },
+                  },
+                })
+              }
+            />
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold text-navy-900">{t.settings.qualifications}</p>
+            <ul className="mt-3 space-y-3">
+              {qualifications.map((qualification, index) => (
+                <li key={index} className="rounded-xl border border-slate-200 p-3">
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <label
+                        htmlFor={`qual-ar-${index}`}
+                        className="text-xs font-semibold text-slate-500"
+                      >
+                        {t.settings.qualificationAr}
+                      </label>
+                      <input
+                        id={`qual-ar-${index}`}
+                        dir="rtl"
+                        className={inputClass}
+                        value={qualification.ar}
+                        onChange={(event) => {
+                          const next = [...qualifications];
+                          next[index] = { ...qualification, ar: event.target.value };
+                          update({ doctor: { ...settings.doctor, qualifications: next } });
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor={`qual-en-${index}`}
+                        className="text-xs font-semibold text-slate-500"
+                      >
+                        {t.settings.qualificationEn}
+                      </label>
+                      <input
+                        id={`qual-en-${index}`}
+                        dir="ltr"
+                        className={inputClass}
+                        value={qualification.en}
+                        onChange={(event) => {
+                          const next = [...qualifications];
+                          next[index] = { ...qualification, en: event.target.value };
+                          update({ doctor: { ...settings.doctor, qualifications: next } });
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const next = qualifications.filter((_, i) => i !== index);
+                      update({ doctor: { ...settings.doctor, qualifications: next } });
+                    }}
+                    className="mt-2 text-xs font-semibold text-red-600 hover:text-red-700"
+                  >
+                    {t.common.remove}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <button
+              type="button"
+              onClick={() =>
+                update({
+                  doctor: {
+                    ...settings.doctor,
+                    qualifications: [...qualifications, { ar: "", en: "" }],
+                  },
+                })
+              }
+              className="mt-3 rounded-full border border-brand-300 px-4 py-2 text-sm font-semibold text-brand-700 hover:bg-brand-50"
+            >
+              + {t.settings.addQualification}
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------- Identity ---------------- */}
+      <section className="rounded-2xl border border-slate-200 bg-white p-6">
+        <h2 className="text-xs font-bold tracking-wide text-slate-600 uppercase">
+          {t.settings.identity}
+        </h2>
         <div className="mt-4 grid gap-5 sm:grid-cols-2">
           <TextField
-            label="Site name (AR)"
+            label={t.settings.siteNameAr}
             dir="rtl"
             value={settings.siteName.ar}
             onChange={(value) => update({ siteName: { ...settings.siteName, ar: value } })}
           />
           <TextField
-            label="Site name (EN)"
+            label={t.settings.siteNameEn}
             dir="ltr"
             value={settings.siteName.en}
             onChange={(value) => update({ siteName: { ...settings.siteName, en: value } })}
           />
           <TextField
-            label="Tagline (AR)"
+            label={t.settings.taglineAr}
             dir="rtl"
             value={settings.tagline.ar}
             onChange={(value) => update({ tagline: { ...settings.tagline, ar: value } })}
           />
           <TextField
-            label="Tagline (EN)"
+            label={t.settings.taglineEn}
             dir="ltr"
             value={settings.tagline.en}
             onChange={(value) => update({ tagline: { ...settings.tagline, en: value } })}
           />
           <TextField
-            label="Footer note (AR)"
+            label={t.settings.footerNoteAr}
             dir="rtl"
             value={settings.footerNote.ar}
             onChange={(value) => update({ footerNote: { ...settings.footerNote, ar: value } })}
           />
           <TextField
-            label="Footer note (EN)"
+            label={t.settings.footerNoteEn}
             dir="ltr"
             value={settings.footerNote.en}
             onChange={(value) => update({ footerNote: { ...settings.footerNote, en: value } })}
@@ -157,58 +327,56 @@ export default function SettingsPage() {
         </div>
       </section>
 
+      {/* ---------------- Contact ---------------- */}
       <section className="rounded-2xl border border-slate-200 bg-white p-6">
         <h2 className="text-xs font-bold tracking-wide text-slate-600 uppercase">
-          Contact — verified details only
+          {t.settings.contact}
         </h2>
         <div className="mt-4 grid gap-5 sm:grid-cols-3">
           <TextField
-            label="Mobile (national)"
+            label={t.settings.mobileNational}
             dir="ltr"
             type="tel"
             value={settings.contact.phone ?? ""}
             onChange={(value) => update({ contact: { ...settings.contact, phone: value || null } })}
-            hint="As printed on the clinic branding, e.g. 0799101101."
+            hint={t.settings.mobileIntl}
           />
           <TextField
-            label="Mobile (international)"
+            label={t.settings.mobileIntl}
             dir="ltr"
             type="tel"
             value={settings.contact.phoneIntl ?? ""}
             onChange={(value) =>
               update({ contact: { ...settings.contact, phoneIntl: value || null } })
             }
-            hint="Used for the tel: link, e.g. +962799101101."
           />
           <TextField
-            label="Clinic landline (national)"
+            label={t.settings.landlineNational}
             dir="ltr"
             type="tel"
             value={settings.contact.landline ?? ""}
             onChange={(value) =>
               update({ contact: { ...settings.contact, landline: value || null } })
             }
-            hint="As printed on the clinic branding, e.g. 065685354."
           />
           <TextField
-            label="Clinic landline (international)"
+            label={t.settings.landlineIntl}
             dir="ltr"
             type="tel"
             value={settings.contact.landlineIntl ?? ""}
             onChange={(value) =>
               update({ contact: { ...settings.contact, landlineIntl: value || null } })
             }
-            hint="Used for the tel: link, e.g. +96265685354."
           />
           <TextField
-            label="WhatsApp number"
+            label={t.settings.whatsappNumber}
             dir="ltr"
             type="tel"
             value={settings.contact.whatsapp ?? ""}
             onChange={(value) =>
               update({ contact: { ...settings.contact, whatsapp: value || null } })
             }
-            hint="Prepared link: https://wa.me/962799101101. Stored but NOT active until confirmed."
+            hint={t.settings.whatsappHint}
           />
           <div className="flex items-center gap-3 self-end pb-1.5">
             <input
@@ -223,11 +391,11 @@ export default function SettingsPage() {
               }
             />
             <label htmlFor="whatsapp-enabled" className="text-sm font-semibold text-navy-900">
-              WhatsApp confirmed — activate channel
+              {t.settings.whatsappEnable}
             </label>
           </div>
           <TextField
-            label="Email"
+            label={t.settings.email}
             dir="ltr"
             type="email"
             value={settings.contact.email ?? ""}
@@ -237,37 +405,33 @@ export default function SettingsPage() {
 
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
           <TextField
-            label="Address (AR)"
+            label={t.settings.addressAr}
             dir="rtl"
             value={settings.contact.address?.ar ?? ""}
             onChange={(value) =>
               update({
                 contact: {
                   ...settings.contact,
-                  address: value
-                    ? { ar: value, en: settings.contact.address?.en ?? "" }
-                    : null,
+                  address: value ? { ar: value, en: settings.contact.address?.en ?? "" } : null,
                 },
               })
             }
           />
           <TextField
-            label="Address (EN)"
+            label={t.settings.addressEn}
             dir="ltr"
             value={settings.contact.address?.en ?? ""}
             onChange={(value) =>
               update({
                 contact: {
                   ...settings.contact,
-                  address: value
-                    ? { ar: settings.contact.address?.ar ?? "", en: value }
-                    : null,
+                  address: value ? { ar: settings.contact.address?.ar ?? "", en: value } : null,
                 },
               })
             }
           />
           <TextField
-            label="Working hours (AR)"
+            label={t.settings.hoursAr}
             dir="rtl"
             value={settings.contact.workingHours?.ar ?? ""}
             onChange={(value) =>
@@ -282,7 +446,7 @@ export default function SettingsPage() {
             }
           />
           <TextField
-            label="Working hours (EN)"
+            label={t.settings.hoursEn}
             dir="ltr"
             value={settings.contact.workingHours?.en ?? ""}
             onChange={(value) =>
@@ -299,9 +463,34 @@ export default function SettingsPage() {
         </div>
       </section>
 
+      {/* ---------------- Maps ---------------- */}
+      <section className="rounded-2xl border border-slate-200 bg-white p-6">
+        <h2 className="text-xs font-bold tracking-wide text-slate-600 uppercase">{t.settings.maps}</h2>
+        <p className="mt-1 text-xs leading-relaxed text-slate-500">{t.settings.mapsHint}</p>
+        <div className="mt-4 grid gap-5">
+          <TextField
+            label={t.settings.mapsEmbed}
+            dir="ltr"
+            value={settings.contact.mapsEmbedUrl ?? ""}
+            onChange={(value) =>
+              update({ contact: { ...settings.contact, mapsEmbedUrl: value || null } })
+            }
+          />
+          <TextField
+            label={t.settings.mapsPlace}
+            dir="ltr"
+            value={settings.contact.mapsPlaceUrl ?? ""}
+            onChange={(value) =>
+              update({ contact: { ...settings.contact, mapsPlaceUrl: value || null } })
+            }
+          />
+        </div>
+      </section>
+
+      {/* ---------------- Social ---------------- */}
       <section className="rounded-2xl border border-slate-200 bg-white p-6">
         <h2 className="text-xs font-bold tracking-wide text-slate-600 uppercase">
-          Social links (optional)
+          {t.settings.social}
         </h2>
         <div className="mt-4 grid gap-5 sm:grid-cols-2">
           {(["facebook", "instagram", "x", "linkedin", "youtube"] as const).map((key) => (
@@ -317,89 +506,46 @@ export default function SettingsPage() {
         </div>
       </section>
 
+      {/* ---------------- Branding ---------------- */}
       <section className="rounded-2xl border border-slate-200 bg-white p-6">
         <h2 className="text-xs font-bold tracking-wide text-slate-600 uppercase">
-          Google Maps (exact client-supplied embed)
+          {t.settings.branding}
         </h2>
-        <p className="mt-1 text-sm text-slate-500">
-          Only google.com/maps/embed URLs are accepted — never a generated search URL. The
-          &ldquo;Open in Google Maps&rdquo; link must target the same place as the embed.
-        </p>
-        <div className="mt-4 grid gap-5">
-          <TextField
-            label="Maps embed URL"
-            dir="ltr"
-            value={settings.contact.mapsEmbedUrl ?? ""}
-            onChange={(value) =>
-              update({ contact: { ...settings.contact, mapsEmbedUrl: value || null } })
-            }
-            hint="The exact embed supplied by the client."
-          />
-          <TextField
-            label="Open-in-Maps URL"
-            dir="ltr"
-            value={settings.contact.mapsPlaceUrl ?? ""}
-            onChange={(value) =>
-              update({ contact: { ...settings.contact, mapsPlaceUrl: value || null } })
-            }
-            hint="Same place feature as the embed (no invented place IDs, no coordinates)."
-          />
-        </div>
-      </section>
-
-      <section className="rounded-2xl border border-slate-200 bg-white p-6">
-        <h2 className="text-xs font-bold tracking-wide text-slate-600 uppercase">Branding</h2>
         <div className="mt-4 grid gap-5 sm:grid-cols-2">
           <TextField
-            label="Primary brand color (hex)"
+            label={t.settings.brandColor}
             dir="ltr"
             value={settings.branding.brandColor}
             onChange={(value) =>
               update({ branding: { ...settings.branding, brandColor: value } })
             }
-            hint="Sampled from the supplied brand reference: #0097F3."
           />
           <TextField
-            label="Emblem (light backgrounds)"
+            label={t.settings.logoLight}
             dir="ltr"
             value={settings.branding.logoUrl ?? ""}
             onChange={(value) =>
               update({ branding: { ...settings.branding, logoUrl: value || null } })
             }
-            hint="Local path, e.g. /images/logo-emblem.png"
           />
           <TextField
-            label="Emblem (dark backgrounds)"
+            label={t.settings.logoDark}
             dir="ltr"
             value={settings.branding.logoUrlDark ?? ""}
             onChange={(value) =>
               update({ branding: { ...settings.branding, logoUrlDark: value || null } })
             }
-            hint="Local path, e.g. /images/logo-emblem-transparent.png"
           />
         </div>
-        <p className="mt-4 text-xs leading-relaxed text-slate-500">
-          The emblem is a faithful crop of the supplied brand reference image. Never replace it
-          with an unrelated icon; the original transparent logo (if supplied) replaces these
-          crops 1:1.
-        </p>
+        <p className="mt-4 text-xs leading-relaxed text-slate-500">{t.settings.logoHint}</p>
       </section>
-
-      {notice ? (
-        <p
-          role="status"
-          className="rounded-xl border border-green-200 bg-green-50 p-4 text-sm font-medium text-green-800"
-        >
-          {notice}
-        </p>
-      ) : null}
 
       <button
         type="submit"
         disabled={saving}
         className="rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-60"
       >
-        {saving ? "Saving…" : "Save settings"}
+        {saving ? t.common.saving : t.common.save}
       </button>
     </form>
   );

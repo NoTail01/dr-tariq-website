@@ -43,12 +43,54 @@ type Props = {
     byAuthor: string;
     demoBadge: string;
     demoArticleBadge: string;
+    notInLanguage: string;
+    readInArabic: string;
+    readInEnglish: string;
     category: { demo: string; guides: string; news: string };
   };
 };
 
 export default function ArticleCard({ article, locale, labels }: Props) {
-  const href = localizePath(locale, `/blog/${article.slug[locale]}`);
+  const slug = article.slug[locale];
+  const otherLocale: Locale = locale === "ar" ? "en" : "ar";
+  const otherSlug = article.slug[otherLocale];
+
+  // Bilingual fallback: never emit a broken link. When this locale has no
+  // slug, the card explains the gap and links to the available language
+  // instead of silently showing the wrong language.
+  if (!slug) {
+    return (
+      <article className="flex h-full flex-col rounded-2xl border border-dashed border-brand-300 bg-brand-50/60 p-6">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-brand-700">
+            {categoryLabel(article.category, labels.category)}
+          </span>
+          {article.isDemo ? <DevBadge label={labels.demoBadge} /> : null}
+        </div>
+
+        <h3 className="mt-4 text-xl font-bold text-navy-900 break-words-safe">
+          {article.title[otherLocale] || labels.notInLanguage}
+        </h3>
+
+        <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-500 break-words-safe">
+          {labels.notInLanguage}
+        </p>
+
+        {otherSlug ? (
+          <Link
+            href={localizePath(otherLocale, `/blog/${otherSlug}`)}
+            hrefLang={otherLocale}
+            className="mt-4 inline-flex min-h-9 items-center gap-1.5 rounded-lg text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"
+          >
+            {otherLocale === "ar" ? labels.readInArabic : labels.readInEnglish}
+            <span aria-hidden="true" className="rtl:rotate-180">→</span>
+          </Link>
+        ) : null}
+      </article>
+    );
+  }
+
+  const href = localizePath(locale, `/blog/${slug}`);
 
   return (
     <article className="group flex h-full flex-col rounded-2xl border border-brand-100 bg-white p-6 transition-shadow hover:shadow-[0_10px_40px_-18px_rgba(8,33,63,0.45)]">
@@ -81,7 +123,7 @@ export default function ArticleCard({ article, locale, labels }: Props) {
 
       <Link
         href={href}
-        className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"
+        className="mt-4 inline-flex min-h-9 items-center gap-1.5 rounded-lg text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"
       >
         {labels.readMore}
         <span aria-hidden="true" className="rtl:rotate-180">→</span>

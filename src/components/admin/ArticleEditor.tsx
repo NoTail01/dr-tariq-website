@@ -1,9 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 
 import { apiSend } from "@/components/admin/api";
+import { useDashboardLocale } from "@/components/admin/useDashboardLocale";
 import {
   ARTICLE_CATEGORIES,
   type Article,
@@ -54,12 +55,24 @@ const inputClass =
 
 export default function ArticleEditor({ article }: Props) {
   const router = useRouter();
+  const { t } = useDashboardLocale();
   const [form, setForm] = useState<FormState>(() => toFormState(article));
   const [locale, setLocale] = useState<"ar" | "en">("ar");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
-  const [notice, setNotice] = useState<string | null>(null);
+  const [notice, setNotice] = useState<{ kind: "success" | "error"; text: string } | null>(null);
   const [uploading, setUploading] = useState(false);
+
+  // Warn before losing unsaved edits.
+  const dirty = JSON.stringify(form) !== JSON.stringify(toFormState(article));
+  useEffect(() => {
+    if (!dirty) return;
+    function onBeforeUnload(event: BeforeUnloadEvent) {
+      event.preventDefault();
+    }
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [dirty]);
 
   const setLocalized = (field: keyof FormState, key: "ar" | "en", value: string) => {
     setForm((current) => ({
@@ -80,7 +93,7 @@ export default function ArticleEditor({ article }: Props) {
         | null;
 
       if (!response.ok || !body?.ok || !body.url) {
-        setNotice(body?.message ?? "Image upload failed.");
+        setNotice({ kind: "error", text: body?.message ?? t.common.saveFailed });
         return;
       }
       setForm((current) => ({ ...current, coverUrl: body.url as string }));
@@ -99,12 +112,17 @@ export default function ArticleEditor({ article }: Props) {
     const localErrors: Record<string, string> = {};
     for (const key of ["ar", "en"] as const) {
       if (form.slug[key] && !SLUG_PATTERN.test(form.slug[key])) {
-        localErrors[`slug.${key}`] = "Lowercase Latin letters, numbers and hyphens only.";
+        localErrors[`slug.${key}`] = t.editor.slugInvalid;
+      }
+      if (!form.title[key].trim()) {
+        localErrors[`title.${key}`] =
+          key === "ar" ? t.editor.titleRequiredAr : t.editor.titleRequiredEn;
       }
     }
     if (Object.keys(localErrors).length > 0) {
       setErrors(localErrors);
       setSaving(false);
+      setNotice({ kind: "error", text: t.editor.saveFailed });
       return;
     }
 
@@ -128,7 +146,10 @@ export default function ArticleEditor({ article }: Props) {
     try {
       if (article) {
         await apiSend("PATCH", `/api/admin/articles/${article.id}`, payload);
-        setNotice("Saved.");
+        setNotice({
+          kind: "success",
+          text: form.status === "published" ? t.editor.published : t.editor.saved,
+        });
         router.refresh();
       } else {
         const created = (await apiSend<{ article: Article }>(
@@ -136,17 +157,17 @@ export default function ArticleEditor({ article }: Props) {
           "/api/admin/articles",
           payload,
         )) as { article: Article };
+        setNotice({ kind: "success", text: t.editor.saved });
         router.replace(`/admin/articles/${created.article.id}`);
         router.refresh();
       }
     } catch (error) {
       const apiError = error as { errors?: Record<string, string>; status?: number };
       if (apiError.errors) setErrors(apiError.errors);
-      setNotice(
-        apiError.status === 401
-          ? "Your session expired. Sign in again."
-          : "Could not save the article.",
-      );
+      setNotice({
+        kind: "error",
+        text: apiError.status === 401 ? t.editor.unsaved : t.editor.saveFailed,
+      });
     } finally {
       setSaving(false);
     }
@@ -160,12 +181,29 @@ export default function ArticleEditor({ article }: Props) {
     ) : null;
 
   const tabs: { key: "ar" | "en"; label: string; dir: "rtl" | "ltr" }[] = [
-    { key: "ar", label: "العربية", dir: "rtl" },
-    { key: "en", label: "English", dir: "ltr" },
+    { key: "ar", label: t.common.arabic, dir: "rtl" },
+    { key: "en", label: t.common.english, dir: "ltr" },
   ];
+
+  const categoryLabels: Record<ArticleCategory, string> = {
+    demo: t.articles.colCategory, // replaced below with blog categories
+    guides: t.articles.colCategory,
+    news: t.articles.colCategory,
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl font-bold text-navy-900">
+          {article ? t.editor.editTitle : t.editor.newTitle}
+        </h1>
+        {dirty ? (
+          <span className="rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-900">
+            ⚠ {t.editor.unsaved}
+          </span>
+        ) : null}
+      </div>
+
       {/* Language tabs */}
       <div className="flex gap-2" role="tablist" aria-label="Content language">
         {tabs.map((tab) => (
@@ -192,7 +230,7 @@ export default function ArticleEditor({ article }: Props) {
           <div dir={locale === "ar" ? "rtl" : "ltr"} className="space-y-5">
             <div>
               <label className="text-sm font-semibold text-navy-900" htmlFor="title">
-                Title ({locale.toUpperCase()})
+                {locale === "ar" ? t.editor.titleAr : t.editor.titleEn}
               </label>
               <input
                 id="title"
@@ -205,7 +243,7 @@ export default function ArticleEditor({ article }: Props) {
 
             <div>
               <label className="text-sm font-semibold text-navy-900" htmlFor="slug">
-                Slug ({locale.toUpperCase()})
+                {locale === "ar" ? t.editor.slugAr : t.editor.slugEn}
               </label>
               <input
                 id="slug"
@@ -215,15 +253,13 @@ export default function ArticleEditor({ article }: Props) {
                 value={form.slug[locale]}
                 onChange={(e) => setLocalized("slug", locale, e.target.value.toLowerCase())}
               />
-              <p className="mt-1 text-xs text-slate-500">
-                Latin characters only, e.g. <code>healthy-habits</code>
-              </p>
+              <p className="mt-1 text-xs text-slate-500">{t.editor.slugInvalid}</p>
               {err(`slug.${locale}`)}
             </div>
 
             <div>
               <label className="text-sm font-semibold text-navy-900" htmlFor="excerpt">
-                Excerpt ({locale.toUpperCase()})
+                {locale === "ar" ? t.editor.excerptAr : t.editor.excerptEn}
               </label>
               <textarea
                 id="excerpt"
@@ -237,7 +273,7 @@ export default function ArticleEditor({ article }: Props) {
 
             <div>
               <label className="text-sm font-semibold text-navy-900" htmlFor="body">
-                Body ({locale.toUpperCase()}) — Markdown-lite
+                {locale === "ar" ? t.editor.bodyAr : t.editor.bodyEn}
               </label>
               <textarea
                 id="body"
@@ -246,10 +282,6 @@ export default function ArticleEditor({ article }: Props) {
                 value={form.body[locale]}
                 onChange={(e) => setLocalized("body", locale, e.target.value)}
               />
-              <p className="mt-1 text-xs text-slate-500">
-                Separate paragraphs with an empty line, headings with <code>##</code>, lists
-                with <code>-</code>.
-              </p>
               {err(`body.${locale}`)}
             </div>
 
@@ -259,7 +291,7 @@ export default function ArticleEditor({ article }: Props) {
               </p>
               <div className="mt-3">
                 <label className="text-sm font-semibold text-navy-900" htmlFor="seo-title">
-                  SEO title
+                  {t.editor.seoTitle}
                 </label>
                 <input
                   id="seo-title"
@@ -272,7 +304,7 @@ export default function ArticleEditor({ article }: Props) {
               </div>
               <div className="mt-3">
                 <label className="text-sm font-semibold text-navy-900" htmlFor="seo-desc">
-                  SEO description
+                  {t.editor.seoDescription}
                 </label>
                 <textarea
                   id="seo-desc"
@@ -291,11 +323,13 @@ export default function ArticleEditor({ article }: Props) {
         {/* ---------------- Settings ---------------- */}
         <div className="space-y-6">
           <div className="rounded-2xl border border-slate-200 bg-white p-6">
-            <p className="text-xs font-bold tracking-wide text-slate-600 uppercase">Publishing</p>
+            <p className="text-xs font-bold tracking-wide text-slate-600 uppercase">
+              {t.editor.status}
+            </p>
 
             <div className="mt-4">
               <label className="text-sm font-semibold text-navy-900" htmlFor="status">
-                Status
+                {t.editor.status}
               </label>
               <select
                 id="status"
@@ -305,14 +339,14 @@ export default function ArticleEditor({ article }: Props) {
                   setForm((c) => ({ ...c, status: e.target.value as FormState["status"] }))
                 }
               >
-                <option value="draft">Draft (private)</option>
-                <option value="published">Published</option>
+                <option value="draft">{t.articles.statusDraft}</option>
+                <option value="published">{t.articles.statusPublished}</option>
               </select>
             </div>
 
             <div className="mt-4">
               <label className="text-sm font-semibold text-navy-900" htmlFor="category">
-                Category
+                {t.editor.category}
               </label>
               <select
                 id="category"
@@ -324,7 +358,7 @@ export default function ArticleEditor({ article }: Props) {
               >
                 {ARTICLE_CATEGORIES.map((category) => (
                   <option key={category} value={category}>
-                    {category}
+                    {categoryLabels[category]}
                   </option>
                 ))}
               </select>
@@ -333,19 +367,16 @@ export default function ArticleEditor({ article }: Props) {
             <label className="mt-4 flex items-start gap-3 text-sm text-slate-700">
               <input
                 type="checkbox"
-                className="mt-0.5 h-4 w-4 accent-[#1767c4]"
+                className="mt-0.5 h-4 w-4 accent-[#0b74c9]"
                 checked={form.isDemo}
                 onChange={(e) => setForm((c) => ({ ...c, isDemo: e.target.checked }))}
               />
-              <span>
-                <strong>Demo/template article.</strong> Marked on the page, excluded from the
-                sitemap, and hidden in production.
-              </span>
+              <span>{t.editor.demo}</span>
             </label>
 
             <div className="mt-4">
               <label className="text-sm font-semibold text-navy-900" htmlFor="source">
-                Source URL (optional)
+                {t.editor.sourceUrl}
               </label>
               <input
                 id="source"
@@ -360,10 +391,12 @@ export default function ArticleEditor({ article }: Props) {
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-6">
-            <p className="text-xs font-bold tracking-wide text-slate-600 uppercase">Author</p>
+            <p className="text-xs font-bold tracking-wide text-slate-600 uppercase">
+              {t.editor.authorAr} / {t.editor.authorEn}
+            </p>
             <div className="mt-3">
               <label className="text-sm font-semibold text-navy-900" htmlFor="author-ar">
-                Author (AR)
+                {t.editor.authorAr}
               </label>
               <input
                 id="author-ar"
@@ -375,7 +408,7 @@ export default function ArticleEditor({ article }: Props) {
             </div>
             <div className="mt-3">
               <label className="text-sm font-semibold text-navy-900" htmlFor="author-en">
-                Author (EN)
+                {t.editor.authorEn}
               </label>
               <input
                 id="author-en"
@@ -388,7 +421,9 @@ export default function ArticleEditor({ article }: Props) {
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-6">
-            <p className="text-xs font-bold tracking-wide text-slate-600 uppercase">Cover image</p>
+            <p className="text-xs font-bold tracking-wide text-slate-600 uppercase">
+              {t.editor.coverImage}
+            </p>
 
             <div className="mt-3 flex items-center gap-3">
               {form.coverUrl ? (
@@ -400,11 +435,11 @@ export default function ArticleEditor({ article }: Props) {
                 />
               ) : (
                 <div className="flex h-16 w-16 items-center justify-center rounded-lg border border-dashed border-slate-300 text-xs text-slate-400">
-                  none
+                  —
                 </div>
               )}
               <label className="cursor-pointer rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100">
-                {uploading ? "Uploading…" : "Upload"}
+                {uploading ? t.common.saving : t.editor.upload}
                 <input
                   type="file"
                   accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
@@ -420,7 +455,7 @@ export default function ArticleEditor({ article }: Props) {
 
             <div className="mt-3">
               <label className="text-sm font-semibold text-navy-900" htmlFor="cover-url">
-                Image URL
+                {t.editor.imageUrl}
               </label>
               <input
                 id="cover-url"
@@ -434,7 +469,7 @@ export default function ArticleEditor({ article }: Props) {
 
             <div className="mt-3">
               <label className="text-sm font-semibold text-navy-900" htmlFor="cover-alt-ar">
-                Alt text (AR)
+                {t.editor.altAr}
               </label>
               <input
                 id="cover-alt-ar"
@@ -446,7 +481,7 @@ export default function ArticleEditor({ article }: Props) {
             </div>
             <div className="mt-3">
               <label className="text-sm font-semibold text-navy-900" htmlFor="cover-alt-en">
-                Alt text (EN)
+                {t.editor.altEn}
               </label>
               <input
                 id="cover-alt-en"
@@ -465,12 +500,12 @@ export default function ArticleEditor({ article }: Props) {
         <p
           role="status"
           className={`rounded-xl p-4 text-sm font-medium ${
-            notice === "Saved."
+            notice.kind === "success"
               ? "border border-green-200 bg-green-50 text-green-800"
               : "border border-red-200 bg-red-50 text-red-700"
           }`}
         >
-          {notice}
+          {notice.text}
         </p>
       ) : null}
 
@@ -480,7 +515,11 @@ export default function ArticleEditor({ article }: Props) {
           disabled={saving}
           className="rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-60"
         >
-          {saving ? "Saving…" : article ? "Save changes" : "Create article"}
+          {saving
+            ? t.common.saving
+            : article
+              ? t.common.save
+              : t.editor.saveDraft}
         </button>
 
         {article ? (
@@ -490,16 +529,19 @@ export default function ArticleEditor({ article }: Props) {
             rel="noreferrer"
             className="rounded-xl border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100"
           >
-            Preview in new tab
+            {t.editor.previewNewTab}
           </a>
         ) : null}
 
         <button
           type="button"
-          onClick={() => router.push("/admin/articles")}
+          onClick={() => {
+            if (dirty && !window.confirm(t.editor.discardConfirm)) return;
+            router.push("/admin/articles");
+          }}
           className="rounded-xl border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100"
         >
-          Cancel
+          {t.common.cancel}
         </button>
       </div>
     </form>

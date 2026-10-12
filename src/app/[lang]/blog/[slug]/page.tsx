@@ -15,6 +15,14 @@ import { getSiteMode, SITE_URL } from "@/lib/site";
 type Params = { lang: string; slug: string };
 
 /**
+ * The article body depends on `params` (locale + slug), so a navigation into
+ * this route is allowed to block on the server rather than being validated
+ * for instant navigation. Documented fix for the instant-navigation
+ * validation warning on `/blog/[slug]`.
+ */
+export const instant = false;
+
+/**
  * Known slugs are prerendered for both locales. Slugs whose article is not
  * visible (for example demo articles in a production build) call `notFound()`
  * and ship as 404s; unknown slugs render on demand.
@@ -70,7 +78,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[s
   if (!article) notFound();
 
   const others = (await getVisibleArticles(mode))
-    .filter((a) => a.id !== article.id)
+    .filter((a) => a.id !== article.id && a.slug[locale].length > 0)
     .slice(0, 3);
 
   const jsonLd = {

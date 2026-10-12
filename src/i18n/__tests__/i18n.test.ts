@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { dashboardDict } from "@/components/admin/dashboard-dict";
 import { getDictionary } from "@/i18n/dictionaries";
 import {
   defaultLocale,
@@ -89,5 +90,36 @@ describe("locale path helpers", () => {
     expect(isLocale("fr")).toBe(false);
     expect(isRtl("ar")).toBe(true);
     expect(isRtl("en")).toBe(false);
+  });
+});
+
+describe("dashboard dictionary", () => {
+  it("keeps Arabic and English structures in sync", () => {
+    const arKeys = flattenKeys(dashboardDict.ar).sort();
+    const enKeys = flattenKeys(dashboardDict.en).sort();
+    expect(arKeys).toEqual(enKeys);
+  });
+
+  it("has a non-empty Arabic string for every label", () => {
+    const empty: string[] = [];
+    const walk = (value: unknown, path: string) => {
+      if (typeof value === "string") {
+        if (value.trim().length === 0) empty.push(path);
+        return;
+      }
+      if (typeof value !== "object" || value === null) return;
+      for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
+        walk(child, path ? `${path}.${key}` : key);
+      }
+    };
+    walk(dashboardDict.ar, "");
+    expect(empty).toEqual([]);
+  });
+
+  it("provides Arabic labels for the shell, settings, editor and login", () => {
+    expect(dashboardDict.ar.shell.overview.length).toBeGreaterThan(0);
+    expect(dashboardDict.ar.settings.bioAr).toContain("عربي");
+    expect(dashboardDict.ar.editor.titleAr).toContain("عربي");
+    expect(dashboardDict.ar.login.signIn.length).toBeGreaterThan(0);
   });
 });

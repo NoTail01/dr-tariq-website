@@ -81,6 +81,7 @@ export const ar: Dictionary = {
     membershipsTitle: "العضويات",
     membershipsIntro: "تُنشر العضويات كما وردت في كل مصدر.",
     servicesTitle: "التخصصات",
+    specialtiesKicker: "مجالات الخبرة",
     servicesIntro:
       "نظرة معلوماتية على مجالات تخصص الدكتور. تعد زراعة الكلى من مجالات خبرته، ولا تُجرى العمليات الجراحية في العيادة.",
     services: [
@@ -107,6 +108,7 @@ export const ar: Dictionary = {
     contactTitle: "العيادة والتواصل",
     contactText: "اتصل بالعيادة لحجز موعد أو للاستفسار عن مواعيد المراجعة.",
     contactPlaceholder: "ستُنشر بيانات التواصل هنا.",
+    locationCardLabel: "موقع العيادة",
     locationTitle: "موقع عيادة الدكتور طارق أبو حويج في عمّان",
     locationText:
       "تعرّف على موقع عيادة الدكتور طارق أبو حويج في عمّان، واستعرض الخريطة أو اتصل بالعيادة للاستفسار عن المواعيد. العيادة خلف المستشفى التخصصي، مجمع الرياض الطبي، الطابق الأول.",
@@ -153,6 +155,9 @@ export const ar: Dictionary = {
     categoryNews: "أخبار العيادة",
     demoArticleBadge: "مقال تجريبي — ليس محتوى طبياً",
     byAuthor: "بقلم",
+    notInLanguage: "هذا المقال غير متوفر بهذه اللغة حتى الآن.",
+    readInArabic: "اقرأه بالعربية",
+    readInEnglish: "اقرأه بالإنجليزية",
   },
   book: {
     title: "احجز الآن",
@@ -165,6 +170,7 @@ export const ar: Dictionary = {
     landlineTitle: "هاتف العيادة",
     landlineText: "رقم هاتف العيادة الأرضي كما هو منشور في هوية العيادة.",
     callAction: "اتصل",
+    mobileCallPrompt: "للحجز، اتصل بالعيادة",
     whatsappTitle: "واتساب",
     whatsappText:
       "لم يتم تأكيد دعم واتساب على رقم جوال العيادة بعد، لذا تبقى هذه القناة غير مفعّلة. الرابط المُحضَّر هو wa.me/962799101101 وسيُفعَّل بعد التأكيد.",

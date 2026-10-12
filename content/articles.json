@@ -3,7 +3,10 @@
     "id": "demo-article-001",
     "status": "published",
     "isDemo": true,
-    "slug": { "ar": "demo-blog-article", "en": "demo-blog-article" },
+    "slug": {
+      "ar": "demo-blog-article",
+      "en": "demo-blog-article"
+    },
     "title": {
       "ar": "مقال تجريبي: هكذا تظهر المقالات في المدونة",
       "en": "Demo article: how posts appear in the blog"
@@ -20,7 +23,7 @@
     "coverImage": null,
     "seo": {
       "title": {
-        "ar": "مقال تجريبي للمدونة | د. طارق أبو هويجة",
+        "ar": "مقال تجريبي للمدونة | الدكتور طارق أبو حويج",
         "en": "Demo blog article | Dr Tariq Abu Hweij"
       },
       "description": {
@@ -28,7 +31,10 @@
         "en": "A demo entry showing what a published blog post looks like during development."
       }
     },
-    "author": { "ar": "فريق الموقع (نموذج تجريبي)", "en": "Site team (demo)" },
+    "author": {
+      "ar": "فريق الموقع (نموذج تجريبي)",
+      "en": "Site team (demo)"
+    },
     "sourceUrl": null,
     "publishedAt": "2026-10-08T09:00:00.000Z",
     "updatedAt": "2026-10-08T09:00:00.000Z"
@@ -37,7 +43,10 @@
     "id": "demo-article-002",
     "status": "published",
     "isDemo": true,
-    "slug": { "ar": "demo-preview-and-seo", "en": "demo-preview-and-seo" },
+    "slug": {
+      "ar": "demo-preview-and-seo",
+      "en": "demo-preview-and-seo"
+    },
     "title": {
       "ar": "معاينة المقال وبياناته قبل النشر",
       "en": "Previewing an article and its metadata before publishing"
@@ -54,7 +63,7 @@
     "coverImage": null,
     "seo": {
       "title": {
-        "ar": "معاينة المقال وبياناته قبل النشر | د. طارق أبو هويجة",
+        "ar": "معاينة المقال وبياناته قبل النشر | الدكتور طارق أبو حويج",
         "en": "Previewing an article before publishing | Dr Tariq Abu Hweij"
       },
       "description": {
@@ -62,7 +71,10 @@
         "en": "A demo walkthrough of article previews and search metadata in the dashboard."
       }
     },
-    "author": { "ar": "فريق الموقع (نموذج تجريبي)", "en": "Site team (demo)" },
+    "author": {
+      "ar": "فريق الموقع (نموذج تجريبي)",
+      "en": "Site team (demo)"
+    },
     "sourceUrl": null,
     "publishedAt": "2026-10-07T09:00:00.000Z",
     "updatedAt": "2026-10-07T09:00:00.000Z"
@@ -71,7 +83,10 @@
     "id": "demo-article-003",
     "status": "draft",
     "isDemo": true,
-    "slug": { "ar": "demo-draft", "en": "demo-draft" },
+    "slug": {
+      "ar": "demo-draft",
+      "en": "demo-draft"
+    },
     "title": {
       "ar": "مسودة تجريبية — لا تظهر للزوار",
       "en": "Demo draft — never shown to visitors"
@@ -87,10 +102,19 @@
     "category": "demo",
     "coverImage": null,
     "seo": {
-      "title": { "ar": "", "en": "" },
-      "description": { "ar": "", "en": "" }
+      "title": {
+        "ar": "",
+        "en": ""
+      },
+      "description": {
+        "ar": "",
+        "en": ""
+      }
     },
-    "author": { "ar": "فريق الموقع (نموذج تجريبي)", "en": "Site team (demo)" },
+    "author": {
+      "ar": "فريق الموقع (نموذج تجريبي)",
+      "en": "Site team (demo)"
+    },
     "sourceUrl": null,
     "publishedAt": null,
     "updatedAt": "2026-10-08T09:30:00.000Z"

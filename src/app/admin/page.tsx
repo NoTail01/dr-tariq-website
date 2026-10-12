@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { useDashboardLocale } from "@/components/admin/useDashboardLocale";
 import type { Article } from "@/lib/article-types";
 
 type Session = { enabled: boolean; authenticated: boolean; mode: string };
 
 export default function AdminOverviewPage() {
+  const { t } = useDashboardLocale();
   const [session, setSession] = useState<Session | null>(null);
   const [articles, setArticles] = useState<Article[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -23,8 +25,8 @@ export default function AdminOverviewPage() {
         setSession(sessionData);
         setArticles(articlesData.articles ?? []);
       })
-      .catch(() => setError("Article data is unavailable. Check that you are signed in."));
-  }, []);
+      .catch(() => setError(t.common.unavailable));
+  }, [t]);
 
   const published = articles?.filter((a) => a.status === "published").length ?? 0;
   const drafts = articles?.filter((a) => a.status === "draft").length ?? 0;
@@ -32,17 +34,15 @@ export default function AdminOverviewPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-navy-900">Overview</h1>
-        <p className="mt-1 text-sm text-slate-500">
-          Create, preview and publish articles in Arabic and English.
-        </p>
+        <h1 className="text-2xl font-bold text-navy-900">{t.home.title}</h1>
+        <p className="mt-1 text-sm text-slate-500">{t.home.subtitle}</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         {[
-          { label: "Articles", value: articles ? articles.length : "—" },
-          { label: "Published", value: published },
-          { label: "Drafts", value: drafts },
+          { label: t.home.articles, value: articles ? articles.length : "—" },
+          { label: t.home.published, value: published },
+          { label: t.home.drafts, value: drafts },
         ].map((card) => (
           <div key={card.label} className="rounded-2xl border border-slate-200 bg-white p-5">
             <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
@@ -54,28 +54,26 @@ export default function AdminOverviewPage() {
       </div>
 
       {error ? (
-        <p className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        <p className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
           {error}
         </p>
       ) : null}
 
       <div className="rounded-2xl border border-slate-200 bg-white p-6">
-        <h2 className="text-lg font-bold text-navy-900">Environment</h2>
+        <h2 className="text-lg font-bold text-navy-900">{t.home.environment}</h2>
         <ul className="mt-3 space-y-2 text-sm text-slate-600">
           <li>
-            Mode:{" "}
+            {t.home.environment}:{" "}
             <strong>
-              {session?.mode === "development"
-                ? "local development (open dashboard)"
-                : "production (token protected)"}
+              {session?.mode === "development" ? t.home.devMode : t.home.prodMode}
             </strong>
           </li>
           <li>
-            Dashboard enabled: <strong>{session?.enabled ? "yes" : "no"}</strong>
+            {t.shell.brand}:{" "}
+            <strong>{session?.enabled ? t.home.enabledYes : t.home.enabledNo}</strong>
           </li>
-          <li>
-            Backend: <strong>file-based (content/articles.json)</strong> — Supabase not
-            connected yet, see <code>docs/SUPABASE.md</code>
+          <li className="break-words-safe">
+            {t.home.backend} — <code>docs/SUPABASE.md</code>
           </li>
         </ul>
 
@@ -84,23 +82,23 @@ export default function AdminOverviewPage() {
             href="/admin/articles/new"
             className="rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700"
           >
-            New article
+            {t.home.newArticle}
           </Link>
           <Link
             href="/admin/settings"
             className="rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-100"
           >
-            Site settings
+            {t.home.siteSettings}
           </Link>
         </div>
       </div>
 
       <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-sm text-amber-900">
-        <p className="font-bold">Content rules</p>
+        <p className="font-bold">{t.home.contentRules}</p>
         <ul className="mt-2 list-disc space-y-1 ps-5">
-          <li>Only publish facts that can be traced to a source (see src/content/SOURCES.md).</li>
-          <li>Never add qualifications, services, or contact details that were not verified.</li>
-          <li>Demo articles are marked and hidden from production automatically.</li>
+          <li>{t.home.rule1}</li>
+          <li>{t.home.rule2}</li>
+          <li>{t.home.rule3}</li>
         </ul>
       </div>
     </div>

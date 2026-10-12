@@ -42,6 +42,9 @@ type ListLabels = {
   byAuthor: string;
   demoBadge: string;
   demoArticleBadge: string;
+  notInLanguage: string;
+  readInArabic: string;
+  readInEnglish: string;
   category: { demo: string; guides: string; news: string };
 };
 
@@ -172,6 +175,9 @@ export default async function BlogPage({ params, searchParams }: PageProps<"/[la
     byAuthor: dict.blog.byAuthor,
     demoBadge: dict.common.demoBadge,
     demoArticleBadge: dict.blog.demoArticleBadge,
+    notInLanguage: dict.blog.notInLanguage,
+    readInArabic: dict.blog.readInArabic,
+    readInEnglish: dict.blog.readInEnglish,
     category: {
       demo: dict.blog.categoryDemo,
       guides: dict.blog.categoryGuides,

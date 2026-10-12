@@ -4,11 +4,13 @@ import { notFound } from "next/navigation";
 import BookForm from "@/components/BookForm";
 import ClinicMap from "@/components/ClinicMap";
 import ContactOptions from "@/components/ContactOptions";
+import MobileCallBar from "@/components/MobileCallBar";
 import { Section, SectionHeading } from "@/components/Layout";
 import Reveal from "@/components/Reveal";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale, locales, type Locale } from "@/i18n/config";
 import { pageMetadata } from "@/lib/seo";
+import { phoneLink } from "@/lib/settings";
 import { readSettings } from "@/lib/settings";
 
 /** Both locales are known at build time so the page is prerendered. */
@@ -98,7 +100,7 @@ export default async function BookPage({ params }: PageProps<"/[lang]/book">) {
       </Section>
 
       {/* ---------------- Demo request form ---------------- */}
-      <Section tone="white">
+      <Section tone="white" className="pb-28 lg:pb-16">
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
           <Reveal>
             <SectionHeading
@@ -121,6 +123,14 @@ export default async function BookPage({ params }: PageProps<"/[lang]/book">) {
           </Reveal>
         </div>
       </Section>
+
+      {/* Compact call action on phones only — the page reserves space above
+          so the bar never covers content or other controls. */}
+      <MobileCallBar
+        href={phoneLink(settings.contact.phone, settings.contact.phoneIntl) ?? "#"}
+        prompt={dict.book.mobileCallPrompt}
+        action={dict.book.callAction}
+      />
     </>
   );
 }

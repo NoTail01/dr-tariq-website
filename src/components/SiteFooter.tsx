@@ -16,8 +16,8 @@ type Props = {
   contactTitle: string;
   /** Localized address line (or null). */
   address: string | null;
-  /** Localized phone line (or null). */
-  phoneLine: string | null;
+  /** Published clinic lines, each as a tappable tel: link. */
+  phones: { label: string; href: string }[];
   /** Localized WhatsApp pending note (or null when unknown). */
   whatsappNote: string | null;
   disclaimerTitle: string;
@@ -37,7 +37,7 @@ export default function SiteFooter({
   developedNote,
   contactTitle,
   address,
-  phoneLine,
+  phones,
   whatsappNote,
   disclaimerTitle,
   disclaimer,
@@ -62,12 +62,12 @@ export default function SiteFooter({
 
         <nav aria-label={linksTitle}>
           <p className="text-sm font-bold tracking-wide text-white uppercase">{linksTitle}</p>
-          <ul className="mt-4 space-y-2">
+          <ul className="mt-2 space-y-1">
             {links.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-sm text-brand-100/85 transition-colors hover:text-white"
+                  className="inline-flex min-h-9 items-center text-sm text-brand-100/85 transition-colors hover:text-white"
                 >
                   {link.label}
                 </Link>
@@ -81,10 +81,20 @@ export default function SiteFooter({
           <p className="mt-4 text-sm text-brand-100/80 break-words-safe">
             {address ?? developedNote}
           </p>
-          {phoneLine ? (
-            <p className="mt-3 text-sm font-semibold text-white break-words-safe" dir="ltr">
-              {phoneLine}
-            </p>
+          {phones.length > 0 ? (
+            <ul className="mt-3 space-y-1">
+              {phones.map((phone) => (
+                <li key={phone.href}>
+                  <a
+                    href={phone.href}
+                    className="inline-flex min-h-9 items-center text-sm font-semibold text-white transition-colors hover:text-brand-300"
+                    dir="ltr"
+                  >
+                    {phone.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
           ) : null}
           {whatsappNote ? (
             <p className="mt-2 text-xs text-amber-300/90 break-words-safe">{whatsappNote}</p>

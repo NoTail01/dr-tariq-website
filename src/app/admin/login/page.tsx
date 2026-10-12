@@ -4,7 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
 
+import { useDashboardLocale } from "@/components/admin/useDashboardLocale";
+
 export default function AdminLoginPage() {
+  const { t } = useDashboardLocale();
   const router = useRouter();
   const [token, setToken] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -36,9 +39,7 @@ export default function AdminLoginPage() {
 
       if (!response.ok || !body?.ok) {
         setError(
-          response.status === 403
-            ? "The dashboard is disabled in this environment."
-            : "The access token is not valid.",
+          response.status === 403 ? t.login.disabled : t.login.invalidToken,
         );
         return;
       }
@@ -46,7 +47,7 @@ export default function AdminLoginPage() {
       router.replace("/admin/articles");
       router.refresh();
     } catch {
-      setError("Could not reach the server. Is the local server running?");
+      setError(t.login.unreachable);
     } finally {
       setBusy(false);
     }
@@ -60,24 +61,23 @@ export default function AdminLoginPage() {
             DT
           </span>
           <div>
-            <h1 className="text-lg font-bold text-navy-900">Content dashboard</h1>
-            <p className="text-xs text-slate-500">Private area — authorised staff only</p>
+            <h1 className="text-lg font-bold text-navy-900">{t.login.title}</h1>
+            <p className="text-xs text-slate-500">{t.login.subtitle}</p>
           </div>
         </div>
 
         {devMode === true ? (
           <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-            Local development mode: no token is required. Open{" "}
+            {t.login.devNotice}{" "}
             <Link href="/admin/articles" className="font-semibold underline">
-              Articles
-            </Link>{" "}
-            to continue.
+              {t.login.articlesLink}
+            </Link>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <div>
               <label htmlFor="admin-token" className="block text-sm font-semibold text-navy-900">
-                Access token
+                {t.login.token}
               </label>
               <input
                 id="admin-token"
@@ -86,7 +86,7 @@ export default function AdminLoginPage() {
                 value={token}
                 onChange={(event) => setToken(event.target.value)}
                 className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-brand-500 focus:outline-none"
-                placeholder="ADMIN_TOKEN value"
+                placeholder={t.login.tokenPlaceholder}
               />
             </div>
 
@@ -101,20 +101,16 @@ export default function AdminLoginPage() {
               disabled={busy}
               className="w-full rounded-xl bg-navy-900 px-4 py-3 text-sm font-semibold text-white hover:bg-navy-800 disabled:opacity-60"
             >
-              {busy ? "Checking…" : "Sign in"}
+              {busy ? t.login.signingIn : t.login.signIn}
             </button>
 
-            <p className="text-xs leading-relaxed text-slate-500">
-              In production this token comes from the <code>ADMIN_TOKEN</code> environment
-              variable. Supabase Auth replaces it when the backend is activated — see
-              <code> docs/SUPABASE.md</code>.
-            </p>
+            <p className="text-xs leading-relaxed text-slate-500">{t.login.prodHint}</p>
           </form>
         )}
 
         <div className="mt-6 border-t border-slate-100 pt-4">
           <Link href="/ar" className="text-sm font-semibold text-brand-700 hover:underline">
-            ← Back to the website
+            {t.login.backToSite}
           </Link>
         </div>
       </div>

@@ -7,6 +7,15 @@ import type { Localized } from "./article-types";
 export type Settings = {
   siteName: Localized;
   tagline: Localized;
+  /**
+   * Editable doctor profile. Values default to the verified facts in
+   * `src/content/doctor.ts`; the clinic becomes the source once it edits
+   * and saves them from the dashboard.
+   */
+  doctor: {
+    biography: Localized;
+    qualifications: { ar: string; en: string }[];
+  };
   contact: {
     /** Mobile number in national format, as printed on the clinic branding. */
     phone: string | null;
@@ -67,6 +76,17 @@ export const defaultSettings: Settings = {
     ar: "استشاري أمراض الباطنية والكلى وزراعة الكلى وضغط الدم",
     en: "Consultant in Internal Medicine, Nephrology, Kidney Transplantation and Hypertension",
   },
+  doctor: {
+    biography: {
+      ar: "الدكتور طارق أبو حويج، استشاري أمراض الباطنية والكلى وزراعة الكلى وضغط الدم. حاصل على البورد الأردني في الأمراض الباطنية والبورد الأردني في أمراض الكلى، إضافة إلى البورد الألماني. يعالج حالات أمراض الباطنية والكلى، وهو عضو الجمعية الألمانية لأمراض الباطنية والقلب، وعضو نقابتي الأطباء الألمانية والأردنية. تجري العيادة خلف المستشفى التخصصي في مجمع الرياض الطبي — الطابق الأول.",
+      en: "Dr Tariq Abu Hweij is a consultant in internal medicine, nephrology, kidney transplantation and hypertension. He holds the Jordanian Board in Internal Medicine and the Jordanian Board in Nephrology, as well as the German Board. He treats internal medicine and kidney cases, is a member of the German Association for Internal Medicine and Cardiology, and a member of the German and Jordanian medical associations. The clinic is located behind the Specialty Hospital in Al-Riyad Medical Complex, first floor.",
+    },
+    qualifications: [
+      { ar: "البورد الأردني في الأمراض الباطنية", en: "Jordanian Board in Internal Medicine" },
+      { ar: "البورد الأردني في أمراض الكلى", en: "Jordanian Board in Nephrology" },
+      { ar: "البورد الألماني", en: "German Board" },
+    ],
+  },
   contact: {
     phone: "0799101101",
     phoneIntl: "+962799101101",
@@ -110,17 +130,36 @@ export const defaultSettings: Settings = {
 
 const SETTINGS_FILE = path.join(process.cwd(), "content", "settings.json");
 
-function mergeWithDefaults(raw: unknown): Settings {
+/** Exported for tests: applies defaults and legacy-file migrations. */
+export function mergeWithDefaults(raw: unknown): Settings {
   if (typeof raw !== "object" || raw === null) return defaultSettings;
   const data = raw as Partial<Settings>;
   const contact = { ...defaultSettings.contact, ...(data.contact ?? {}) };
   // A legacy settings file without the WhatsApp flag must stay disabled.
   if (typeof contact.whatsappEnabled !== "boolean") contact.whatsappEnabled = false;
+  // Legacy files without the doctor block fall back to the verified defaults.
+  const doctor = data.doctor ?? defaultSettings.doctor;
+  const qualificationRows = Array.isArray(doctor.qualifications)
+    ? doctor.qualifications
+        .filter((q) => q && ((q.ar && q.ar.trim()) || (q.en && q.en.trim())))
+        // Backfill the missing language so a row never renders blank.
+        .map((q) => {
+          const ar = (q.ar ?? "").trim();
+          const en = (q.en ?? "").trim();
+          return { ar: ar || en, en: en || ar };
+        })
+    : [];
+  const qualifications =
+    qualificationRows.length > 0 ? qualificationRows : defaultSettings.doctor.qualifications;
   return {
     ...defaultSettings,
     ...data,
     siteName: { ...defaultSettings.siteName, ...(data.siteName ?? {}) },
     tagline: { ...defaultSettings.tagline, ...(data.tagline ?? {}) },
+    doctor: {
+      biography: { ...defaultSettings.doctor.biography, ...(doctor.biography ?? {}) },
+      qualifications,
+    },
     contact,
     social: { ...defaultSettings.social, ...(data.social ?? {}) },
     branding: { ...defaultSettings.branding, ...(data.branding ?? {}) },

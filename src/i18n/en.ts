@@ -81,6 +81,7 @@ export const en = {
     membershipsTitle: "Memberships",
     membershipsIntro: "Memberships are published exactly as stated by each source.",
     servicesTitle: "Specialties",
+    specialtiesKicker: "Fields of expertise",
     servicesIntro:
       "Informational overview of the doctor's listed specialty areas. Kidney transplantation is a field of expertise; surgical procedures are not performed at this clinic.",
     services: [
@@ -107,6 +108,7 @@ export const en = {
     contactTitle: "Clinic & contact",
     contactText: "Call the clinic to book an appointment or ask about consultation times.",
     contactPlaceholder: "Contact details will be published here.",
+    locationCardLabel: "Clinic location",
     locationTitle: "Dr Tariq Abu Hweij's Clinic Location in Amman",
     locationText:
       "Find Dr Tariq Abu Hweij's clinic in Amman: view the map or call the clinic to ask about appointments. The clinic is behind the Specialty Hospital, Al-Riyad Medical Complex, first floor.",
@@ -155,6 +157,9 @@ export const en = {
     categoryNews: "Clinic news",
     demoArticleBadge: "Demo article — not medical content",
     byAuthor: "By",
+    notInLanguage: "This article is not available in this language yet.",
+    readInArabic: "Read it in Arabic",
+    readInEnglish: "Read it in English",
   },
   book: {
     title: "Book Now",
@@ -167,6 +172,7 @@ export const en = {
     landlineTitle: "Clinic landline",
     landlineText: "Clinic landline as published on the clinic's branding.",
     callAction: "Call",
+    mobileCallPrompt: "To book, call the clinic",
     whatsappTitle: "WhatsApp",
     whatsappText:
       "WhatsApp has not been confirmed for the clinic's mobile number yet, so this channel stays inactive. The prepared link is wa.me/962799101101 and will be activated after confirmation.",

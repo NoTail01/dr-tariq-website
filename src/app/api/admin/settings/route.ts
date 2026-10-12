@@ -35,6 +35,26 @@ function nullableUrl(value: unknown): string | null {
   return /^https?:\/\//i.test(result) ? result : null;
 }
 
+/** Bilingual doctor biography — capped to keep the public page readable. */
+function doctorBiography(value: unknown): Localized {
+  const result = localized(value, 4000);
+  return {
+    ar: result.ar || defaultSettings.doctor.biography.ar,
+    en: result.en || defaultSettings.doctor.biography.en,
+  };
+}
+
+/** Bilingual qualification list — max 8 items, empty rows dropped. */
+function doctorQualifications(value: unknown): { ar: string; en: string }[] {
+  if (!Array.isArray(value)) return defaultSettings.doctor.qualifications;
+  const items = value
+    .slice(0, 8)
+    .map((entry) => localized(entry, 200))
+    .filter((entry) => entry.ar || entry.en)
+    .map((entry) => ({ ar: entry.ar || entry.en, en: entry.en || entry.ar }));
+  return items.length > 0 ? items : defaultSettings.doctor.qualifications;
+}
+
 /** Google Maps embed URL — only google.com/maps/embed URLs are accepted. */
 function mapsEmbed(value: unknown): string | null {
   const result = str(value, 1200);
@@ -90,11 +110,19 @@ export async function PATCH(request: Request) {
   const contactRaw = (raw.contact ?? {}) as Record<string, unknown>;
   const socialRaw = (raw.social ?? {}) as Record<string, unknown>;
   const brandingRaw = (raw.branding ?? {}) as Record<string, unknown>;
+  const doctorRaw = (raw.doctor ?? {}) as Record<string, unknown>;
   const currentBranding = current.branding ?? defaultSettings.branding;
+  const currentDoctor = current.doctor ?? defaultSettings.doctor;
 
   const next: Settings = {
     siteName: localized(raw.siteName ?? current.siteName, LIMITS.text) || defaultSettings.siteName,
     tagline: localized(raw.tagline ?? current.tagline, LIMITS.long),
+    doctor: {
+      biography: doctorBiography(doctorRaw.biography ?? currentDoctor.biography),
+      qualifications: doctorQualifications(
+        doctorRaw.qualifications ?? currentDoctor.qualifications,
+      ),
+    },
     contact: {
       phone: nullableContact(contactRaw.phone, "phone"),
       phoneIntl: nullableContact(contactRaw.phoneIntl, "phone"),

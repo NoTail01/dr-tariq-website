@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { apiGet, apiSend } from "@/components/admin/api";
+import { useDashboardLocale } from "@/components/admin/useDashboardLocale";
 import type { Article } from "@/lib/article-types";
 
 type ListResponse = { ok: boolean; articles: Article[] };
@@ -22,20 +23,10 @@ function Badge({ tone, children }: { tone: "green" | "amber" | "slate"; children
 }
 
 export default function AdminArticlesPage() {
+  const { t, locale } = useDashboardLocale();
   const [articles, setArticles] = useState<Article[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
-
-  async function load() {
-    try {
-      const data = await apiGet<ListResponse>("/api/admin/articles");
-      setArticles(data.articles);
-      setError(null);
-    } catch {
-      setError("Could not load articles. Check your access rights.");
-      setArticles([]);
-    }
-  }
 
   useEffect(() => {
     // Initial load on mount — state updates happen only after the awaited
@@ -46,12 +37,12 @@ export default function AdminArticlesPage() {
         setArticles(data.articles);
         setError(null);
       } catch {
-        setError("Could not load articles. Check your access rights.");
+        setError(t.common.unavailable);
         setArticles([]);
       }
     };
     void run();
-  }, []);
+  }, [t]);
 
   async function toggleStatus(article: Article) {
     setBusyId(article.id);
@@ -61,15 +52,27 @@ export default function AdminArticlesPage() {
       });
       await load();
     } catch {
-      setError("Could not update the article status.");
+      setError(t.common.saveFailed);
     } finally {
       setBusyId(null);
     }
   }
 
+  async function load() {
+    try {
+      const data = await apiGet<ListResponse>("/api/admin/articles");
+      setArticles(data.articles);
+      setError(null);
+    } catch {
+      setError(t.common.unavailable);
+      setArticles([]);
+    }
+  }
+
   async function remove(article: Article) {
+    const name = article.title[locale] || article.title.ar || article.title.en || "—";
     const confirmed = window.confirm(
-      `Delete "${article.title.en || article.title.ar}"? This cannot be undone.`,
+      locale === "ar" ? `حذف "${name}" نهائياً؟` : `Delete "${name}" permanently?`,
     );
     if (!confirmed) return;
 
@@ -78,7 +81,7 @@ export default function AdminArticlesPage() {
       await apiSend("DELETE", `/api/admin/articles/${article.id}`);
       await load();
     } catch {
-      setError("Could not delete the article.");
+      setError(t.common.saveFailed);
     } finally {
       setBusyId(null);
     }
@@ -88,16 +91,14 @@ export default function AdminArticlesPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-navy-900">Articles</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Drafts are private; demo articles are hidden from production automatically.
-          </p>
+          <h1 className="text-2xl font-bold text-navy-900">{t.articles.title}</h1>
+          <p className="mt-1 text-sm text-slate-500">{t.articles.subtitle}</p>
         </div>
         <Link
           href="/admin/articles/new"
           className="rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700"
         >
-          New article
+          {t.articles.newArticle}
         </Link>
       </div>
 
@@ -115,15 +116,12 @@ export default function AdminArticlesPage() {
         </div>
       ) : articles.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center">
-          <h2 className="text-lg font-bold text-navy-900">No articles yet</h2>
-          <p className="mt-2 text-sm text-slate-500">
-            Create the first article to see it appear in the blog.
-          </p>
+          <h2 className="text-lg font-bold text-navy-900">{t.articles.empty}</h2>
           <Link
             href="/admin/articles/new"
             className="mt-5 inline-flex rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700"
           >
-            New article
+            {t.articles.newArticle}
           </Link>
         </div>
       ) : (
@@ -131,11 +129,11 @@ export default function AdminArticlesPage() {
           <table className="w-full min-w-[720px] text-start text-sm">
             <thead className="border-b border-slate-200 bg-slate-50 text-start text-xs font-semibold tracking-wide text-slate-500 uppercase">
               <tr>
-                <th className="px-4 py-3 text-start">Title</th>
-                <th className="px-4 py-3 text-start">Status</th>
-                <th className="px-4 py-3 text-start">Category</th>
-                <th className="px-4 py-3 text-start">Updated</th>
-                <th className="px-4 py-3 text-start">Actions</th>
+                <th className="px-4 py-3 text-start">{t.articles.colTitle}</th>
+                <th className="px-4 py-3 text-start">{t.articles.colStatus}</th>
+                <th className="px-4 py-3 text-start">{t.articles.colCategory}</th>
+                <th className="px-4 py-3 text-start">{t.articles.colUpdated}</th>
+                <th className="px-4 py-3 text-start">{t.articles.colActions}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -143,7 +141,7 @@ export default function AdminArticlesPage() {
                 <tr key={article.id} className="align-top">
                   <td className="px-4 py-3">
                     <p className="font-semibold text-navy-900">
-                      {article.title.en || article.title.ar || "(untitled)"}
+                      {article.title[locale] || article.title.ar || article.title.en || "—"}
                     </p>
                     <p className="mt-0.5 text-xs text-slate-500" dir="rtl">
                       {article.title.ar || "—"}
@@ -152,7 +150,9 @@ export default function AdminArticlesPage() {
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-1.5">
                       <Badge tone={article.status === "published" ? "green" : "amber"}>
-                        {article.status}
+                        {article.status === "published"
+                          ? t.articles.statusPublished
+                          : t.articles.statusDraft}
                       </Badge>
                       {article.isDemo ? <Badge tone="slate">demo</Badge> : null}
                     </div>
@@ -167,13 +167,13 @@ export default function AdminArticlesPage() {
                         href={`/admin/articles/${article.id}`}
                         className="rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100"
                       >
-                        Edit
+                        {t.common.edit}
                       </Link>
                       <Link
                         href={`/admin/preview/${article.id}`}
                         className="rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100"
                       >
-                        Preview
+                        {t.common.preview}
                       </Link>
                       <button
                         type="button"
@@ -181,7 +181,9 @@ export default function AdminArticlesPage() {
                         onClick={() => toggleStatus(article)}
                         className="rounded-lg border border-brand-300 px-2.5 py-1.5 text-xs font-semibold text-brand-700 hover:bg-brand-50 disabled:opacity-50"
                       >
-                        {article.status === "published" ? "Unpublish" : "Publish"}
+                        {article.status === "published"
+                          ? t.editor.unpublish
+                          : t.editor.publish}
                       </button>
                       <button
                         type="button"
@@ -189,7 +191,7 @@ export default function AdminArticlesPage() {
                         onClick={() => remove(article)}
                         className="rounded-lg border border-red-200 px-2.5 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50"
                       >
-                        Delete
+                        {t.common.delete}
                       </button>
                     </div>
                   </td>

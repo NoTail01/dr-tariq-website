@@ -56,6 +56,41 @@ brand reference and lives in `src/app/globals.css` as `brand-*` tokens.
 - `docs/GOOGLE.md` — optional GA4 / GTM / Search Console / Maps setup.
 - `docs/SUPABASE.md` — activating the booking/storage/auth backend.
 
+## Dashboard (`/admin`, development or with `ADMIN_TOKEN`)
+
+The dashboard is used by clinic staff, so its chrome carries an **AR/EN
+language switch** (persisted per browser, shared across all pages) —
+labels for the shell, settings, article editor, articles list and login
+are translated in `src/components/admin/dashboard-dict.ts`.
+
+Editable from the dashboard (single system, no duplicate admin):
+
+| Area | Where |
+| --- | --- |
+| Biography + qualifications (per language) | Settings → "Doctor biography & qualifications" |
+| Contact numbers (mobile/landline, national + international) | Settings → Contact |
+| WhatsApp activation flag (off until confirmed) | Settings → Contact |
+| Address, working hours (empty stays inactive) | Settings → Contact |
+| Google Maps embed + open-in-Maps link | Settings → Google Maps |
+| Brand color, emblem assets | Settings → Branding |
+| Social links | Settings → Social links |
+| Articles: drafts, publishing, SEO fields, cover image + alt | Articles / editor |
+
+Unsaved edits are protected by a visible banner plus a `beforeunload`
+guard in both the settings page and the article editor. Saving reports
+success only after the server confirms the write, and changes appear on
+the public site immediately (no server restart).
+
+Validation rules enforced server-side: only `google.com/maps/embed` URLs
+are accepted for the map, WhatsApp never activates implicitly, brand
+colors must be hex, and publishing an article requires title, slug,
+excerpt and body in **both** languages (so a missing translation can
+never produce a broken link).
+
+Persistence: articles and settings are JSON files under `content/`, and
+uploaded images go to `public/uploads/`. On Vercel the filesystem is
+ephemeral — see `docs/SUPABASE.md` before enabling deployment.
+
 ## Hosting
 
 The repository is hosted on GitHub at
