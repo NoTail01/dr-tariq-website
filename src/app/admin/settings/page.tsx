@@ -401,6 +401,40 @@ export default function SettingsPage() {
             value={settings.contact.email ?? ""}
             onChange={(value) => update({ contact: { ...settings.contact, email: value || null } })}
           />
+          <TextField
+            label={t.settings.whatsappMessageAr}
+            dir="rtl"
+            value={settings.contact.whatsappMessage?.ar ?? ""}
+            onChange={(value) =>
+              update({
+                contact: {
+                  ...settings.contact,
+                  whatsappMessage: {
+                    ar: value,
+                    en: settings.contact.whatsappMessage?.en ?? "",
+                  },
+                },
+              })
+            }
+            hint={t.settings.whatsappMessageHint}
+          />
+          <TextField
+            label={t.settings.whatsappMessageEn}
+            dir="ltr"
+            value={settings.contact.whatsappMessage?.en ?? ""}
+            onChange={(value) =>
+              update({
+                contact: {
+                  ...settings.contact,
+                  whatsappMessage: {
+                    ar: settings.contact.whatsappMessage?.ar ?? "",
+                    en: value,
+                  },
+                },
+              })
+            }
+            hint={t.settings.whatsappMessageHint}
+          />
         </div>
 
         <div className="mt-5 grid gap-5 sm:grid-cols-2">

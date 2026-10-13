@@ -24,8 +24,17 @@ describe("phoneLink", () => {
 });
 
 describe("defaultSettings", () => {
-  it("keeps WhatsApp disabled until explicitly enabled", () => {
-    expect(defaultSettings.contact.whatsappEnabled).toBe(false);
+  it("enables WhatsApp by default after the clinic confirmed it", () => {
+    // Confirmed October 2026 for +962799101101; can still be turned off
+    // from the dashboard.
+    expect(defaultSettings.contact.whatsappEnabled).toBe(true);
+    expect(defaultSettings.contact.whatsapp).toBe("+962799101101");
+  });
+
+  it("carries the localized prefilled WhatsApp message", () => {
+    expect(defaultSettings.contact.whatsappMessage?.ar).toContain("المواعيد المتاحة");
+    expect(defaultSettings.contact.whatsappMessage?.ar).toContain("طارق أبو حويج");
+    expect(defaultSettings.contact.whatsappMessage?.en).toContain("available appointment times");
   });
 
   it("publishes only the supplied clinic numbers", () => {
@@ -57,7 +66,7 @@ describe("defaultSettings", () => {
 describe("mergeWithDefaults", () => {
   const base: Settings = defaultSettings;
 
-  it("keeps WhatsApp disabled for legacy files without the flag", () => {
+  it("enables WhatsApp for legacy files without the flag", () => {
     const legacy = {
       ...base,
       contact: {
@@ -69,7 +78,8 @@ describe("mergeWithDefaults", () => {
     delete (legacy.contact as Record<string, unknown>).whatsappEnabled;
 
     const merged = mergeWithDefaults(legacy);
-    expect(merged.contact.whatsappEnabled).toBe(false);
+    // Confirmed October 2026 — the flag defaults to on.
+    expect(merged.contact.whatsappEnabled).toBe(true);
     expect(merged.contact.phone).toBe("0799101101");
   });
 

@@ -19,14 +19,17 @@ Three different location wordings are on record:
 - The wordings must never be combined; the published wording stays exactly as
   supplied until the clinic confirms a change in writing.
 
-## 2. WhatsApp availability
+## 2. WhatsApp availability — resolved (October 2026)
 
-- The mobile number 0799101101 / +962799101101 is **not confirmed** to be
-  WhatsApp-enabled.
-- The prepared link `https://wa.me/962799101101` is stored in settings and the
-  channel is visibly disabled ("WhatsApp not confirmed yet").
-- **Action:** flip `contact.whatsappEnabled` to `true` in the admin dashboard
-  (Settings) after the clinic confirms.
+- The clinic **confirmed** WhatsApp on the mobile number 0799101101 /
+  +962799101101. `contact.whatsappEnabled` is now `true` and the channel is
+  published on the home page, the appointments page and the mobile bar.
+- The link is `https://wa.me/962799101101` with a localized prefilled message
+  (editable in Settings). Opening the chat never confirms a booking — the
+  wording says so everywhere the button appears.
+- **Action (only if the clinic asks):** untick "WhatsApp active" in Settings →
+  Contact. The button disappears and the footer returns to the plain phone
+  note without any code change.
 
 ## 3. Opening hours
 

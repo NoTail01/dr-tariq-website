@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import BookForm from "@/components/BookForm";
 import ClinicMap from "@/components/ClinicMap";
-import ContactOptions from "@/components/ContactOptions";
+import ContactOptions, { whatsappHref } from "@/components/ContactOptions";
 import MobileCallBar from "@/components/MobileCallBar";
 import { Section, SectionHeading } from "@/components/Layout";
 import Reveal from "@/components/Reveal";
@@ -78,7 +78,11 @@ export default async function BookPage({ params }: PageProps<"/[lang]/book">) {
         </Reveal>
         <div className="mt-8">
           <Reveal>
-            <ContactOptions contact={settings.contact} labels={channelLabels} />
+            <ContactOptions
+              contact={settings.contact}
+              labels={channelLabels}
+              whatsappMessage={settings.contact.whatsappMessage?.[locale] ?? null}
+            />
           </Reveal>
         </div>
       </Section>
@@ -124,12 +128,18 @@ export default async function BookPage({ params }: PageProps<"/[lang]/book">) {
         </div>
       </Section>
 
-      {/* Compact call action on phones only — the page reserves space above
-          so the bar never covers content or other controls. */}
+      {/* Compact booking actions on phones only — the page reserves space
+          above so the bar never covers content or other controls. */}
       <MobileCallBar
-        href={phoneLink(settings.contact.phone, settings.contact.phoneIntl) ?? "#"}
+        callHref={phoneLink(settings.contact.phone, settings.contact.phoneIntl) ?? "#"}
+        callLabel={dict.book.callAction}
+        whatsappHref={
+          settings.contact.whatsappEnabled
+            ? (whatsappHref(settings.contact.whatsapp, settings.contact.whatsappMessage?.[locale]) ?? null)
+            : null
+        }
+        whatsappLabel={dict.book.whatsappAction}
         prompt={dict.book.mobileCallPrompt}
-        action={dict.book.callAction}
       />
     </>
   );

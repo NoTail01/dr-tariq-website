@@ -9,6 +9,27 @@ export type Localized = { ar: string; en: string };
 
 export type ArticleStatus = "draft" | "published";
 
+/**
+ * Medical approval state — tracked independently of publication.
+ * The 10 prepared articles are stored as drafts with `pending` review so
+ * the doctor can approve or request changes before anything goes public.
+ */
+export type ReviewStatus = "pending" | "approved" | "needs-changes";
+
+export type ArticleReview = {
+  status: ReviewStatus;
+  /** Free-text note from the reviewer (or for the reviewer). */
+  notes: string | null;
+  /** ISO timestamp of the last review decision. */
+  reviewedAt: string | null;
+};
+
+export const REVIEW_STATUSES: readonly ReviewStatus[] = ["pending", "approved", "needs-changes"];
+
+export function isReviewStatus(value: unknown): value is ReviewStatus {
+  return typeof value === "string" && (REVIEW_STATUSES as readonly string[]).includes(value);
+}
+
 export type Article = {
   id: string;
   status: ArticleStatus;
@@ -24,6 +45,8 @@ export type Article = {
   author: Localized;
   /** Optional reference for factual claims. */
   sourceUrl: string | null;
+  /** Medical review state — never inferred from publication. */
+  review: ArticleReview;
   publishedAt: string | null;
   updatedAt: string;
 };
@@ -116,6 +139,18 @@ export function validateArticleInput(input: unknown): ValidationResult {
     }
   }
 
+  // Medical review is a separate decision from publication. Unknown or
+  // missing values default to "pending" — never to "approved".
+  const reviewStatus: ReviewStatus = isReviewStatus(raw.reviewStatus)
+    ? (raw.reviewStatus as ReviewStatus)
+    : "pending";
+  const review: ArticleReview = {
+    status: reviewStatus,
+    notes: readText(raw.reviewNotes) || null,
+    reviewedAt:
+      typeof raw.reviewedAt === "string" && raw.reviewedAt ? raw.reviewedAt : null,
+  };
+
   if (!author.ar && !author.en) {
     author.ar = "Dr Tariq Abu Hweij";
     author.en = "Dr Tariq Abu Hweij";
@@ -175,6 +210,7 @@ export function validateArticleInput(input: unknown): ValidationResult {
       seo,
       author,
       sourceUrl,
+      review,
       publishedAt,
     },
   };

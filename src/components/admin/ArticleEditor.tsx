@@ -10,6 +10,7 @@ import {
   type Article,
   type ArticleCategory,
   type Localized,
+  type ReviewStatus,
 } from "@/lib/article-types";
 
 type Props = { article?: Article };
@@ -28,6 +29,8 @@ type FormState = {
   sourceUrl: string;
   coverUrl: string;
   coverAlt: Localized;
+  reviewStatus: ReviewStatus;
+  reviewNotes: string;
 };
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -47,6 +50,8 @@ function toFormState(article?: Article): FormState {
     sourceUrl: article?.sourceUrl ?? "",
     coverUrl: article?.coverImage?.url ?? "",
     coverAlt: article?.coverImage?.alt ?? { ar: "", en: "" },
+    reviewStatus: article?.review.status ?? "pending",
+    reviewNotes: article?.review.notes ?? "",
   };
 }
 
@@ -137,6 +142,9 @@ export default function ArticleEditor({ article }: Props) {
       seo: { title: form.seoTitle, description: form.seoDescription },
       author: form.author,
       sourceUrl: form.sourceUrl || null,
+      reviewStatus: form.reviewStatus,
+      reviewNotes: form.reviewNotes,
+      reviewedAt: article?.review.reviewedAt ?? null,
       publishedAt: article?.publishedAt ?? null,
       coverImage: form.coverUrl
         ? { url: form.coverUrl, alt: { ar: form.coverAlt.ar, en: form.coverAlt.en } }
@@ -335,13 +343,29 @@ export default function ArticleEditor({ article }: Props) {
                 id="status"
                 className={inputClass}
                 value={form.status}
-                onChange={(e) =>
-                  setForm((c) => ({ ...c, status: e.target.value as FormState["status"] }))
-                }
+                onChange={(e) => {
+                  const next = e.target.value as FormState["status"];
+                  // Medical approval is a separate gate: publishing is
+                  // blocked until the doctor's review says "approved".
+                  if (next === "published" && form.reviewStatus !== "approved") {
+                    setNotice({ kind: "error", text: t.editor.publishGuard });
+                    return;
+                  }
+                  setForm((c) => ({ ...c, status: next }));
+                }}
               >
                 <option value="draft">{t.articles.statusDraft}</option>
-                <option value="published">{t.articles.statusPublished}</option>
+                <option
+                  value="published"
+                  disabled={form.reviewStatus !== "approved"}
+                >
+                  {t.articles.statusPublished}
+                  {form.reviewStatus !== "approved" ? " — " + t.articles.reviewPending : ""}
+                </option>
               </select>
+              {form.reviewStatus !== "approved" ? (
+                <p className="mt-1.5 text-xs text-amber-700">{t.editor.publishGuard}</p>
+              ) : null}
             </div>
 
             <div className="mt-4">
@@ -387,6 +411,47 @@ export default function ArticleEditor({ article }: Props) {
                 onChange={(e) => setForm((c) => ({ ...c, sourceUrl: e.target.value }))}
               />
               {err("sourceUrl")}
+            </div>
+          </div>
+
+          {/* ---------------- Medical review ---------------- */}
+          <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-6">
+            <p className="text-xs font-bold tracking-wide text-amber-700 uppercase">
+              {t.editor.reviewSection}
+            </p>
+            <div className="mt-4">
+              <label className="text-sm font-semibold text-navy-900" htmlFor="review-status">
+                {t.editor.reviewStatus}
+              </label>
+              <select
+                id="review-status"
+                className={inputClass}
+                value={form.reviewStatus}
+                onChange={(e) =>
+                  setForm((c) => ({ ...c, reviewStatus: e.target.value as ReviewStatus }))
+                }
+              >
+                <option value="pending">{t.editor.reviewPending}</option>
+                <option value="approved">{t.editor.reviewApproved}</option>
+                <option value="needs-changes">{t.editor.reviewNeedsChanges}</option>
+              </select>
+              <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
+                {form.reviewStatus === "approved"
+                  ? t.editor.reviewApproved
+                  : t.editor.publishGuard}
+              </p>
+            </div>
+            <div className="mt-4">
+              <label className="text-sm font-semibold text-navy-900" htmlFor="review-notes">
+                {t.editor.reviewNotes}
+              </label>
+              <textarea
+                id="review-notes"
+                rows={3}
+                className={`${inputClass} resize-y`}
+                value={form.reviewNotes}
+                onChange={(e) => setForm((c) => ({ ...c, reviewNotes: e.target.value }))}
+              />
             </div>
           </div>
 

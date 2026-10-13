@@ -28,10 +28,13 @@ export type Settings = {
     /** WhatsApp number (international). Only used when whatsappEnabled. */
     whatsapp: string | null;
     /**
-     * WhatsApp activation flag. The number above is NOT confirmed to be
-     * WhatsApp-enabled, so this stays false until the clinic confirms it.
+     * WhatsApp activation flag. The clinic confirmed WhatsApp on the mobile
+     * number 0799101101 / +962799101101 (October 2026), so this is true.
+     * Opening WhatsApp never confirms a booking — it only starts a chat.
      */
     whatsappEnabled: boolean;
+    /** Localized prefilled message for the wa.me link. */
+    whatsappMessage: Localized | null;
     email: string | null;
     address: Localized | null;
     workingHours: Localized | null;
@@ -94,7 +97,11 @@ export const defaultSettings: Settings = {
     landlineIntl: "+96265685354",
     // Prepared for later activation; NOT confirmed as a working WhatsApp line.
     whatsapp: "+962799101101",
-    whatsappEnabled: false,
+    whatsappEnabled: true,
+    whatsappMessage: {
+      ar: "مرحبًا، أود الاستفسار عن المواعيد المتاحة لدى الدكتور طارق أبو حويج.",
+      en: "Hello, I would like to enquire about the available appointment times with Dr Tariq Abu Hweij.",
+    },
     email: null,
     // Wording exactly as supplied on the clinic's brand image.
     address: {
@@ -137,6 +144,8 @@ export function mergeWithDefaults(raw: unknown): Settings {
   const contact = { ...defaultSettings.contact, ...(data.contact ?? {}) };
   // A legacy settings file without the WhatsApp flag must stay disabled.
   if (typeof contact.whatsappEnabled !== "boolean") contact.whatsappEnabled = false;
+  // WhatsApp is confirmed (October 2026) but can be turned off in the
+  // dashboard if the clinic ever asks for it.
   // Legacy files without the doctor block fall back to the verified defaults.
   const doctor = data.doctor ?? defaultSettings.doctor;
   const qualificationRows = Array.isArray(doctor.qualifications)

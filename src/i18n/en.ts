@@ -26,7 +26,7 @@ export const en = {
         description: "Articles on kidney and internal medicine by Dr Tariq Abu Hweij, in Arabic and English.",
       },
       book: {
-        title: "Book an Appointment — Dr Tariq Abu Hweij's Clinic in Amman",
+        title: "Appointments & Clinic Contact — Dr Tariq Abu Hweij",
         description:
           "Call the clinic to book an appointment with Dr Tariq Abu Hweij in Amman. Mobile and landline numbers, clinic location and map.",
       },
@@ -70,7 +70,7 @@ export const en = {
       "Consultant in Internal Medicine, Nephrology, Kidney Transplantation and Hypertension",
     heroLead:
       "The clinic of Dr Tariq Abu Hweij, consultant in internal medicine and nephrology in Amman — behind the Specialty Hospital, Al-Riyad Medical Complex, first floor.",
-    heroPrimary: "Book an Appointment",
+    heroPrimary: "Contact the Clinic for an Appointment",
     heroSecondary: "About the doctor",
     aboutTitle: "About the doctor",
     aboutText:
@@ -106,7 +106,8 @@ export const en = {
     articlesText: "Newest published articles from the blog.",
     articlesEmpty: "No articles have been published yet.",
     contactTitle: "Clinic & contact",
-    contactText: "Call the clinic to book an appointment or ask about consultation times.",
+    contactText:
+      "To arrange an appointment with Dr Tariq Abu Hweij, contact the clinic by phone or WhatsApp to enquire about availability.",
     contactPlaceholder: "Contact details will be published here.",
     locationCardLabel: "Clinic location",
     locationTitle: "Dr Tariq Abu Hweij's Clinic Location in Amman",
@@ -114,8 +115,9 @@ export const en = {
       "Find Dr Tariq Abu Hweij's clinic in Amman: view the map or call the clinic to ask about appointments. The clinic is behind the Specialty Hospital, Al-Riyad Medical Complex, first floor.",
     openInMaps: "Open in Google Maps",
     mapTitle: "Map of Dr Tariq Abu Hweij's clinic in Amman",
-    finalCtaTitle: "Ready to book?",
-    finalCtaText: "Call the clinic to book an appointment with Dr Tariq Abu Hweij in Amman.",
+    finalCtaTitle: "Contact the clinic",
+    finalCtaText:
+      "To arrange an appointment with Dr Tariq Abu Hweij, contact the clinic by phone or WhatsApp to enquire about availability.",
   },
   about: {
     title: "About the Doctor",
@@ -162,22 +164,24 @@ export const en = {
     readInEnglish: "Read it in English",
   },
   book: {
-    title: "Book Now",
-    description: "Request an appointment with Dr Tariq Abu Hweij.",
+    title: "Appointments & Clinic Contact",
+    description:
+      "To arrange an appointment with Dr Tariq Abu Hweij, contact the clinic by phone or WhatsApp to enquire about availability.",
     intro:
-      "Appointments are arranged by calling the clinic directly. The numbers below are the clinic's published contact lines.",
+      "To arrange an appointment with Dr Tariq Abu Hweij, contact the clinic by phone or WhatsApp to enquire about availability. The numbers below are the clinic's published contact lines.",
     optionsTitle: "Contact options",
     mobileTitle: "Mobile",
     mobileText: "Mobile number as published on the clinic's branding.",
     landlineTitle: "Clinic landline",
     landlineText: "Clinic landline as published on the clinic's branding.",
-    callAction: "Call",
-    mobileCallPrompt: "To book, call the clinic",
+    callAction: "Call the Clinic",
+    mobileCallPrompt: "To reach the clinic",
     whatsappTitle: "WhatsApp",
     whatsappText:
-      "WhatsApp has not been confirmed for the clinic's mobile number yet, so this channel stays inactive. The prepared link is wa.me/962799101101 and will be activated after confirmation.",
-    whatsappPending: "WhatsApp not confirmed yet — channel inactive",
-    whatsappAction: "Open WhatsApp",
+      "Send a WhatsApp message to the clinic about an appointment. Opening the chat does not confirm a booking — the clinic replies to arrange the time.",
+    whatsappPending: "WhatsApp is not active for this number at the moment.",
+    whatsappAction: "Enquire About an Appointment",
+    whatsappNote: "Opening WhatsApp starts a chat — it does not confirm an appointment.",
     emailTitle: "By email",
     emailText: "No public email address has been supplied yet.",
     emailAction: "Send an email",

@@ -33,8 +33,13 @@ npm run dev
 All doctor facts are verified against sources listed in
 `src/content/SOURCES.md` (Specialty Hospital doctor profile + the supplied
 brand reference image). Nothing is invented: the German Board is published
-without naming its specialty, the WhatsApp channel stays disabled until
-confirmed, and no reviews or success rates are ever published.
+without naming its specialty, and no reviews or success rates are ever
+published.
+
+The clinic **confirmed WhatsApp** on the mobile number (October 2026), so
+`wa.me/962799101101` is published with a localized prefilled message — while
+the wording everywhere states that opening the chat does not confirm an
+appointment. Untick it in Settings to switch the channel off again.
 
 ## Supplied assets
 

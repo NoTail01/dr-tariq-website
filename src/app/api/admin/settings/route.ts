@@ -129,8 +129,9 @@ export async function PATCH(request: Request) {
       landline: nullableContact(contactRaw.landline, "phone"),
       landlineIntl: nullableContact(contactRaw.landlineIntl, "phone"),
       whatsapp: nullableContact(contactRaw.whatsapp, "whatsapp"),
-      // Never activated implicitly: only an explicit boolean turns it on.
+      // Only an explicit boolean changes activation; confirmed Oct 2026.
       whatsappEnabled: contactRaw.whatsappEnabled === true,
+      whatsappMessage: nullableLocalized(contactRaw.whatsappMessage, 400),
       email: nullableContact(contactRaw.email, "email"),
       address: nullableLocalized(contactRaw.address, LIMITS.long),
       workingHours: nullableLocalized(contactRaw.workingHours, LIMITS.long),

@@ -3,6 +3,7 @@
     "id": "demo-article-001",
     "status": "published",
     "isDemo": true,
+    "category": "demo",
     "slug": {
       "ar": "demo-blog-article",
       "en": "demo-blog-article"
@@ -19,7 +20,6 @@
       "ar": "هذا مقال **تجريبي** بالكامل، مُعدّ لعرض شكل وتنسيق المدونة أثناء التطوير فقط.\n\n## لماذا يظهر هذا المقال؟\n\nحتى تتمكن من معاينة شكل المدونة قبل وصول المقالات الحقيقية، يعرض الموقع هذا النموذج أثناء التطوير فقط. المقال:\n\n- مُعلَّم بوضوح بأنه تجريبي\n- مستثنى من خريطة الموقع (sitemap)\n- محميّ بوسم `noindex`\n- مخفيّ تماماً في نسخة الإنتاج\n\n## ما الذي يُنشر فعلياً؟\n\nلا يُنشر أي محتوى طبي إلا بعد مراجعته والتأكد من مصدره. تتم كتابة المقالات الحقيقية من لوحة التحكم الخاصة بالموقع ثم تُراجَع قبل الظهور للزوار.\n\n## نصائح للكتابة\n\n- استخدم فقرات قصيرة سهلة القراءة\n- أضف عناوين أقسام واضحة\n- أدرج المصدر عند ذكر معلومة واقعية",
       "en": "This is a completely **demo** article, created only to preview the blog layout during development.\n\n## Why does this post exist?\n\nSo you can see what the blog looks like before real articles arrive, the site shows this sample in development mode only. This post is:\n\n- Clearly labelled as a demo\n- Excluded from the sitemap\n- Tagged with `noindex`\n- Completely hidden in production builds\n\n## What actually gets published?\n\nNo medical content is published unless it has been reviewed and traced to a source. Real articles are written from the site dashboard and reviewed before visitors can see them.\n\n## Writing tips\n\n- Keep paragraphs short and readable\n- Add clear section headings\n- Include the source whenever you state a factual claim"
     },
-    "category": "demo",
     "coverImage": null,
     "seo": {
       "title": {
@@ -37,12 +37,18 @@
     },
     "sourceUrl": null,
     "publishedAt": "2026-10-08T09:00:00.000Z",
-    "updatedAt": "2026-10-08T09:00:00.000Z"
+    "updatedAt": "2026-10-08T09:00:00.000Z",
+    "review": {
+      "status": "pending",
+      "notes": null,
+      "reviewedAt": null
+    }
   },
   {
     "id": "demo-article-002",
     "status": "published",
     "isDemo": true,
+    "category": "demo",
     "slug": {
       "ar": "demo-preview-and-seo",
       "en": "demo-preview-and-seo"
@@ -59,7 +65,6 @@
       "ar": "هذا المقال أيضاً **تجريبي**، ويشرح آلية العمل داخل لوحة التحكم الخاصة بالموقع.\n\n## الخطوات داخل لوحة التحكم\n\n- إنشاء مقال جديد بالعربية والإنجليزية معاً\n- كتابة المقتطف وعنوان الصفحة ووصفها لمحركات البحث\n- المعاينة قبل النشر لأي لغة\n- حفظ المسودة ثم النشر عندما يكتمل المحتوى\n\n## المعاينة والمسودات\n\nالمسودات لا تظهر للزوار إطلاقاً. المعاينة متاحة فقط داخل لوحة التحكم، ويمكن استخدامها للتأكد من الشكل النهائي قبل النشر.\n\n## تحسين الظهور في البحث\n\nلكل مقال عنوان ووصف منفصلان بالعربية والإنجليزية، ويظهر الرابط البديل بين اللغتين تلقائياً في رأس الصفحة.",
       "en": "This is also a **demo** article that explains how the site dashboard works.\n\n## Steps in the dashboard\n\n- Create a new article in Arabic and English at the same time\n- Write the excerpt, SEO title and SEO description\n- Preview either language before publishing\n- Save as a draft, then publish when the content is complete\n\n## Previews and drafts\n\nDrafts are never visible to visitors. Previewing is available inside the dashboard only, so the final layout can be checked before publishing.\n\n## Search visibility\n\nEvery article carries separate Arabic and English titles and descriptions, and the alternate language URL is added to the page head automatically."
     },
-    "category": "demo",
     "coverImage": null,
     "seo": {
       "title": {
@@ -77,12 +82,18 @@
     },
     "sourceUrl": null,
     "publishedAt": "2026-10-07T09:00:00.000Z",
-    "updatedAt": "2026-10-07T09:00:00.000Z"
+    "updatedAt": "2026-10-07T09:00:00.000Z",
+    "review": {
+      "status": "pending",
+      "notes": null,
+      "reviewedAt": null
+    }
   },
   {
     "id": "demo-article-003",
     "status": "draft",
     "isDemo": true,
+    "category": "demo",
     "slug": {
       "ar": "demo-draft",
       "en": "demo-draft"
@@ -99,7 +110,6 @@
       "ar": "هذه مسودة تجريبية. المسودات لا تظهر في المدونة ولا في خريطة الموقع ولا لمحركات البحث.",
       "en": "This is a demo draft. Drafts never appear in the blog, the sitemap, or search engines."
     },
-    "category": "demo",
     "coverImage": null,
     "seo": {
       "title": {
@@ -117,6 +127,461 @@
     },
     "sourceUrl": null,
     "publishedAt": null,
-    "updatedAt": "2026-10-08T09:30:00.000Z"
+    "updatedAt": "2026-10-08T09:30:00.000Z",
+    "review": {
+      "status": "pending",
+      "notes": null,
+      "reviewedAt": null
+    }
+  },
+  {
+    "id": "445c006a-e5f9-4e37-9627-29391947cdd1",
+    "status": "published",
+    "isDemo": false,
+    "category": "guides",
+    "slug": {
+      "ar": "chronic-kidney-disease",
+      "en": "chronic-kidney-disease"
+    },
+    "title": {
+      "ar": "مرض الكلى المزمن: لماذا قد تحتاج إلى الفحص رغم غياب الأعراض؟",
+      "en": "Chronic Kidney Disease: Why You May Need Testing Even Without Symptoms"
+    },
+    "excerpt": {
+      "ar": "قد تبدأ أمراض الكلى من دون علامات واضحة. تعرّف على من يحتاج إلى فحص وظائف الكلى، وكيف يتم التقييم، ولماذا لا يكفي الشعور بأنك بخير.",
+      "en": "Kidney disease can begin without clear signs. Learn who should be tested for kidney function, how it is assessed, and why feeling well is not enough."
+    },
+    "body": {
+      "ar": "قد تبدأ أمراض الكلى من دون علامات واضحة. لذلك، الشعور بأنك بخير لا يكفي وحده للحكم على صحة الكلى، خصوصًا عند وجود عوامل خطر تستدعي المتابعة.\n\n## ما المقصود بمرض الكلى المزمن؟\n\nهو وجود تلف أو مشكلة مستمرة في الكلى تؤثر في قدرتها على أداء وظائفها. تساعد الكلى على تصفية الدم والتخلص من الفضلات والسوائل الزائدة، وقد تتأثر هذه الوظائف مع تقدم المرض.\n\n## من يحتاج إلى الاهتمام بالفحص؟\n\nتزداد أهمية المتابعة لدى المصابين بالسكري أو ارتفاع ضغط الدم أو أمراض القلب، وكذلك من لديهم تاريخ عائلي للفشل الكلوي. يحدد الطبيب الفحوصات المناسبة وتكرارها بحسب الحالة.\n\n## كيف يتم التقييم؟\n\nيعتمد التقييم على فحوصات الدم والبول، وليس على الأعراض وحدها. تساعد النتائج الطبيب على معرفة قدرة الكلى على التصفية ووجود مؤشرات على التلف.\n\nغياب الألم لا يستبعد المرض، كما أن ظهور نتيجة غير طبيعية يحتاج إلى تفسير طبي ومتابعة، وليس إلى تشخيص ذاتي.\n\n## الخطوة التالية\n\nإذا كانت لديك عوامل خطر أو نتائج سابقة غير طبيعية، تواصل مع العيادة لتحديد موعد ومناقشة فحوصاتك مع الدكتور طارق أبو حويج.\n\n## مقالات ذات صلة\n\n- [فحوصات وظائف الكلى: ما الفرق بين الكرياتينين وeGFR وزلال البول؟](/ar/blog/kidney-function-tests)\n- [ارتفاع ضغط الدم والكلى: علاقة تحتاج إلى متابعة منتظمة](/ar/blog/blood-pressure-kidney-health)\n- [الزلال في البول: ماذا يعني وجود الألبومين وكيف تتم متابعته؟](/ar/blog/albumin-in-urine)\n\n**محتوى تثقيفي عام، ولا يغني عن التقييم الطبي الفردي.**\n\nللتواصل مع العيادة وتحديد موعد: [تواصل مع العيادة لتحديد موعد](/ar/book)",
+      "en": "Kidney disease can begin without clear symptoms. Feeling fine on its own is therefore not enough to judge the health of the kidneys, especially when risk factors call for follow-up.\n\n## What is chronic kidney disease?\n\nIt is lasting damage or a persistent problem in the kidneys that affects their ability to perform their functions. The kidneys help filter the blood and remove waste and excess fluid, and these functions can decline as the disease progresses.\n\n## Who should pay attention to testing?\n\nFollow-up matters most for people living with diabetes, high blood pressure or heart disease, as well as those with a family history of kidney failure. The doctor decides which tests are appropriate and how often to repeat them based on the individual case.\n\n## How is it assessed?\n\nThe assessment relies on blood and urine tests, not on symptoms alone. The results help the doctor understand how well the kidneys filter and whether there are signs of damage.\n\nThe absence of pain does not rule out disease, and an abnormal result needs medical interpretation and follow-up rather than self-diagnosis.\n\n## The next step\n\nIf you have risk factors or earlier abnormal results, contact the clinic to arrange an appointment and discuss your tests with Dr Tariq Abu Hweij.\n\n## Related articles\n\n- [Kidney Function Tests: Creatinine, eGFR and Urine Albumin Explained](/en/blog/kidney-function-tests)\n- [Blood Pressure and the Kidneys: A Relationship Worth Monitoring](/en/blog/blood-pressure-kidney-health)\n- [Albumin in the Urine: What It Means and How It Is Followed Up](/en/blog/albumin-in-urine)\n\n**General educational content; it does not replace an individual medical assessment.**\n\nTo contact the clinic and arrange an appointment: [Contact the Clinic for an Appointment](/en/book)"
+    },
+    "coverImage": null,
+    "seo": {
+      "title": {
+        "ar": "مرض الكلى المزمن: الأعراض الصامتة ومن يحتاج إلى الفحص",
+        "en": "Chronic Kidney Disease: Silent Signs and Who Needs Testing"
+      },
+      "description": {
+        "ar": "دليل مبسّط عن مرض الكلى المزمن: من يحتاج إلى الفحص رغم غياب الأعراض، وكيف يعتمد التقييم على فحوصات الدم والبول مع الدكتور طارق أبو حويج.",
+        "en": "A plain-language guide to chronic kidney disease: who needs testing even without symptoms, and why assessment relies on blood and urine tests."
+      }
+    },
+    "author": {
+      "ar": "فريق تحرير موقع الدكتور طارق أبو حويج",
+      "en": "Dr Tariq Abu Hweij website editorial team"
+    },
+    "sourceUrl": "https://www.niddk.nih.gov/health-information/kidney-disease/chronic-kidney-disease-ckd",
+    "review": {
+      "status": "pending",
+      "notes": null,
+      "reviewedAt": null
+    },
+    "publishedAt": "2026-10-13T07:50:18.487Z",
+    "updatedAt": "2026-10-13T07:50:18.611Z"
+  },
+  {
+    "id": "e2d11087-aa81-4f77-b3b4-6ef22a310d3e",
+    "status": "published",
+    "isDemo": false,
+    "category": "guides",
+    "slug": {
+      "ar": "kidney-function-tests",
+      "en": "kidney-function-tests"
+    },
+    "title": {
+      "ar": "فحوصات وظائف الكلى: ما الفرق بين الكرياتينين وeGFR وزلال البول؟",
+      "en": "Kidney Function Tests: Creatinine, eGFR and Urine Albumin Explained"
+    },
+    "excerpt": {
+      "ar": "قد يحتوي تقرير المختبر على عدة أرقام تخص الكلى. تعرّف على دور كل فحص، ولماذا لا يجعل رقم واحد وحده أساسًا للتشخيص.",
+      "en": "A lab report may contain several kidney-related numbers. Learn what each test measures and why no single value is enough for a diagnosis."
+    },
+    "body": {
+      "ar": "قد يحتوي تقرير المختبر على عدة أرقام تخص الكلى. فهم دور كل فحص يساعدك على مناقشة النتائج مع الطبيب، لكنه لا يجعل رقمًا واحدًا كافيًا للتشخيص.\n\n## الكرياتينين وeGFR\n\nالكرياتينين مادة ناتجة عن نشاط العضلات وتتخلص منها الكلى. تُستخدم نتيجة فحصه، مع معلومات أخرى، لتقدير معدل الترشيح الكبيبي المعروف باسم eGFR.\n\nيساعد هذا التقدير في تقييم قدرة الكلى على تصفية الدم. ينظر الطبيب إلى النتيجة ضمن سياق الحالة الصحية والنتائج السابقة.\n\n## لماذا نحتاج إلى فحص البول؟\n\nقد يكشف فحص البول عن الألبومين، وهو بروتين قد يتسرب إلى البول عندما تتضرر الكلى. لذلك، فحص الدم وفحص البول يقدمان معلومات مختلفة ومتكاملة.\n\n## هل نتيجة واحدة تكفي؟\n\nقد تحتاج النتائج غير الطبيعية إلى إعادة الفحص أو متابعة إضافية. كما تُستخدم الفحوصات لمراقبة الحالة مع الوقت وتقييم خطة العلاج.\n\n## كيف تستعد للزيارة؟\n\nأحضر تقاريرك السابقة وقائمة الأدوية التي تستخدمها. لا توقف أي دواء من نفسك قبل الفحص.\n\nلفهم نتائج وظائف الكلى في سياق حالتك، تواصل مع العيادة لتحديد موعد.\n\n## مقالات ذات صلة\n\n- [مرض الكلى المزمن: لماذا قد تحتاج إلى الفحص رغم غياب الأعراض؟](/ar/blog/chronic-kidney-disease)\n- [الزلال في البول: ماذا يعني وجود الألبومين وكيف تتم متابعته؟](/ar/blog/albumin-in-urine)\n- [السكري والكلى: لماذا تبقى الفحوصات مهمة حتى عندما تشعر أنك بخير؟](/ar/blog/diabetes-kidney-health)\n\n**محتوى تثقيفي عام، ولا يغني عن التقييم الطبي الفردي.**\n\nللتواصل مع العيادة وتحديد موعد: [تواصل مع العيادة لتحديد موعد](/ar/book)",
+      "en": "A lab report may contain several kidney-related numbers. Understanding what each test measures helps you discuss the results with your doctor, but no single number is enough for a diagnosis.\n\n## Creatinine and eGFR\n\nCreatinine is a waste product of muscle activity that the kidneys remove from the blood. Its result, together with other information, is used to estimate the glomerular filtration rate, known as eGFR.\n\nThis estimate helps assess how well the kidneys filter the blood. The doctor reads it in the context of your overall health and previous results.\n\n## Why is a urine test needed?\n\nA urine test can reveal albumin, a protein that may leak into the urine when the kidneys are damaged. Blood tests and urine tests therefore provide different, complementary information.\n\n## Is one result enough?\n\nAbnormal results may need to be repeated or followed up with additional testing. The tests are also used to monitor the condition over time and to review the treatment plan.\n\n## How to prepare for your visit\n\nBring your previous reports and a list of the medicines you take. Do not stop any medicine on your own before the test.\n\nTo understand your kidney function results in the context of your health, contact the clinic to arrange an appointment.\n\n## Related articles\n\n- [Chronic Kidney Disease: Why You May Need Testing Even Without Symptoms](/en/blog/chronic-kidney-disease)\n- [Albumin in the Urine: What It Means and How It Is Followed Up](/en/blog/albumin-in-urine)\n- [Diabetes and the Kidneys: Why Testing Still Matters When You Feel Well](/en/blog/diabetes-kidney-health)\n\n**General educational content; it does not replace an individual medical assessment.**\n\nTo contact the clinic and arrange an appointment: [Contact the Clinic for an Appointment](/en/book)"
+    },
+    "coverImage": null,
+    "seo": {
+      "title": {
+        "ar": "فحوصات وظائف الكلى: الكرياتينين وeGFR وزلال البول",
+        "en": "Kidney Function Tests: Creatinine, eGFR and Urine Albumin"
+      },
+      "description": {
+        "ar": "شرح مبسّط لفحوصات وظائف الكلى: معنى الكرياتينين، ومعدل الترشيح الكبيبي eGFR، وأهمية زلال البول، وكيف تستعد للزيارة.",
+        "en": "A clear explanation of kidney function tests: creatinine, eGFR, urine albumin, and how to prepare for your appointment."
+      }
+    },
+    "author": {
+      "ar": "فريق تحرير موقع الدكتور طارق أبو حويج",
+      "en": "Dr Tariq Abu Hweij website editorial team"
+    },
+    "sourceUrl": "https://www.niddk.nih.gov/health-information/kidney-disease/chronic-kidney-disease-ckd/tests-diagnosis",
+    "review": {
+      "status": "pending",
+      "notes": null,
+      "reviewedAt": null
+    },
+    "publishedAt": "2026-10-13T07:50:18.487Z",
+    "updatedAt": "2026-10-13T07:50:18.611Z"
+  },
+  {
+    "id": "60da38b7-4ff8-4b7f-8bf2-65c44a7c8fe0",
+    "status": "published",
+    "isDemo": false,
+    "category": "guides",
+    "slug": {
+      "ar": "blood-pressure-kidney-health",
+      "en": "blood-pressure-kidney-health"
+    },
+    "title": {
+      "ar": "ارتفاع ضغط الدم والكلى: علاقة تحتاج إلى متابعة منتظمة",
+      "en": "Blood Pressure and the Kidneys: A Relationship Worth Monitoring"
+    },
+    "excerpt": {
+      "ar": "قد لا يسبب ارتفاع ضغط الدم أعراضًا واضحة، لكنه قد يؤثر في الكلى مع الوقت. تعرّف على طبيعة العلاقة بينهما وما يشمله التقييم.",
+      "en": "High blood pressure often has no clear symptoms, yet it can affect the kidneys over time. Learn how the two interact and what assessment involves."
+    },
+    "body": {
+      "ar": "قد لا يسبب ارتفاع ضغط الدم أعراضًا واضحة، لكنه قد يؤثر في الكلى مع الوقت. والعلاقة بين الضغط والكلى متبادلة، لذلك من المفيد متابعتهما معًا.\n\n## كيف يؤثر الضغط في الكلى؟\n\nقد يؤدي ارتفاع الضغط إلى إتلاف الأوعية الدموية التي تساعد الكلى على أداء وظائفها. وعندما تتأثر الكلى، قد تصبح قدرتها على التخلص من السوائل الزائدة أقل، ما قد يزيد صعوبة ضبط الضغط.\n\n## لماذا لا نعتمد على الأعراض؟\n\nغياب الصداع أو الدوخة لا يعني أن ضغط الدم طبيعي. القياس والمتابعة أكثر فائدة من الاعتماد على الشعور العام وحده.\n\n## ما الذي يشمله التقييم؟\n\nقد يشمل تقييم الحالة قياسات الضغط وفحوصات وظائف الكلى والبول، مع مراجعة الأدوية والتاريخ الصحي.\n\nالالتزام بالعلاج الموصوف ومناقشة نمط الغذاء والنشاط مع الطبيب جزء من المتابعة. أهداف الضغط وخطة العلاج تختلف بحسب الحالة؛ لا تعدّل الجرعات بنفسك.\n\n## متى تتواصل مع العيادة؟\n\nإذا كنت تعاني من ارتفاع الضغط أو لديك نتائج غير طبيعية لوظائف الكلى، تواصل مع العيادة لمناقشة خطة المتابعة المناسبة.\n\n## مقالات ذات صلة\n\n- [مرض الكلى المزمن: لماذا قد تحتاج إلى الفحص رغم غياب الأعراض؟](/ar/blog/chronic-kidney-disease)\n- [قياس ضغط الدم في المنزل: كيف تجعل القراءات أكثر فائدة للطبيب؟](/ar/blog/home-blood-pressure-monitoring)\n- [فحوصات وظائف الكلى: ما الفرق بين الكرياتينين وeGFR وزلال البول؟](/ar/blog/kidney-function-tests)\n\n**محتوى تثقيفي عام، ولا يغني عن التقييم الطبي الفردي.**\n\nللتواصل مع العيادة وتحديد موعد: [تواصل مع العيادة لتحديد موعد](/ar/book)",
+      "en": "High blood pressure often causes no clear symptoms, yet it can affect the kidneys over time. The relationship works in both directions, so monitoring them together is useful.\n\n## How does blood pressure affect the kidneys?\n\nRaised blood pressure can damage the blood vessels that help the kidneys do their work. When the kidneys are affected, their ability to remove excess fluid may fall, which can make blood pressure harder to control.\n\n## Why not rely on symptoms?\n\nThe absence of headache or dizziness does not mean blood pressure is normal. Measuring and follow-up are more useful than relying on how you feel.\n\n## What does the assessment involve?\n\nAn assessment may include blood pressure readings, blood and urine kidney tests, and a review of your medicines and medical history.\n\nSticking to the prescribed treatment and discussing diet and activity with your doctor are part of the follow-up. Blood pressure targets and treatment plans differ from person to person; do not adjust doses on your own.\n\n## When to contact the clinic\n\nIf you have high blood pressure or abnormal kidney function results, contact the clinic to discuss an appropriate follow-up plan.\n\n## Related articles\n\n- [Chronic Kidney Disease: Why You May Need Testing Even Without Symptoms](/en/blog/chronic-kidney-disease)\n- [Home Blood Pressure Monitoring: Making Readings Useful for Your Doctor](/en/blog/home-blood-pressure-monitoring)\n- [Kidney Function Tests: Creatinine, eGFR and Urine Albumin Explained](/en/blog/kidney-function-tests)\n\n**General educational content; it does not replace an individual medical assessment.**\n\nTo contact the clinic and arrange an appointment: [Contact the Clinic for an Appointment](/en/book)"
+    },
+    "coverImage": null,
+    "seo": {
+      "title": {
+        "ar": "ارتفاع ضغط الدم والكلى: العلاقة والمتابعة المنتظمة",
+        "en": "Blood Pressure and the Kidneys: The Link and Regular Monitoring"
+      },
+      "description": {
+        "ar": "كيف يؤثر ارتفاع ضغط الدم في الكلى، ولماذا لا يُعتمد على الأعراض، وما يشمله تقييم الحالة مع الدكتور طارق أبو حويج.",
+        "en": "How high blood pressure affects the kidneys, why symptoms are not a reliable guide, and what an assessment involves."
+      }
+    },
+    "author": {
+      "ar": "فريق تحرير موقع الدكتور طارق أبو حويج",
+      "en": "Dr Tariq Abu Hweij website editorial team"
+    },
+    "sourceUrl": "https://www.niddk.nih.gov/health-information/kidney-disease/high-blood-pressure",
+    "review": {
+      "status": "pending",
+      "notes": null,
+      "reviewedAt": null
+    },
+    "publishedAt": "2026-10-13T07:50:18.487Z",
+    "updatedAt": "2026-10-13T07:50:18.611Z"
+  },
+  {
+    "id": "25029f66-bf47-4f86-b1fa-0862169765f8",
+    "status": "published",
+    "isDemo": false,
+    "category": "guides",
+    "slug": {
+      "ar": "diabetes-kidney-health",
+      "en": "diabetes-kidney-health"
+    },
+    "title": {
+      "ar": "السكري والكلى: لماذا تبقى الفحوصات مهمة حتى عندما تشعر أنك بخير؟",
+      "en": "Diabetes and the Kidneys: Why Testing Still Matters When You Feel Well"
+    },
+    "excerpt": {
+      "ar": "متابعة السكري الجيدة تشمل صحة الكلى، وليس قياسات السكر فقط. تعرّف على كيفية متابعة وظائف الكلى وما الذي يساعد على حمايتها.",
+      "en": "Good diabetes care includes kidney health, not just sugar readings. Learn how kidney function is monitored and what helps protect it."
+    },
+    "body": {
+      "ar": "المتابعة الجيدة للسكري تشمل الاهتمام بصحة الكلى، وليس بقياسات السكر فقط. فقد يتطور تأثير السكري على الكلى تدريجيًا ومن دون أعراض واضحة في البداية.\n\n## كيف يؤثر السكري في الكلى؟\n\nقد يسبب ارتفاع سكر الدم مع الوقت تلفًا في الأوعية الدموية داخل الكلى. كما قد يترافق السكري مع ارتفاع ضغط الدم، وهو عامل آخر يؤثر في صحة الكلى.\n\n## كيف نتابع صحة الكلى؟\n\nيستخدم الطبيب فحوصات الدم والبول لتقييم وظائف الكلى ووجود الألبومين في البول. يُحدد جدول المتابعة بحسب نوع السكري والحالة الصحية والنتائج السابقة.\n\n## ما الذي يساعد على حماية الكلى؟\n\nتشمل المتابعة ضبط السكر والضغط وفق الخطة الطبية، والالتزام بالأدوية، ومناقشة الغذاء والنشاط والتدخين مع الفريق المعالج.\n\nلا يعني وجود السكري أن كل شخص سيصاب بفشل كلوي، كما أن وجود مشكلة في الكلى لا يُقيّم من تحليل واحد بمعزل عن بقية المعلومات.\n\n## قبل موعدك\n\nأحضر نتائج السكر ووظائف الكلى وقائمة الأدوية. تواصل مع العيادة لتحديد موعد إذا كنت تحتاج إلى مراجعة خطة متابعة الكلى.\n\n## مقالات ذات صلة\n\n- [فحوصات وظائف الكلى: ما الفرق بين الكرياتينين وeGFR وزلال البول؟](/ar/blog/kidney-function-tests)\n- [ارتفاع ضغط الدم والكلى: علاقة تحتاج إلى متابعة منتظمة](/ar/blog/blood-pressure-kidney-health)\n- [مرض الكلى المزمن: لماذا قد تحتاج إلى الفحص رغم غياب الأعراض؟](/ar/blog/chronic-kidney-disease)\n\n**محتوى تثقيفي عام، ولا يغني عن التقييم الطبي الفردي.**\n\nللتواصل مع العيادة وتحديد موعد: [تواصل مع العيادة لتحديد موعد](/ar/book)",
+      "en": "Good diabetes care includes attention to kidney health, not just blood sugar readings. The effect of diabetes on the kidneys can develop gradually, often without clear symptoms at first.\n\n## How does diabetes affect the kidneys?\n\nRaised blood sugar can, over time, damage the small blood vessels inside the kidneys. Diabetes also often occurs together with high blood pressure, another factor that affects kidney health.\n\n## How is kidney health monitored?\n\nThe doctor uses blood and urine tests to assess kidney function and check for albumin in the urine. The follow-up schedule depends on the type of diabetes, your general health and previous results.\n\n## What helps protect the kidneys?\n\nFollow-up includes keeping sugar and blood pressure on track according to the medical plan, taking medicines as prescribed, and discussing diet, activity and smoking with the care team.\n\nHaving diabetes does not mean everyone will develop kidney failure, and a kidney problem cannot be judged from a single test in isolation from the rest of your information.\n\n## Before your appointment\n\nBring your blood sugar and kidney function results and a list of your medicines. Contact the clinic to arrange an appointment if you need your kidney follow-up plan reviewed.\n\n## Related articles\n\n- [Kidney Function Tests: Creatinine, eGFR and Urine Albumin Explained](/en/blog/kidney-function-tests)\n- [Blood Pressure and the Kidneys: A Relationship Worth Monitoring](/en/blog/blood-pressure-kidney-health)\n- [Chronic Kidney Disease: Why You May Need Testing Even Without Symptoms](/en/blog/chronic-kidney-disease)\n\n**General educational content; it does not replace an individual medical assessment.**\n\nTo contact the clinic and arrange an appointment: [Contact the Clinic for an Appointment](/en/book)"
+    },
+    "coverImage": null,
+    "seo": {
+      "title": {
+        "ar": "السكري والكلى: أهمية الفحوصات الدورية",
+        "en": "Diabetes and the Kidneys: Why Regular Testing Matters"
+      },
+      "description": {
+        "ar": "كيف يؤثر السكري على الكلى، وما الفحوصات التي يستخدمها الطبيب للمتابعة، وما الذي يساعد على حماية الكلى مع الوقت.",
+        "en": "How diabetes affects the kidneys, which tests are used for follow-up, and what helps protect the kidneys over time."
+      }
+    },
+    "author": {
+      "ar": "فريق تحرير موقع الدكتور طارق أبو حويج",
+      "en": "Dr Tariq Abu Hweij website editorial team"
+    },
+    "sourceUrl": "https://www.niddk.nih.gov/health-information/diabetes/overview/preventing-problems/diabetic-kidney-disease",
+    "review": {
+      "status": "pending",
+      "notes": null,
+      "reviewedAt": null
+    },
+    "publishedAt": "2026-10-13T07:50:18.487Z",
+    "updatedAt": "2026-10-13T07:50:18.611Z"
+  },
+  {
+    "id": "64b79d2c-cc63-461d-bf04-1d7b64adbf24",
+    "status": "published",
+    "isDemo": false,
+    "category": "guides",
+    "slug": {
+      "ar": "albumin-in-urine",
+      "en": "albumin-in-urine"
+    },
+    "title": {
+      "ar": "الزلال في البول: ماذا يعني وجود الألبومين وكيف تتم متابعته؟",
+      "en": "Albumin in the Urine: What It Means and How It Is Followed Up"
+    },
+    "excerpt": {
+      "ar": "ظهور كلمة «زلال» في تقرير البول يحتاج إلى تفسير ضمن الحالة الصحية. تعرّف على معنى الألبومين، وكيف يُقاس، ولماذا يُكرر الفحص.",
+      "en": "The word albumin on a urine report needs interpretation in the context of your health. Learn what it means, how it is measured, and why the test is repeated."
+    },
+    "body": {
+      "ar": "ظهور كلمة «زلال» في تقرير البول قد يثير القلق، لكنه يحتاج إلى تفسير ضمن الحالة الصحية، وليس إلى استنتاج أن المريض يعاني من فشل كلوي.\n\n## ما هو الألبومين؟\n\nالألبومين بروتين موجود في الدم. تعمل الكلى السليمة عادة على منع مرور كميات كبيرة منه إلى البول. وقد يكون ارتفاعه في البول مؤشرًا على تلف الكلى.\n\n## كيف يتم فحصه؟\n\nقد يستخدم الطبيب فحصًا أوليًا للبول، ثم قياس نسبة الألبومين إلى الكرياتينين المعروفة باسم UACR. تساعد هذه النسبة على تقييم كمية الألبومين بصورة أكثر فائدة.\n\n## هل يحتاج الفحص إلى التكرار؟\n\nقد يطلب الطبيب إعادة التحليل لتأكيد النتيجة ومتابعتها. ويجمعها مع فحوصات وظائف الكلى وقياسات الضغط والتاريخ الصحي.\n\nتزداد أهمية المتابعة عند وجود السكري أو ارتفاع الضغط أو عوامل خطر أخرى.\n\n## ما الخطوة المناسبة؟\n\nأحضر تقرير التحليل والنتائج السابقة إلى الزيارة، ولا تبدأ علاجًا أو حمية شديدة من نفسك. تواصل مع العيادة لتحديد موعد لتقييم النتيجة.\n\n## مقالات ذات صلة\n\n- [فحوصات وظائف الكلى: ما الفرق بين الكرياتينين وeGFR وزلال البول؟](/ar/blog/kidney-function-tests)\n- [مرض الكلى المزمن: لماذا قد تحتاج إلى الفحص رغم غياب الأعراض؟](/ar/blog/chronic-kidney-disease)\n- [السكري والكلى: لماذا تبقى الفحوصات مهمة حتى عندما تشعر أنك بخير؟](/ar/blog/diabetes-kidney-health)\n\n**محتوى تثقيفي عام، ولا يغني عن التقييم الطبي الفردي.**\n\nللتواصل مع العيادة وتحديد موعد: [تواصل مع العيادة لتحديد موعد](/ar/book)",
+      "en": "Seeing the word albumin on a urine report can be worrying, but it needs interpretation in the context of your health — it is not, on its own, proof of kidney failure.\n\n## What is albumin?\n\nAlbumin is a protein found in the blood. Healthy kidneys normally keep large amounts of it out of the urine. A raised level in the urine can be a sign of kidney damage.\n\n## How is it measured?\n\nThe doctor may start with a urine dipstick test, then measure the albumin-to-creatinine ratio, known as UACR. This ratio gives a more useful picture of the amount of albumin.\n\n## Does the test need repeating?\n\nThe doctor may ask for the analysis to be repeated to confirm and follow up the result. It is interpreted together with kidney function tests, blood pressure readings and your medical history.\n\nFollow-up becomes more important when diabetes, high blood pressure or other risk factors are present.\n\n## What is the right next step?\n\nBring the lab report and your previous results to the visit, and do not start a treatment or a strict diet on your own. Contact the clinic to arrange an appointment to have the result assessed.\n\n## Related articles\n\n- [Kidney Function Tests: Creatinine, eGFR and Urine Albumin Explained](/en/blog/kidney-function-tests)\n- [Chronic Kidney Disease: Why You May Need Testing Even Without Symptoms](/en/blog/chronic-kidney-disease)\n- [Diabetes and the Kidneys: Why Testing Still Matters When You Feel Well](/en/blog/diabetes-kidney-health)\n\n**General educational content; it does not replace an individual medical assessment.**\n\nTo contact the clinic and arrange an appointment: [Contact the Clinic for an Appointment](/en/book)"
+    },
+    "coverImage": null,
+    "seo": {
+      "title": {
+        "ar": "الزلال في البول: معناه وطرق المتابعة",
+        "en": "Albumin in the Urine: Meaning and Follow-up"
+      },
+      "description": {
+        "ar": "ما هو الألبومين، وكيف يُقاس زلال البول، ولماذا يحتاج الفحص إلى التكرار والمتابعة مع الدكتور طارق أبو حويج.",
+        "en": "What albumin is, how urine albumin is measured, and why the test needs repeating and follow-up."
+      }
+    },
+    "author": {
+      "ar": "فريق تحرير موقع الدكتور طارق أبو حويج",
+      "en": "Dr Tariq Abu Hweij website editorial team"
+    },
+    "sourceUrl": "https://www.niddk.nih.gov/health-information/kidney-disease/chronic-kidney-disease-ckd/tests-diagnosis/albuminuria-albumin-urine",
+    "review": {
+      "status": "pending",
+      "notes": null,
+      "reviewedAt": null
+    },
+    "publishedAt": "2026-10-13T07:50:18.487Z",
+    "updatedAt": "2026-10-13T14:05:28.834Z"
+  },
+  {
+    "id": "7e6c9c9f-e6ca-4a36-8168-a97450940e9e",
+    "status": "published",
+    "isDemo": false,
+    "category": "guides",
+    "slug": {
+      "ar": "kidney-stone-symptoms",
+      "en": "kidney-stone-symptoms"
+    },
+    "title": {
+      "ar": "أعراض حصى الكلى: متى يحتاج الألم إلى تقييم عاجل؟",
+      "en": "Kidney Stone Symptoms: When Pain Needs Urgent Assessment"
+    },
+    "excerpt": {
+      "ar": "قد تسبب حصى الكلى ألمًا حادًا في الخاصرة أو الظهر. تعرّف على الأعراض الممكنة، والحالات التي تستدعي رعاية سريعة، ولماذا لا يكفي شرب الماء وحده.",
+      "en": "Kidney stones can cause severe pain in the flank or back. Learn the possible symptoms, when urgent care is needed, and why water alone is not enough."
+    },
+    "body": {
+      "ar": "قد تسبب حصى الكلى ألمًا حادًا في الخاصرة أو الظهر أو أسفل البطن، وقد يأتي الألم على شكل موجات. لكن هذه الأعراض لا تثبت وجود حصاة؛ فقد ترتبط بمشكلات أخرى تحتاج إلى التقييم.\n\n## ما الأعراض الممكنة؟\n\nقد تشمل الأعراض وجود دم في البول، أو ألم أثناء التبول، أو الحاجة المتكررة إليه. وقد يترافق الألم مع الغثيان أو القيء.\n\nقد تظهر أيضًا صعوبة في التبول أو خروج كمية قليلة منه، أو تغير في رائحة البول ومظهره.\n\n## متى تطلب الرعاية سريعًا؟\n\nالألم الشديد، أو الدم في البول، أو عدم القدرة على التبول يستدعي تقييمًا طبيًا سريعًا. وتزداد أهمية ذلك عند وجود حرارة أو قشعريرة أو قيء.\n\nلا تنتظر ردًا عبر واتساب عند وجود أعراض تستدعي رعاية عاجلة.\n\n## هل شرب الماء يكفي؟\n\nلا يمكن افتراض أن جميع الحصى ستخرج وحدها أو أن زيادة الماء مناسبة لكل حالة. يحتاج الطبيب إلى تقييم الحالة وتحديد الخطوة المناسبة.\n\nبعد التعامل مع الأعراض العاجلة، يمكن التواصل مع العيادة لمتابعة صحة الكلى ومناقشة الوقاية.\n\n## مقالات ذات صلة\n\n- [الوقاية من تكرار حصى الكلى: هل توجد حمية واحدة للجميع؟](/ar/blog/preventing-kidney-stones)\n- [إصابة الكلى الحادة: لماذا يحتاج التغير المفاجئ في وظائف الكلى إلى الاهتمام؟](/ar/blog/acute-kidney-injury)\n- [فحوصات وظائف الكلى: ما الفرق بين الكرياتينين وeGFR وزلال البول؟](/ar/blog/kidney-function-tests)\n\n**محتوى تثقيفي عام، ولا يغني عن التقييم الطبي الفردي.**\n\nللتواصل مع العيادة وتحديد موعد: [تواصل مع العيادة لتحديد موعد](/ar/book)",
+      "en": "Kidney stones can cause severe pain in the flank, back or lower abdomen, and the pain may come in waves. These symptoms do not prove a stone is present; other problems that need assessment can look the same.\n\n## What are the possible symptoms?\n\nSymptoms may include blood in the urine, pain while passing urine, or needing to urinate more often. Pain may also come with nausea or vomiting.\n\nYou may also notice difficulty passing urine or only small amounts coming out, or a change in the smell and appearance of the urine.\n\n## When should you seek care quickly?\n\nSevere pain, blood in the urine, or being unable to pass urine all call for prompt medical assessment. This becomes more important when there is fever, chills or vomiting.\n\nDo not wait for a WhatsApp reply when symptoms call for urgent care.\n\n## Is drinking water enough?\n\nIt cannot be assumed that all stones will pass on their own, or that drinking more water is appropriate for every case. The doctor needs to assess the situation and decide the right step.\n\nAfter any urgent symptoms are dealt with, you can contact the clinic for kidney follow-up and to discuss prevention.\n\n## Related articles\n\n- [Preventing Recurrent Kidney Stones: Is There One Diet for Everyone?](/en/blog/preventing-kidney-stones)\n- [Acute Kidney Injury: Why a Sudden Change Needs Attention](/en/blog/acute-kidney-injury)\n- [Kidney Function Tests: Creatinine, eGFR and Urine Albumin Explained](/en/blog/kidney-function-tests)\n\n**General educational content; it does not replace an individual medical assessment.**\n\nTo contact the clinic and arrange an appointment: [Contact the Clinic for an Appointment](/en/book)"
+    },
+    "coverImage": null,
+    "seo": {
+      "title": {
+        "ar": "أعراض حصى الكلى ومتى تحتاج إلى رعاية عاجلة",
+        "en": "Kidney Stone Symptoms and When to Seek Urgent Care"
+      },
+      "description": {
+        "ar": "أعراض حصى الكلى الممكنة، والعلامات التي تستدعي تقييمًا طبيًا سريعًا، ولماذا لا يُفترض أن كل الحصى تخرج وحدها.",
+        "en": "Possible kidney stone symptoms, the signs that need urgent medical assessment, and why passing a stone cannot be assumed."
+      }
+    },
+    "author": {
+      "ar": "فريق تحرير موقع الدكتور طارق أبو حويج",
+      "en": "Dr Tariq Abu Hweij website editorial team"
+    },
+    "sourceUrl": "https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/symptoms-causes",
+    "review": {
+      "status": "pending",
+      "notes": null,
+      "reviewedAt": null
+    },
+    "publishedAt": "2026-10-13T07:50:18.487Z",
+    "updatedAt": "2026-10-13T07:50:18.611Z"
+  },
+  {
+    "id": "594e43ef-7588-414c-8e82-c8b1da27229d",
+    "status": "published",
+    "isDemo": false,
+    "category": "guides",
+    "slug": {
+      "ar": "preventing-kidney-stones",
+      "en": "preventing-kidney-stones"
+    },
+    "title": {
+      "ar": "الوقاية من تكرار حصى الكلى: هل توجد حمية واحدة للجميع؟",
+      "en": "Preventing Recurrent Kidney Stones: Is There One Diet for Everyone?"
+    },
+    "excerpt": {
+      "ar": "بعد الإصابة بحصى الكلى، تعتمد الوقاية على نوع الحصاة والحالة الصحية. تعرّف على دور السوائل والغذاء، ولماذا لا توجد قائمة موحدة للجميع.",
+      "en": "After a kidney stone, prevention depends on the type of stone and your health. Learn about fluids and diet, and why there is no single list for everyone."
+    },
+    "body": {
+      "ar": "بعد الإصابة بحصى الكلى، يصبح السؤال المهم: كيف نقلل احتمال تكرارها؟ الإجابة تعتمد على نوع الحصاة والحالة الصحية، وليست قائمة ممنوعات موحدة لكل شخص.\n\n## السوائل جزء مهم من الوقاية\n\nيساعد تناول كمية مناسبة من السوائل على الوقاية من الحصى لدى كثير من الأشخاص. لكن الكمية المناسبة تختلف، خصوصًا عند وجود فشل كلوي أو تعليمات بتقييد السوائل.\n\nلا تزد كمية الماء بصورة كبيرة إذا كانت لديك تعليمات طبية مختلفة.\n\n## نوع الحصاة يوجه الغذاء\n\nقد تختلف التوصيات المتعلقة بالصوديوم والبروتين الحيواني والكالسيوم والأوكسالات بحسب نوع الحصاة. لذلك، لا يُنصح بحذف مجموعات غذائية كاملة بصورة عشوائية.\n\nيمكن للطبيب أو اختصاصي التغذية المساعدة في وضع خطة تتناسب مع نتائجك.\n\n## ماذا تحضر للموعد؟\n\nأحضر تقارير الحصى وأي تحليل لتركيبها، وقائمة الأدوية والمكملات. هذه المعلومات تساعد على وضع خطة أوضح للوقاية.\n\nتواصل مع العيادة لتحديد موعد لمناقشة أسباب تكرار الحصى وخطوات المتابعة المناسبة.\n\n## مقالات ذات صلة\n\n- [أعراض حصى الكلى: متى يحتاج الألم إلى تقييم عاجل؟](/ar/blog/kidney-stone-symptoms)\n- [مرض الكلى المزمن: لماذا قد تحتاج إلى الفحص رغم غياب الأعراض؟](/ar/blog/chronic-kidney-disease)\n- [السكري والكلى: لماذا تبقى الفحوصات مهمة حتى عندما تشعر أنك بخير؟](/ar/blog/diabetes-kidney-health)\n\n**محتوى تثقيفي عام، ولا يغني عن التقييم الطبي الفردي.**\n\nللتواصل مع العيادة وتحديد موعد: [تواصل مع العيادة لتحديد موعد](/ar/book)",
+      "en": "After having a kidney stone, the important question becomes: how do we lower the chance of it happening again? The answer depends on the type of stone and your overall health, not on a single list of prohibitions that suits everyone.\n\n## Fluids are an important part of prevention\n\nDrinking an adequate amount of fluid helps prevent stones in many people. The right amount varies, especially if there is kidney failure or medical instructions to restrict fluids.\n\nDo not greatly increase your water intake if you have been given different medical instructions.\n\n## The type of stone guides the diet\n\nAdvice about sodium, animal protein, calcium and oxalates can differ depending on the type of stone. For that reason, cutting out whole food groups at random is not advisable.\n\nYour doctor or a dietitian can help build a plan that fits your results.\n\n## What to bring to your appointment\n\nBring any stone reports and analysis of its composition, along with a list of medicines and supplements. This information helps build a clearer prevention plan.\n\nContact the clinic to arrange an appointment to discuss the causes of recurrent stones and the right follow-up steps.\n\n## Related articles\n\n- [Kidney Stone Symptoms: When Pain Needs Urgent Assessment](/en/blog/kidney-stone-symptoms)\n- [Chronic Kidney Disease: Why You May Need Testing Even Without Symptoms](/en/blog/chronic-kidney-disease)\n- [Diabetes and the Kidneys: Why Testing Still Matters When You Feel Well](/en/blog/diabetes-kidney-health)\n\n**General educational content; it does not replace an individual medical assessment.**\n\nTo contact the clinic and arrange an appointment: [Contact the Clinic for an Appointment](/en/book)"
+    },
+    "coverImage": null,
+    "seo": {
+      "title": {
+        "ar": "الوقاية من تكرار حصى الكلى: السوائل والغذاء",
+        "en": "Preventing Recurrent Kidney Stones: Fluids and Diet"
+      },
+      "description": {
+        "ar": "كيف يقلل الماء احتمال تكرار حصى الكلى، ولماذا تختلف التوصيات الغذائية بحسب نوع الحصاة، وما الذي يحضره للموعد.",
+        "en": "How fluid intake can lower the chance of recurrent kidney stones, why diet advice differs by stone type, and what to bring to your appointment."
+      }
+    },
+    "author": {
+      "ar": "فريق تحرير موقع الدكتور طارق أبو حويج",
+      "en": "Dr Tariq Abu Hweij website editorial team"
+    },
+    "sourceUrl": "https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/eating-diet-nutrition",
+    "review": {
+      "status": "pending",
+      "notes": null,
+      "reviewedAt": null
+    },
+    "publishedAt": "2026-10-13T07:50:18.487Z",
+    "updatedAt": "2026-10-13T07:50:18.611Z"
+  },
+  {
+    "id": "61d48876-93ff-4a38-b0fc-a2eb6134ffe1",
+    "status": "published",
+    "isDemo": false,
+    "category": "guides",
+    "slug": {
+      "ar": "acute-kidney-injury",
+      "en": "acute-kidney-injury"
+    },
+    "title": {
+      "ar": "إصابة الكلى الحادة: لماذا يحتاج التغير المفاجئ في وظائف الكلى إلى الاهتمام؟",
+      "en": "Acute Kidney Injury: Why a Sudden Change Needs Attention"
+    },
+    "excerpt": {
+      "ar": "إصابة الكلى الحادة تعني تدهورًا مفاجئًا في وظائف الكلى، وتختلف عن المرض المزمن. تعرّف على الأسباب، والعلامات، ومتى تكون المراجعة عاجلة.",
+      "en": "Acute kidney injury means a sudden decline in kidney function and differs from chronic disease. Learn the causes, signs, and when review is urgent."
+    },
+    "body": {
+      "ar": "إصابة الكلى الحادة تعني تدهورًا مفاجئًا في قدرتها على العمل. تختلف عن المرض المزمن الذي يستمر مع الوقت، وقد تحدث أثناء مرض آخر أو بعد ظروف تؤثر في تدفق الدم أو تصريف البول.\n\n## ما الأسباب الممكنة؟\n\nقد ترتبط بالجفاف الشديد، أو العدوى، أو انخفاض الضغط، أو انسداد المسالك البولية. وقد تدخل بعض الأدوية أو الإجراءات ضمن عوامل الخطر بحسب الحالة.\n\nهذا لا يعني إيقاف الأدوية من نفسك؛ مراجعتها تكون مع الطبيب.\n\n## هل تظهر أعراض دائمًا؟\n\nقد تكون الإصابة خفيفة دون أعراض واضحة. وقد يظهر انخفاض كمية البول، أو تورم، أو غثيان، أو تعب، أو ضيق نفس، أو ارتباك.\n\n## كيف يتم اكتشافها؟\n\nيعتمد التقييم على فحوصات الدم، ومنها الكرياتينين، مع مراجعة كمية البول والحالة الصحية. وقد تُطلب فحوصات إضافية بحسب السبب المتوقع.\n\n## متى تكون المراجعة عاجلة؟\n\nعند حدوث نقص ملحوظ في البول أو ضيق نفس أو ارتباك، اطلب تقييمًا عاجلًا. لا تنتظر موعدًا روتينيًا أو رسالة واتساب.\n\n## مقالات ذات صلة\n\n- [مرض الكلى المزمن: لماذا قد تحتاج إلى الفحص رغم غياب الأعراض؟](/ar/blog/chronic-kidney-disease)\n- [فحوصات وظائف الكلى: ما الفرق بين الكرياتينين وeGFR وزلال البول؟](/ar/blog/kidney-function-tests)\n- [أعراض حصى الكلى: متى يحتاج الألم إلى تقييم عاجل؟](/ar/blog/kidney-stone-symptoms)\n\n**محتوى تثقيفي عام، ولا يغني عن التقييم الطبي الفردي.**\n\nللتواصل مع العيادة وتحديد موعد: [تواصل مع العيادة لتحديد موعد](/ar/book)",
+      "en": "Acute kidney injury means a sudden decline in the kidneys' ability to work. It differs from chronic kidney disease, which persists over time, and can occur during another illness or after conditions that affect blood flow or urine drainage.\n\n## What are the possible causes?\n\nIt may be linked to severe dehydration, infection, low blood pressure, or a blockage in the urinary tract. Some medicines or procedures can be among the risk factors depending on the case.\n\nThis does not mean stopping medicines on your own; any review of them is done with your doctor.\n\n## Do symptoms always appear?\n\nThe injury can be mild with no clear symptoms. You may notice reduced urine output, swelling, nausea, tiredness, shortness of breath or confusion.\n\n## How is it detected?\n\nAssessment relies on blood tests, including creatinine, together with a review of urine output and your general health. Additional tests may be ordered depending on the suspected cause.\n\n## When is the review urgent?\n\nIf you notice a marked drop in urine output, shortness of breath or confusion, seek urgent medical assessment. Do not wait for a routine appointment or a WhatsApp message.\n\n## Related articles\n\n- [Chronic Kidney Disease: Why You May Need Testing Even Without Symptoms](/en/blog/chronic-kidney-disease)\n- [Kidney Function Tests: Creatinine, eGFR and Urine Albumin Explained](/en/blog/kidney-function-tests)\n- [Kidney Stone Symptoms: When Pain Needs Urgent Assessment](/en/blog/kidney-stone-symptoms)\n\n**General educational content; it does not replace an individual medical assessment.**\n\nTo contact the clinic and arrange an appointment: [Contact the Clinic for an Appointment](/en/book)"
+    },
+    "coverImage": null,
+    "seo": {
+      "title": {
+        "ar": "إصابة الكلى الحادة: الأسباب والعلامات",
+        "en": "Acute Kidney Injury: Causes and Warning Signs"
+      },
+      "description": {
+        "ar": "ما هي إصابة الكلى الحادة، وكيف تختلف عن المرض المزمن، وما الأسباب الممكنة، ومتى تحتاج إلى رعاية عاجلة.",
+        "en": "What acute kidney injury is, how it differs from chronic kidney disease, its possible causes, and when urgent care is needed."
+      }
+    },
+    "author": {
+      "ar": "فريق تحرير موقع الدكتور طارق أبو حويج",
+      "en": "Dr Tariq Abu Hweij website editorial team"
+    },
+    "sourceUrl": "https://www.nhs.uk/conditions/acute-kidney-injury/",
+    "review": {
+      "status": "pending",
+      "notes": null,
+      "reviewedAt": null
+    },
+    "publishedAt": "2026-10-13T07:50:18.487Z",
+    "updatedAt": "2026-10-13T07:50:18.611Z"
+  },
+  {
+    "id": "d3113063-851b-4cd4-ad58-9603ac2051fc",
+    "status": "published",
+    "isDemo": false,
+    "category": "guides",
+    "slug": {
+      "ar": "home-blood-pressure-monitoring",
+      "en": "home-blood-pressure-monitoring"
+    },
+    "title": {
+      "ar": "قياس ضغط الدم في المنزل: كيف تجعل القراءات أكثر فائدة للطبيب؟",
+      "en": "Home Blood Pressure Monitoring: Making Readings Useful for Your Doctor"
+    },
+    "excerpt": {
+      "ar": "قد تساعد قياسات ضغط الدم المنزلية في متابعة حالتك، بشرط استخدام الجهاز بالطريقة الصحيحة وتسجيل القراءات بوضوح.",
+      "en": "Home blood pressure readings can support your follow-up, provided the device is used correctly and readings are recorded clearly."
+    },
+    "body": {
+      "ar": "قد تساعد قياسات ضغط الدم المنزلية الطبيب على متابعة حالتك، بشرط استخدام الجهاز بالطريقة الصحيحة وتسجيل القراءات بوضوح.\n\n## استخدم الجهاز وفق التعليمات\n\nالأجهزة قد تختلف، لذلك اتبع دليل الجهاز، واطلب من الطبيب أو الممرض توضيح طريقة الاستخدام ومقاس الكفة المناسب.\n\nعند القياس، اجلس وأرح ذراعك على سطح مناسب، وحافظ على وضع مريح وثابت أثناء عمل الجهاز.\n\n## سجل النتائج بدل الاعتماد على الذاكرة\n\nدوّن القراءة ووقت القياس، وأحضر السجل إلى موعدك. اتبع جدول القياس الذي يحدده الطبيب، فقد تحتاج إلى أكثر من قراءة لتقييم الوضع بصورة مناسبة.\n\n## هل قراءة واحدة تعني تغيير العلاج؟\n\nلا تعدّل الدواء اعتمادًا على قراءة منفردة. ناقش النتائج مع الطبيب، خصوصًا إذا كانت تختلف كثيرًا عن المعتاد.\n\nارتفاع الضغط قد يكون دون أعراض، لذلك لا تعتمد على الصداع أو الشعور العام لمعرفة مستواه.\n\nتواصل مع العيادة لتحديد موعد لمراجعة سجل الضغط وخطة المتابعة، واطلب رعاية عاجلة عند ظهور أعراض شديدة.\n\n## مقالات ذات صلة\n\n- [ارتفاع ضغط الدم والكلى: علاقة تحتاج إلى متابعة منتظمة](/ar/blog/blood-pressure-kidney-health)\n- [مرض الكلى المزمن: لماذا قد تحتاج إلى الفحص رغم غياب الأعراض؟](/ar/blog/chronic-kidney-disease)\n- [فحوصات وظائف الكلى: ما الفرق بين الكرياتينين وeGFR وزلال البول؟](/ar/blog/kidney-function-tests)\n\n**محتوى تثقيفي عام، ولا يغني عن التقييم الطبي الفردي.**\n\nللتواصل مع العيادة وتحديد موعد: [تواصل مع العيادة لتحديد موعد](/ar/book)",
+      "en": "Home blood pressure readings can help your doctor follow your condition, provided the device is used correctly and the readings are recorded clearly.\n\n## Use the device according to its instructions\n\nDevices differ, so follow the device manual and ask the doctor or nurse to explain how to use it and which cuff size is right for you.\n\nWhen measuring, sit down and rest your arm on a suitable surface, keeping a comfortable, still position while the device works.\n\n## Record the results instead of relying on memory\n\nWrite down each reading and the time it was taken, and bring the log to your appointment. Follow the measuring schedule your doctor sets; more than one reading may be needed to assess the situation properly.\n\n## Does one reading mean treatment should change?\n\nDo not adjust your medicine based on a single reading. Discuss the results with your doctor, especially if they differ a lot from usual.\n\nHigh blood pressure can occur without symptoms, so do not rely on headache or how you feel to judge the level.\n\nContact the clinic to arrange an appointment to review your blood pressure log and follow-up plan, and seek urgent care if severe symptoms appear.\n\n## Related articles\n\n- [Blood Pressure and the Kidneys: A Relationship Worth Monitoring](/en/blog/blood-pressure-kidney-health)\n- [Chronic Kidney Disease: Why You May Need Testing Even Without Symptoms](/en/blog/chronic-kidney-disease)\n- [Kidney Function Tests: Creatinine, eGFR and Urine Albumin Explained](/en/blog/kidney-function-tests)\n\n**General educational content; it does not replace an individual medical assessment.**\n\nTo contact the clinic and arrange an appointment: [Contact the Clinic for an Appointment](/en/book)"
+    },
+    "coverImage": null,
+    "seo": {
+      "title": {
+        "ar": "قياس ضغط الدم في المنزل: خطوات عملية",
+        "en": "Home Blood Pressure Monitoring: Practical Steps"
+      },
+      "description": {
+        "ar": "كيف تقيس ضغط الدم في المنزل بالطريقة الصحيحة، ولماذا تسجل النتائج، ولماذا لا يغني قياس واحد عن مراجعة الطبيب.",
+        "en": "How to measure blood pressure correctly at home, why recording readings matters, and why one reading is no substitute for a medical review."
+      }
+    },
+    "author": {
+      "ar": "فريق تحرير موقع الدكتور طارق أبو حويج",
+      "en": "Dr Tariq Abu Hweij website editorial team"
+    },
+    "sourceUrl": "https://www.nhs.uk/tests-and-treatments/blood-pressure-test/",
+    "review": {
+      "status": "pending",
+      "notes": null,
+      "reviewedAt": null
+    },
+    "publishedAt": "2026-10-13T07:50:18.487Z",
+    "updatedAt": "2026-10-13T07:50:18.611Z"
+  },
+  {
+    "id": "957f198e-9107-43ed-b07e-18c0187fcf89",
+    "status": "published",
+    "isDemo": false,
+    "category": "guides",
+    "slug": {
+      "ar": "kidney-transplant-follow-up",
+      "en": "kidney-transplant-follow-up"
+    },
+    "title": {
+      "ar": "زراعة الكلى: لماذا تستمر المتابعة الطبية بعد العملية؟",
+      "en": "Kidney Transplantation: Why Medical Follow-up Continues Afterwards"
+    },
+    "excerpt": {
+      "ar": "زراعة الكلى أحد الخيارات العلاجية لبعض المصابين بالفشل الكلوي، لكنها ليست نهاية المتابعة. تعرّف على ما يحتاج المريض لمعرفته.",
+      "en": "Kidney transplantation is one treatment option for some people with kidney failure, but it is not the end of follow-up. Learn what patients need to know."
+    },
+    "body": {
+      "ar": "زراعة الكلى أحد الخيارات العلاجية لبعض المصابين بالفشل الكلوي. تُنقل خلالها كلية من متبرع إلى جسم المريض لتقوم بوظائف التصفية، بعد تقييم متخصص لمدى ملاءمة الزراعة.\n\n## هل الزراعة تنهي الحاجة إلى العلاج؟\n\nالزراعة علاج للفشل الكلوي، لكنها ليست نهاية المتابعة. يحتاج المريض إلى أدوية تساعد على منع رفض الكلية، وزيارات وفحوصات منتظمة.\n\n## لماذا تُراقب وظائف الكلية المزروعة؟\n\nتساعد المتابعة على تقييم عمل الكلية ومراجعة الأدوية واكتشاف المشكلات المحتملة، ومنها العدوى أو الرفض أو التأثيرات الجانبية للعلاج.\n\nلا توقف أدوية منع الرفض أو تغير جرعاتها دون الرجوع إلى فريق الزراعة.\n\n## ماذا تفعل عند تغير حالتك؟\n\nاتبع تعليمات فريق الزراعة بشأن الأعراض التي تستدعي التواصل العاجل، ولا تؤجل المراجعة عند وجود تغير مقلق.\n\n## دور المتابعة في العيادة\n\nيمكن الاستفسار عن متابعة أمراض الكلى لدى الدكتور طارق أبو حويج. هذا النص لا يعني إجراء عمليات الزراعة داخل العيادة؛ العملية والتقييم المرتبط بها يتمان ضمن فريق ومركز متخصصين.\n\n## مقالات ذات صلة\n\n- [مرض الكلى المزمن: لماذا قد تحتاج إلى الفحص رغم غياب الأعراض؟](/ar/blog/chronic-kidney-disease)\n- [فحوصات وظائف الكلى: ما الفرق بين الكرياتينين وeGFR وزلال البول؟](/ar/blog/kidney-function-tests)\n- [ارتفاع ضغط الدم والكلى: علاقة تحتاج إلى متابعة منتظمة](/ar/blog/blood-pressure-kidney-health)\n\n**محتوى تثقيفي عام، ولا يغني عن التقييم الطبي الفردي.**\n\nللتواصل مع العيادة وتحديد موعد: [تواصل مع العيادة لتحديد موعد](/ar/book)",
+      "en": "Kidney transplantation is one of the treatment options for some people with kidney failure. A kidney from a donor is transferred into the patient's body to carry out the filtering work, after a specialist assessment of whether transplantation is suitable.\n\n## Does transplantation end the need for treatment?\n\nTransplantation is a treatment for kidney failure, but it is not the end of follow-up. Patients need medicines that help prevent rejection of the kidney, along with regular visits and tests.\n\n## Why is the transplanted kidney monitored?\n\nFollow-up helps assess how the kidney is working, review medicines, and detect possible problems, including infection, rejection or side effects of treatment.\n\nDo not stop anti-rejection medicines or change their doses without consulting the transplant team.\n\n## What should you do if your condition changes?\n\nFollow the transplant team's instructions about symptoms that need urgent contact, and do not postpone a review when something concerning changes.\n\n## The clinic's role in follow-up\n\nEnquiries about kidney follow-up with Dr Tariq Abu Hweij are welcome. This article does not mean transplant operations are carried out at the clinic; the procedure and its assessment take place within a specialist team and centre.\n\n## Related articles\n\n- [Chronic Kidney Disease: Why You May Need Testing Even Without Symptoms](/en/blog/chronic-kidney-disease)\n- [Kidney Function Tests: Creatinine, eGFR and Urine Albumin Explained](/en/blog/kidney-function-tests)\n- [Blood Pressure and the Kidneys: A Relationship Worth Monitoring](/en/blog/blood-pressure-kidney-health)\n\n**General educational content; it does not replace an individual medical assessment.**\n\nTo contact the clinic and arrange an appointment: [Contact the Clinic for an Appointment](/en/book)"
+    },
+    "coverImage": null,
+    "seo": {
+      "title": {
+        "ar": "زراعة الكلى: التقييم والمتابعة بعد العملية",
+        "en": "Kidney Transplantation: Assessment and Follow-up Afterwards"
+      },
+      "description": {
+        "ar": "ما هي زراعة الكلى، ولماذا تستمر المتابعة بعد العملية، وكيف تُراقب وظائف الكلية المزروعة، ودور العيادة في متابعة أمراض الكلى.",
+        "en": "What kidney transplantation involves, why follow-up continues afterwards, how the transplanted kidney is monitored, and the clinic's role in kidney follow-up."
+      }
+    },
+    "author": {
+      "ar": "فريق تحرير موقع الدكتور طارق أبو حويج",
+      "en": "Dr Tariq Abu Hweij website editorial team"
+    },
+    "sourceUrl": "https://www.niddk.nih.gov/health-information/kidney-disease/kidney-failure/kidney-transplant",
+    "review": {
+      "status": "pending",
+      "notes": null,
+      "reviewedAt": null
+    },
+    "publishedAt": "2026-10-13T07:50:18.487Z",
+    "updatedAt": "2026-10-13T07:50:18.611Z"
   }
 ]

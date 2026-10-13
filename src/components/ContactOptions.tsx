@@ -148,24 +148,45 @@ function numberText(national: string | null, intl: string | null): string {
 }
 
 /**
- * Call options for the clinic's published lines.
+ * wa.me link for the clinic's confirmed number, with the localized
+ * prefilled message URL-encoded. Opening the link starts a chat — it never
+ * confirms a booking.
+ */
+export function whatsappHref(
+  whatsapp: string | null,
+  message: string | null | undefined,
+): string | undefined {
+  if (!whatsapp) return undefined;
+  const digits = whatsapp.replace(/[^\d]/g, "");
+  if (!digits) return undefined;
+  const text = message && message.trim() ? `?text=${encodeURIComponent(message.trim())}` : "";
+  return `https://wa.me/${digits}${text}`;
+}
+
+/**
+ * Call and WhatsApp options for the clinic's published lines.
  *
  * A channel is only active when the number exists — mobile and landline are
- * published on the clinic's supplied branding. WhatsApp stays inactive
- * (marked as unconfirmed) until `whatsappEnabled` is switched on in settings.
+ * published on the clinic's supplied branding. WhatsApp is confirmed
+ * (October 2026) and shows a chat action with a prefilled message; opening
+ * it never confirms a booking.
  */
 export default function ContactOptions({
   contact,
   labels,
+  whatsappMessage,
 }: {
   contact: ContactInfo;
   labels: Labels;
+  /** Localized prefilled WhatsApp message (already URL-encoded in the link). */
+  whatsappMessage?: string | null;
 }) {
   const mobileHref = phoneLink(contact.phone, contact.phoneIntl);
   const landlineHref = phoneLink(contact.landline, contact.landlineIntl);
-  const whatsappDigits = contact.whatsapp ? contact.whatsapp.replace(/[^\d]/g, "") : null;
-  const whatsappHref =
-    contact.whatsappEnabled && whatsappDigits ? `https://wa.me/${whatsappDigits}` : undefined;
+  const whatsapp =
+    contact.whatsappEnabled && contact.whatsapp
+      ? whatsappHref(contact.whatsapp, whatsappMessage)
+      : undefined;
   const mailHref = contact.email ? `mailto:${contact.email}` : undefined;
 
   return (
@@ -191,9 +212,9 @@ export default function ContactOptions({
       <Card
         kind="whatsapp"
         title={labels.whatsappTitle}
-        text={labels.whatsappText}
+        text={contact.whatsappEnabled ? labels.whatsappText : labels.whatsappPending}
         actionLabel={labels.whatsappAction}
-        href={whatsappHref}
+        href={whatsapp}
         disabledLabel={labels.disabledNotice}
         pendingLabel={labels.whatsappPending}
       />

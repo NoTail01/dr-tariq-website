@@ -16,8 +16,9 @@ function article(overrides: Partial<Article> = {}): Article {
     category: "guides",
     coverImage: null,
     seo: { title: { ar: "عنوان", en: "Title" }, description: { ar: "وصف", en: "Description" } },
-    author: { ar: "د. طارق أبو هويجة", en: "Dr Tariq Abu Hweij" },
+    author: { ar: "د. طارق أبو حويج", en: "Dr Tariq Abu Hweij" },
     sourceUrl: null,
+    review: { status: "approved", notes: null, reviewedAt: null },
     publishedAt: "2026-01-01T00:00:00.000Z",
     updatedAt: "2026-01-01T00:00:00.000Z",
     ...overrides,
@@ -36,8 +37,9 @@ function validDraft(): ArticleDraftInput {
     body: { ar: "نص المحتوى", en: "Body text" },
     coverImage: null,
     seo: { title: { ar: "عنوان", en: "Title" }, description: { ar: "وصف", en: "Description" } },
-    author: { ar: "د. طارق أبو هويجة", en: "Dr Tariq Abu Hweij" },
+    author: { ar: "د. طارق أبو حويج", en: "Dr Tariq Abu Hweij" },
     sourceUrl: null,
+    review: { status: "pending", notes: null, reviewedAt: null },
     publishedAt: "2026-01-01T00:00:00.000Z",
   };
 }
@@ -125,6 +127,28 @@ describe("validateArticleInput", () => {
     if (result.ok) {
       expect(result.value.author.en).toBe("Dr Tariq Abu Hweij");
     }
+  });
+
+  it("defaults medical review to pending, never approved", () => {
+    const payload = validDraft();
+    delete (payload as unknown as Record<string, unknown>).review;
+    const result = validateArticleInput(payload);
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.value.review.status).toBe("pending");
+  });
+
+  it("keeps an explicit approved review status", () => {
+    const payload = { ...validDraft(), reviewStatus: "approved" };
+    const result = validateArticleInput(payload);
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.value.review.status).toBe("approved");
+  });
+
+  it("ignores an unknown review status and falls back to pending", () => {
+    const payload = { ...validDraft(), reviewStatus: "weird" };
+    const result = validateArticleInput(payload);
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.value.review.status).toBe("pending");
   });
 
   it("enforces length limits", () => {

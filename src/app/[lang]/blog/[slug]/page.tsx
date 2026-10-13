@@ -81,31 +81,83 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[s
     .filter((a) => a.id !== article.id && a.slug[locale].length > 0)
     .slice(0, 3);
 
-  const jsonLd = {
+  const articleUrl = `${SITE_URL}${localizePath(locale, `/blog/${article.slug[locale]}`)}`;
+
+  // Breadcrumbs: Home > Blog > Article, with matching BreadcrumbList JSON-LD.
+  const crumbs = [
+    { name: dict.nav.home, href: localizePath(locale, "/") },
+    { name: dict.blog.title, href: localizePath(locale, "/blog") },
+    { name: article.title[locale], href: localizePath(locale, `/blog/${article.slug[locale]}`) },
+  ];
+  const breadcrumbLd = {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: article.title[locale],
-    description: article.excerpt[locale],
-    inLanguage: locale,
-    url: `${SITE_URL}${localizePath(locale, `/blog/${article.slug[locale]}`)}`,
-    datePublished: article.publishedAt ?? undefined,
-    dateModified: article.updatedAt,
-    author: { "@type": "Organization", name: article.author[locale] },
-    publisher: { "@type": "Organization", name: dict.meta.siteName },
-    ...(article.coverImage ? { image: `${SITE_URL}${article.coverImage.url}` } : {}),
+    "@type": "BreadcrumbList",
+    itemListElement: crumbs.map((crumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.name,
+      item: `${SITE_URL}${crumb.href}`,
+    })),
   };
+
+  // Article structured data is emitted only for medically approved,
+  // published articles — never for content awaiting the doctor's review,
+  // and never with a fabricated reviewer or author.
+  const jsonLd =
+    article.review.status === "approved" && article.status === "published"
+      ? {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          headline: article.title[locale],
+          description: article.excerpt[locale],
+          inLanguage: locale,
+          url: articleUrl,
+          datePublished: article.publishedAt ?? undefined,
+          dateModified: article.updatedAt,
+          author: { "@type": "Organization", name: article.author[locale] },
+          publisher: { "@type": "Organization", name: dict.meta.siteName },
+          ...(article.coverImage ? { image: `${SITE_URL}${article.coverImage.url}` } : {}),
+        }
+      : null;
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          __html: JSON.stringify(breadcrumbLd).replace(/</g, "\\u003c"),
         }}
       />
+      {jsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+      ) : null}
 
       <Section tone="soft" className="border-b border-brand-100">
         <div className="max-w-3xl">
+          {/* Visible breadcrumb navigation */}
+          <nav aria-label={dict.blog.title} className="mb-4">
+            <ol className="flex flex-wrap items-center gap-1.5 text-xs text-ink-500">
+              {crumbs.map((crumb, index) => (
+                <li key={crumb.href} className="flex items-center gap-1.5">
+                  {index > 0 ? <span aria-hidden="true">/</span> : null}
+                  {index === crumbs.length - 1 ? (
+                    <span aria-current="page" className="text-ink-700">
+                      {crumb.name}
+                    </span>
+                  ) : (
+                    <Link href={crumb.href} className="hover:text-brand-700">
+                      {crumb.name}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </nav>
           <Link
             href={localizePath(locale, "/blog")}
             className="inline-flex items-center gap-2 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"

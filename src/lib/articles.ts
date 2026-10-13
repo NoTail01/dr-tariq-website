@@ -2,10 +2,31 @@ import { readFileSync } from "node:fs";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
-import type { Article } from "./article-types";
+import type { Article, ArticleReview } from "./article-types";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 const ARTICLES_FILE = path.join(CONTENT_DIR, "articles.json");
+
+/**
+ * Review state for a stored article.
+ *
+ * A missing or unreadable review block defaults to **pending** — never to
+ * "approved". Approval is a decision the doctor has to record; it can never
+ * be inferred from the fact that an article is published (or from its age).
+ */
+function normalizeReview(raw: unknown): ArticleReview {
+  const source =
+    typeof raw === "object" && raw !== null ? (raw as Record<string, unknown>) : {};
+  const status =
+    source.status === "approved" || source.status === "needs-changes" || source.status === "pending"
+      ? source.status
+      : "pending";
+  return {
+    status,
+    notes: typeof source.notes === "string" && source.notes ? source.notes : null,
+    reviewedAt: typeof source.reviewedAt === "string" && source.reviewedAt ? source.reviewedAt : null,
+  };
+}
 
 /**
  * Read every article (drafts included). Server-side only.
@@ -19,7 +40,11 @@ export async function readAllArticles(): Promise<Article[]> {
   try {
     const raw = readFileSync(ARTICLES_FILE, "utf8");
     const parsed = JSON.parse(raw) as unknown;
-    return Array.isArray(parsed) ? (parsed as Article[]) : [];
+    if (!Array.isArray(parsed)) return [];
+    return parsed.map((entry) => {
+      const article = entry as Article;
+      return article.review ? article : { ...article, review: normalizeReview(undefined) };
+    });
   } catch {
     return [];
   }
