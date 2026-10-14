@@ -36,13 +36,15 @@ clinic has not yet confirmed — those items are in
 | # | Check | Result |
 | --- | --- | --- |
 | 20 | All 10 articles are **published** | Pass |
-| 21 | All 10 articles are **awaiting medical review** | Pass |
+| 21 | All 10 articles are **medically approved** (client-confirmed 14 Oct 2026) | Pass |
 | 22 | Publication never marks an article doctor-approved | Pass |
-| 23 | Every article shows a visible "awaiting medical review" badge and note | Pass |
+| 22b | Pending templates never carry a doctor-review badge | Pass |
+| 23 | No pending-review badge or note on the 10 approved articles | Pass |
+| 23b | Demo templates keep their "not medical content" + pending badges | Pass |
 | 24 | No article is attributed to the doctor as author or reviewer | Pass |
 | 25 | Articles are credited to the website editorial team | Pass |
 | 26 | Each article cites its source (NIDDK / NHS) and links to it | Pass |
-| 27 | Article structured data is emitted only for approved articles | Pass |
+| 27 | Article (BlogPosting) structured data is emitted for all 10 approved articles in both languages | Pass |
 | 28 | No review timestamp exists until the doctor records a decision | Pass |
 | 29 | A review timestamp can only be set by the server, never by the browser | Pass |
 | 30 | No success rates, patient counts, ratings or guarantees are published | Pass |
@@ -81,7 +83,7 @@ clinic has not yet confirmed — those items are in
 
 | # | Check | Result |
 | --- | --- | --- |
-| 51 | `npm run test` — 85/85 passing (9 suites) | Pass |
+| 51 | `npm run test` — 92/92 passing (10 suites) | Pass |
 | 52 | `npx tsc --noEmit` | Pass |
 | 53 | `npm run lint` | Pass |
 | 54 | `npm run build` | Pass |

@@ -37,7 +37,7 @@ export const ar: Dictionary = {
     home: "الرئيسية",
     about: "عن الدكتور",
     blog: "المدونة",
-    book: "احجز الآن",
+    book: "المواعيد",
     skipToContent: "انتقل إلى المحتوى الرئيسي",
     openMenu: "فتح القائمة",
     closeMenu: "إغلاق القائمة",
@@ -47,7 +47,8 @@ export const ar: Dictionary = {
   common: {
     readMore: "اقرأ المزيد",
     learnMore: "اعرف المزيد",
-    bookingCta: "احجز الآن",
+    bookingCta: "تواصل مع العيادة لتحديد موعد",
+    bookingCtaShort: "تواصل لتحديد موعد",
     backToBlog: "العودة إلى المقالات",
     comingSoon: "قريباً",
     awaitingVerification: "بانتظار التحقق",
@@ -161,6 +162,10 @@ export const ar: Dictionary = {
     reviewPendingNote:
       "هذا المقال منشور بانتظار مراجعة الدكتور له: لم يُراجعه الدكتور بعد، ولا يُنسب إليه كمؤلف أو مُراجِع. المصدر المذكور في أسفل المقال هو مرجعه.",
     notInLanguage: "هذا المقال غير متوفر بهذه اللغة حتى الآن.",
+    tocTitle: "محتويات المقال",
+    contactCtaTitle: "هل تريد مناقشة حالتك مع الدكتور؟",
+    contactCtaText:
+      "تواصل مع العيادة عبر الهاتف أو واتساب للاستفسار عن المواعيد المتاحة. المحتوى هنا معلومات عامة ولا يغني عن التقييم الطبي الفردي.",
     readInArabic: "اقرأه بالعربية",
     readInEnglish: "اقرأه بالإنجليزية",
   },
@@ -183,6 +188,7 @@ export const ar: Dictionary = {
     whatsappPending: "واتساب غير مفعّل على هذا الرقم حالياً.",
     whatsappAction: "استفسر عن موعد عبر واتساب",
     whatsappNote: "فتح واتساب يبدأ محادثة — ولا يؤكد الموعد.",
+    contactCtaNote: "التواصل مع العيادة لا يؤكد الموعد — ترد العيادة لتحديد الوقت المناسب.",
     emailTitle: "عبر البريد الإلكتروني",
     emailText: "لم يُزوَّدنا الموقع بعنوان بريد إلكتروني عام بعد.",
     emailAction: "أرسل بريداً",

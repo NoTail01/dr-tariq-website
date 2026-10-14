@@ -115,6 +115,7 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
           logoSrc={settings.branding.logoUrl ?? "/images/logo-emblem.png"}
           logoAlt={dict.common.portraitAlt}
           bookCta={dict.common.bookingCta}
+          bookCtaShort={dict.common.bookingCtaShort}
           switchLanguage={dict.nav.switchLanguage}
           switchLanguageLabel={dict.nav.switchLanguageLabel}
         />

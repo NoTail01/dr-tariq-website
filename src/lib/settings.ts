@@ -192,9 +192,22 @@ export async function readSettings(): Promise<Settings> {
       const remote = rows[0]?.data;
       if (remote && typeof remote === "object") return mergeWithDefaults(remote);
     } catch {
-      // Fall through to the local store on a backend error.
+      // Same rule as articles: in production a stale local settings file is
+      // never served silently after a backend failure. Set
+      // SUPABASE_FALLBACK_TO_LOCAL=1 to opt into last-known-good instead.
+      if (process.env.SUPABASE_FALLBACK_TO_LOCAL === "1" || process.env.NODE_ENV !== "production") {
+        return readLocalSettings();
+      }
+      throw new Error(
+        "Supabase read failed and no last-known-good fallback is allowed in production (set SUPABASE_FALLBACK_TO_LOCAL=1 to opt in).",
+      );
     }
   }
+  return readLocalSettings();
+}
+
+/** Settings from the repository `content/settings.json`. */
+function readLocalSettings(): Settings {
   try {
     const raw = readFileSync(SETTINGS_FILE, "utf8");
     return mergeWithDefaults(JSON.parse(raw));

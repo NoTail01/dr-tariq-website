@@ -5,10 +5,10 @@ import { notFound } from "next/navigation";
 import { categoryLabel, formatDate, readingTimeText } from "@/components/ArticleCard";
 import { DevBadge } from "@/components/PlaceholderImage";
 import { Section } from "@/components/Layout";
-import Markdown from "@/components/Markdown";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale, localizePath, locales, type Locale } from "@/i18n/config";
-import { findVisibleArticle, getVisibleArticles, readAllArticles } from "@/lib/articles";
+import { findVisibleArticle, readAllArticles } from "@/lib/articles";
+import Markdown, { extractHeadings } from "@/components/Markdown";
 import { pageMetadata } from "@/lib/seo";
 import { getSiteMode, SITE_URL } from "@/lib/site";
 
@@ -77,11 +77,10 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[s
   const article = await findVisibleArticle(locale, slug, mode);
   if (!article) notFound();
 
-  const others = (await getVisibleArticles(mode))
-    .filter((a) => a.id !== article.id && a.slug[locale].length > 0)
-    .slice(0, 3);
-
   const articleUrl = `${SITE_URL}${localizePath(locale, `/blog/${article.slug[locale]}`)}`;
+
+  // A table of contents is only worth its space on the longer articles.
+  const headings = extractHeadings(article.body[locale]);
 
   // Breadcrumbs: Home > Blog > Article, with matching BreadcrumbList JSON-LD.
   const crumbs = [
@@ -224,46 +223,77 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[s
             </figure>
           ) : null}
 
-          <p className="text-lg leading-relaxed text-navy-800 break-words-safe">
-            {article.excerpt[locale]}
-          </p>
+          {/* The excerpt repeats the body's opening lines verbatim, so it is
+              not shown again as a lead paragraph: SEO keeps using
+              `seo.description`, and the reader gets the text once. */}
+          {headings.length >= 4 ? (
+            <nav
+              aria-label={dict.blog.tocTitle}
+              className="mt-6 rounded-2xl border border-brand-100 bg-brand-50/60 p-5"
+            >
+              <p className="text-xs font-bold tracking-wide text-brand-700 uppercase">
+                {dict.blog.tocTitle}
+              </p>
+              <ol className="mt-3 space-y-2">
+                {headings.map((heading, hi) => (
+                  <li key={heading.id} className="flex gap-2.5 text-sm">
+                    <span className="font-semibold text-brand-600" aria-hidden="true">
+                      {hi + 1}.
+                    </span>
+                    <a
+                      href={`#${heading.id}`}
+                      className="font-medium text-navy-800 underline decoration-brand-200 underline-offset-4 transition-colors hover:text-brand-700"
+                    >
+                      {heading.text}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          ) : null}
 
           <div className="mt-6 border-t border-brand-100 pt-6">
             <Markdown source={article.body[locale]} />
           </div>
 
           {article.sourceUrl ? (
-            <p className="mt-8 rounded-xl bg-brand-50 p-4 text-sm text-ink-700 break-words-safe">
-              <span className="font-semibold">{dict.about.sourcesTitle}: </span>
+            <div className="mt-8 rounded-2xl border border-brand-200 bg-brand-50 p-5">
+              <p className="text-xs font-bold tracking-wide text-brand-700 uppercase">
+                {dict.about.sourcesTitle}
+              </p>
               <a
                 href={article.sourceUrl}
                 rel="noopener noreferrer nofollow"
                 target="_blank"
-                className="text-brand-700 underline"
+                className="mt-2 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand-800 underline decoration-brand-300 underline-offset-4 transition-colors hover:text-brand-900"
               >
-                {article.sourceUrl}
+                {article.sourceUrl.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
+                <span aria-hidden="true">↗</span>
               </a>
-            </p>
+            </div>
           ) : null}
+
+          {/* One clear clinic-contact call to action at the end of the
+              article — the body's own link remains as an inline fallback. */}
+          <div className="mt-8 rounded-2xl border border-brand-200 bg-white p-6 text-center">
+            <p className="text-base font-semibold text-navy-900">
+              {dict.blog.contactCtaTitle}
+            </p>
+            <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-ink-600">
+              {dict.blog.contactCtaText}
+            </p>
+            <Link
+              href={localizePath(locale, "/book")}
+              className="mt-4 inline-flex min-h-12 items-center justify-center rounded-full bg-brand-600 px-6 text-sm font-bold text-white transition-colors hover:bg-brand-700"
+            >
+              {dict.common.bookingCta}
+            </Link>
+            <p className="mt-3 text-xs text-ink-500">{dict.book.contactCtaNote}</p>
+          </div>
         </article>
 
-        {others.length > 0 ? (
-          <div className="mt-14 border-t border-brand-100 pt-10">
-            <h2 className="text-xl font-bold text-navy-900">{dict.home.articlesTitle}</h2>
-            <ul className="mt-5 grid gap-4 sm:grid-cols-3">
-              {others.map((other) => (
-                <li key={other.id}>
-                  <Link
-                    href={localizePath(locale, `/blog/${other.slug[locale]}`)}
-                    className="block h-full rounded-xl border border-brand-100 p-4 text-sm font-semibold text-navy-900 transition-colors hover:border-brand-300 hover:text-brand-700"
-                  >
-                    {other.title[locale]}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
+        {/* The body already links its related articles, so a second "latest
+            articles" grid here would repeat the same links. */}
       </Section>
     </>
   );

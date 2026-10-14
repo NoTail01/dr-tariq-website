@@ -24,6 +24,7 @@ type Labels = {
   whatsappText: string;
   whatsappPending: string;
   whatsappAction: string;
+  whatsappNote: string;
   emailTitle: string;
   emailText: string;
   emailAction: string;
@@ -80,6 +81,7 @@ function Card({
   kind,
   disabledLabel,
   pendingLabel,
+  note,
 }: {
   title: string;
   /** Description or number line shown in the card. */
@@ -91,6 +93,8 @@ function Card({
   kind: "phone" | "whatsapp" | "mail";
   disabledLabel: string;
   pendingLabel?: string;
+  /** Small clarification line, used only for the WhatsApp channel. */
+  note?: string;
 }) {
   const active = Boolean(href);
 
@@ -123,6 +127,13 @@ function Card({
       ) : (
         <p className="mt-4 flex-1 text-sm leading-relaxed text-ink-500 break-words-safe">{text}</p>
       )}
+
+      {/* WhatsApp carries its own one-line note: opening the chat is not a
+          booking. Other channels stay silent — the page states the shared
+          "does not confirm an appointment" warning once at the top. */}
+      {kind === "whatsapp" && active && note ? (
+        <p className="mt-3 text-xs leading-relaxed text-ink-500 break-words-safe">{note}</p>
+      ) : null}
 
       {active && actionLabel && href ? (
         <a
@@ -217,6 +228,7 @@ export default function ContactOptions({
         href={whatsapp}
         disabledLabel={labels.disabledNotice}
         pendingLabel={labels.whatsappPending}
+        note={labels.whatsappNote}
       />
       <Card
         kind="mail"

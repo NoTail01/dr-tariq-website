@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import ArticleCard from "@/components/ArticleCard";
-import { DevBadge } from "@/components/PlaceholderImage";
 import { EmptyState, Section, SectionHeading } from "@/components/Layout";
 import Reveal from "@/components/Reveal";
 import { ARTICLE_CATEGORIES, type Article, type ArticleCategory } from "@/lib/article-types";
@@ -80,7 +79,7 @@ function CategoryChips({
       >
         {allLabel}
       </Link>
-      {ARTICLE_CATEGORIES.map((category) => (
+      {ARTICLE_CATEGORIES.filter((category) => counts[category] > 0).map((category) => (
         <Link
           key={category}
           href={hrefFor(category)}
@@ -205,12 +204,6 @@ export default async function BlogPage({ params, searchParams }: PageProps<"/[la
             intro={dict.blog.description}
             as="h1"
           />
-          <div className="mt-5 flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4">
-            <DevBadge label={dict.common.demoBadge} />
-            <p className="flex-1 text-sm leading-relaxed text-amber-900 break-words-safe">
-              {dict.blog.demoNotice}
-            </p>
-          </div>
         </Reveal>
       </Section>
 

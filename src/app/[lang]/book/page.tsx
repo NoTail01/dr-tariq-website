@@ -53,6 +53,7 @@ export default async function BookPage({ params }: PageProps<"/[lang]/book">) {
     whatsappText: dict.book.whatsappText,
     whatsappPending: dict.book.whatsappPending,
     whatsappAction: dict.book.whatsappAction,
+    whatsappNote: dict.book.whatsappNote,
     emailTitle: dict.book.emailTitle,
     emailText: dict.book.emailText,
     emailAction: dict.book.emailAction,
@@ -69,6 +70,12 @@ export default async function BookPage({ params }: PageProps<"/[lang]/book">) {
             intro={dict.book.intro}
             as="h1"
           />
+          {/* Stated once, here at the top: contacting the clinic does not
+              confirm an appointment. The page no longer repeats it in
+              every contact card. */}
+          <p className="mt-5 max-w-2xl rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-relaxed font-medium text-amber-900 break-words-safe">
+            {dict.book.contactCtaNote}
+          </p>
         </Reveal>
       </Section>
 
@@ -104,7 +111,7 @@ export default async function BookPage({ params }: PageProps<"/[lang]/book">) {
       </Section>
 
       {/* ---------------- Demo request form ---------------- */}
-      <Section tone="white" className="pb-28 lg:pb-16">
+      <Section tone="white" className="pb-[max(7rem,calc(6rem+env(safe-area-inset-bottom)))] lg:pb-16">
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
           <Reveal>
             <SectionHeading

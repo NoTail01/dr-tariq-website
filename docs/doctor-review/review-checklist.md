@@ -1,6 +1,6 @@
 # Doctor review package — 2026-10-14
 
-10 articles are **published on the site while awaiting medical review**.
+10 articles are **published and medically approved** — the client confirmed all 10 on 14 October 2026.
 Review status is a separate state from publication: publication never implies
 medical approval, and an approval only exists once the doctor records it (the
 server stamps that decision).
@@ -28,16 +28,16 @@ server stamps that decision).
 
 ## Articles
 
-1. **Chronic Kidney Disease: Why You May Need Testing Even Without Symptoms** — slug `chronic-kidney-disease` — review: pending — source: https://www.niddk.nih.gov/health-information/kidney-disease/chronic-kidney-disease-ckd
-2. **Kidney Function Tests: Creatinine, eGFR and Urine Albumin Explained** — slug `kidney-function-tests` — review: pending — source: https://www.niddk.nih.gov/health-information/kidney-disease/chronic-kidney-disease-ckd/tests-diagnosis
-3. **Blood Pressure and the Kidneys: A Relationship Worth Monitoring** — slug `blood-pressure-kidney-health` — review: pending — source: https://www.niddk.nih.gov/health-information/kidney-disease/high-blood-pressure
-4. **Diabetes and the Kidneys: Why Testing Still Matters When You Feel Well** — slug `diabetes-kidney-health` — review: pending — source: https://www.niddk.nih.gov/health-information/diabetes/overview/preventing-problems/diabetic-kidney-disease
-5. **Albumin in the Urine: What It Means and How It Is Followed Up** — slug `albumin-in-urine` — review: pending — source: https://www.niddk.nih.gov/health-information/kidney-disease/chronic-kidney-disease-ckd/tests-diagnosis/albuminuria-albumin-urine
-6. **Kidney Stone Symptoms: When Pain Needs Urgent Assessment** — slug `kidney-stone-symptoms` — review: pending — source: https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/symptoms-causes
-7. **Preventing Recurrent Kidney Stones: Is There One Diet for Everyone?** — slug `preventing-kidney-stones` — review: pending — source: https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/eating-diet-nutrition
-8. **Acute Kidney Injury: Why a Sudden Change Needs Attention** — slug `acute-kidney-injury` — review: pending — source: https://www.nhs.uk/conditions/acute-kidney-injury/
-9. **Home Blood Pressure Monitoring: Making Readings Useful for Your Doctor** — slug `home-blood-pressure-monitoring` — review: pending — source: https://www.nhs.uk/tests-and-treatments/blood-pressure-test/
-10. **Kidney Transplantation: Why Medical Follow-up Continues Afterwards** — slug `kidney-transplant-follow-up` — review: pending — source: https://www.niddk.nih.gov/health-information/kidney-disease/kidney-failure/kidney-transplant
+1. **Chronic Kidney Disease: Why You May Need Testing Even Without Symptoms** — slug `chronic-kidney-disease` — review: approved — source: https://www.niddk.nih.gov/health-information/kidney-disease/chronic-kidney-disease-ckd
+2. **Kidney Function Tests: Creatinine, eGFR and Urine Albumin Explained** — slug `kidney-function-tests` — review: approved — source: https://www.niddk.nih.gov/health-information/kidney-disease/chronic-kidney-disease-ckd/tests-diagnosis
+3. **Blood Pressure and the Kidneys: A Relationship Worth Monitoring** — slug `blood-pressure-kidney-health` — review: approved — source: https://www.niddk.nih.gov/health-information/kidney-disease/high-blood-pressure
+4. **Diabetes and the Kidneys: Why Testing Still Matters When You Feel Well** — slug `diabetes-kidney-health` — review: approved — source: https://www.niddk.nih.gov/health-information/diabetes/overview/preventing-problems/diabetic-kidney-disease
+5. **Albumin in the Urine: What It Means and How It Is Followed Up** — slug `albumin-in-urine` — review: approved — source: https://www.niddk.nih.gov/health-information/kidney-disease/chronic-kidney-disease-ckd/tests-diagnosis/albuminuria-albumin-urine
+6. **Kidney Stone Symptoms: When Pain Needs Urgent Assessment** — slug `kidney-stone-symptoms` — review: approved — source: https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/symptoms-causes
+7. **Preventing Recurrent Kidney Stones: Is There One Diet for Everyone?** — slug `preventing-kidney-stones` — review: approved — source: https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/eating-diet-nutrition
+8. **Acute Kidney Injury: Why a Sudden Change Needs Attention** — slug `acute-kidney-injury` — review: approved — source: https://www.nhs.uk/conditions/acute-kidney-injury/
+9. **Home Blood Pressure Monitoring: Making Readings Useful for Your Doctor** — slug `home-blood-pressure-monitoring` — review: approved — source: https://www.nhs.uk/tests-and-treatments/blood-pressure-test/
+10. **Kidney Transplantation: Why Medical Follow-up Continues Afterwards** — slug `kidney-transplant-follow-up` — review: approved — source: https://www.niddk.nih.gov/health-information/kidney-disease/kidney-failure/kidney-transplant
 
 ## Arabic versions
 

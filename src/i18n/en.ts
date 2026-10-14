@@ -36,7 +36,7 @@ export const en = {
     home: "Home",
     about: "About the Doctor",
     blog: "Blog",
-    book: "Book Now",
+    book: "Appointments",
     skipToContent: "Skip to main content",
     openMenu: "Open menu",
     closeMenu: "Close menu",
@@ -46,7 +46,8 @@ export const en = {
   common: {
     readMore: "Read more",
     learnMore: "Learn more",
-    bookingCta: "Book now",
+    bookingCta: "Contact the Clinic for an Appointment",
+    bookingCtaShort: "Contact the Clinic",
     backToBlog: "Back to articles",
     comingSoon: "Coming soon",
     awaitingVerification: "Awaiting verification",
@@ -163,6 +164,10 @@ export const en = {
     reviewPendingNote:
       "This article is published awaiting the doctor's review: it has not been reviewed by him and is not attributed to him as author or reviewer. The source cited at the end of the article is its reference.",
     notInLanguage: "This article is not available in this language yet.",
+    tocTitle: "In this article",
+    contactCtaTitle: "Want to discuss your case with the doctor?",
+    contactCtaText:
+      "Contact the clinic by phone or WhatsApp to enquire about available appointment times. This content is general information and does not replace an individual medical assessment.",
     readInArabic: "Read it in Arabic",
     readInEnglish: "Read it in English",
   },
@@ -185,6 +190,7 @@ export const en = {
     whatsappPending: "WhatsApp is not active for this number at the moment.",
     whatsappAction: "Enquire About an Appointment",
     whatsappNote: "Opening WhatsApp starts a chat — it does not confirm an appointment.",
+    contactCtaNote: "Contacting the clinic does not confirm an appointment — the clinic replies to arrange the time.",
     emailTitle: "By email",
     emailText: "No public email address has been supplied yet.",
     emailAction: "Send an email",

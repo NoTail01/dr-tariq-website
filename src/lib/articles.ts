@@ -56,9 +56,20 @@ export async function readAllArticles(): Promise<Article[]> {
           article.review ? article : { ...article, review: normalizeReview(undefined) },
         );
     } catch {
-      // Never serve a broken page: fall back to the local store so a
-      // temporary backend outage degrades to the last published content.
-      return readLocalArticles();
+      // Documented limitation: on a backend error the site degrades to the
+      // last local snapshot. In DEVELOPMENT that is the live store, so the
+      // dashboard keeps working offline. In PRODUCTION the local file is a
+      // stale build-time snapshot: it can therefore re-show content that has
+      // since been unpublished or edited, so it is never used silently —
+      // the read throws and the page answers 503 instead of serving stale
+      // content. Operators who prefer availability over freshness can set
+      // SUPABASE_FALLBACK_TO_LOCAL=1 (documented in docs/SUPABASE.md).
+      if (process.env.SUPABASE_FALLBACK_TO_LOCAL === "1" || process.env.NODE_ENV !== "production") {
+        return readLocalArticles();
+      }
+      throw new Error(
+        "Supabase read failed and no last-known-good fallback is allowed in production (set SUPABASE_FALLBACK_TO_LOCAL=1 to opt in).",
+      );
     }
   }
   return readLocalArticles();

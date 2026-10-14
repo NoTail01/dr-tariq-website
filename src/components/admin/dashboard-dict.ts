@@ -48,7 +48,7 @@ export const dashboardDict = {
     },
     home: {
       title: "المدونة",
-      subtitle: "إدارة مقالات الموقع: المسودات خاصة، ويتطلّب النشر الطبي موافقة الدكتور.",
+      subtitle: "إدارة مقالات الموقع: المسودات خاصة، والمراجعة الطبية حالة منفصلة عن النشر.",
       articles: "المقالات",
       published: "منشور",
       drafts: "مسودات",
@@ -67,7 +67,7 @@ export const dashboardDict = {
     },
     articles: {
       title: "المدونة",
-      subtitle: "إدارة المقالات: المسودات خاصة، ويتطلّب النشر الطبي موافقة الدكتور.",
+      subtitle: "إدارة المقالات: المسودات خاصة، والمراجعة الطبية حالة منفصلة عن النشر.",
       newArticle: "مقال جديد",
       colTitle: "العنوان",
       colStatus: "الحالة",
@@ -93,6 +93,9 @@ export const dashboardDict = {
       publishHint: "النشر متاح مباشرة — ولا يعني موافقة الدكتور الطبية.",
       unpublishHint: "إخفاء المقال عن الزوار مع الاحتفاظ به كمسودة.",
       reviewNote: "ملاحظة المراجعة",
+      emptyHint: "ابدأ بإنشاء المقال الأول من لوحة التحكم.",
+      noMatches: "لا توجد نتائج مطابقة",
+      noMatchesHint: "غيّر كلمة البحث أو اختر تصنيفاً آخر لعرض المزيد من المقالات.",
     },
     editor: {
       newTitle: "مقال جديد",
@@ -251,7 +254,7 @@ export const dashboardDict = {
     },
     home: {
       title: "Blog",
-      subtitle: "Manage the site's articles: drafts stay private, and publishing requires the doctor's medical approval.",
+      subtitle: "Manage the site's articles: drafts stay private; medical review is a state separate from publication.",
       articles: "Articles",
       published: "Published",
       drafts: "Drafts",
@@ -270,7 +273,7 @@ export const dashboardDict = {
     },
     articles: {
       title: "Blog",
-      subtitle: "Manage articles: drafts stay private, and publishing requires the doctor's medical approval.",
+      subtitle: "Manage articles: drafts stay private; medical review is a state separate from publication.",
       newArticle: "New article",
       colTitle: "Title",
       colStatus: "Status",
@@ -296,6 +299,9 @@ export const dashboardDict = {
       publishHint: "Publish immediately — this does not mean the doctor approved it.",
       unpublishHint: "Hide from visitors and keep it as a draft.",
       reviewNote: "Review note",
+      emptyHint: "Start by creating the first article from the dashboard.",
+      noMatches: "No matching articles",
+      noMatchesHint: "Change the search term or pick another category to see more articles.",
     },
     editor: {
       newTitle: "New article",

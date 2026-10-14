@@ -61,10 +61,10 @@ export default function ClinicMap({
             loading="lazy"
             referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
-            className="block h-64 w-full border-0 sm:h-80 lg:h-96"
+            className="block h-56 w-full border-0 sm:h-72 lg:h-[26rem]"
           />
         ) : (
-          <div className="flex h-64 items-center justify-center p-8 text-center text-sm text-ink-500">
+          <div className="flex h-56 items-center justify-center p-8 text-center text-sm text-ink-500 sm:h-72 lg:h-[26rem]">
             {mapTitle}
           </div>
         )}

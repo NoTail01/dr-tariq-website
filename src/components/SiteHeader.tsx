@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useId, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 import BrandLogo from "@/components/BrandLogo";
 import { localizePath, switchLocalePath, type Locale } from "@/i18n/config";
@@ -28,6 +28,8 @@ type Props = {
   bookCta: string;
   switchLanguage: string;
   switchLanguageLabel: string;
+  /** Shorter CTA label used inside the mobile menu. */
+  bookCtaShort?: string;
 };
 
 export default function SiteHeader(props: Props) {
@@ -45,12 +47,15 @@ function SiteHeaderInner({
   logoSrc,
   logoAlt,
   bookCta,
+  bookCtaShort,
   switchLanguage,
   switchLanguageLabel,
 }: Props) {
   const pathname = usePathname() || `/${locale}`;
   const [open, setOpen] = useState(false);
   const menuId = useId();
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
 
   const currentPath = pathname.startsWith(`/${locale}`)
     ? pathname.slice(locale.length + 1) || "/"
@@ -63,14 +68,81 @@ function SiteHeaderInner({
     { href: localizePath(locale, "/book"), path: "/book", label: labels.book },
   ];
 
+  const isActive = (path: string) =>
+    path === "/" ? currentPath === "/" : currentPath === path || currentPath.startsWith(`${path}/`);
+
   const targetLocale: Locale = locale === "ar" ? "en" : "ar";
 
+  // Close on Escape and return focus to the trigger. The panel is marked
+  // `inert` while closed so its links are never reachable by keyboard or
+  // pointer while hidden.
+  const close = useCallback(() => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    // Keep Tab inside the open panel: background content must not be
+    // reachable while the menu owns the screen.
+    const panel = panelRef.current;
+    if (!panel) return;
+    const focusable = panel.querySelectorAll<HTMLElement>("a[href], button");
+    focusable[0]?.focus();
+    const onTab = (event: KeyboardEvent) => {
+      if (event.key !== "Tab" || focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    panel.addEventListener("keydown", onTab);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      panel.removeEventListener("keydown", onTab);
+    };
+  }, [open, close]);
+
+  // A resize to the desktop layout must not leave the menu open.
+  useEffect(() => {
+    if (!open) return;
+    const query = window.matchMedia("(min-width: 1024px)");
+    const onChange = () => {
+      if (query.matches) setOpen(false);
+    };
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, [open]);
+
+  // Lock background scrolling while the menu is open so the page behind
+  // cannot be scrolled out from under it.
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [open]);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-brand-100 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+    <header className="sticky top-0 z-50 border-b border-brand-100 bg-white/95 backdrop-blur">
+      <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 sm:gap-4 sm:px-6">
         <Link
           href={localizePath(locale, "/")}
-          className="flex items-center gap-2 font-bold text-navy-900 break-words-safe"
+          className="flex min-w-0 items-center gap-2.5 font-bold text-navy-900 break-words-safe"
         >
           <BrandLogo
             name={brandName}
@@ -83,10 +155,7 @@ function SiteHeaderInner({
         <nav aria-label={labels.skipToContent} className="hidden lg:block">
           <ul className="flex items-center gap-1">
             {navItems.map((item) => {
-              const active =
-                item.path === "/"
-                  ? currentPath === "/"
-                  : currentPath === item.path || currentPath.startsWith(`${item.path}/`);
+              const active = isActive(item.path);
               return (
                 <li key={item.href}>
                   <Link
@@ -106,11 +175,13 @@ function SiteHeaderInner({
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="ms-auto flex shrink-0 items-center gap-2">
+          {/* Language switch stays visible on phones: switching language is
+              a primary need for a bilingual clinic audience. */}
           <Link
             href={switchLocalePath(pathname, targetLocale)}
             hrefLang={targetLocale}
-            className="hidden rounded-full border border-brand-300 px-3 py-1.5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-50 sm:inline-flex"
+            className="inline-flex h-10 items-center rounded-full border border-brand-300 px-3 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-50"
             aria-label={switchLanguageLabel}
           >
             {switchLanguage}
@@ -118,17 +189,18 @@ function SiteHeaderInner({
 
           <Link
             href={localizePath(locale, "/book")}
-            className="hidden rounded-full bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-700 sm:inline-flex"
+            className="hidden h-10 items-center rounded-full bg-brand-600 px-4 text-sm font-semibold text-white transition-colors hover:bg-brand-700 sm:inline-flex"
           >
-            {bookCta}
+            {bookCtaShort ?? bookCta}
           </Link>
 
           <button
+            ref={triggerRef}
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-brand-100 text-navy-900 transition-colors hover:bg-brand-50 lg:hidden"
             aria-expanded={open}
             aria-controls={menuId}
-            onClick={() => setOpen((value) => !value)}
+            onClick={() => (open ? close() : setOpen(true))}
           >
             <span className="sr-only">{open ? labels.closeMenu : labels.openMenu}</span>
             <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
@@ -143,24 +215,23 @@ function SiteHeaderInner({
       </div>
 
       <div
+        ref={panelRef}
         id={menuId}
         hidden={!open}
-        className="border-t border-brand-100 bg-white lg:hidden"
+        inert={!open}
+        className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-brand-100 bg-white lg:hidden"
       >
         <nav aria-label={labels.skipToContent} className="mx-auto max-w-6xl px-4 py-3 sm:px-6">
           <ul className="flex flex-col gap-1">
             {navItems.map((item) => {
-              const active =
-                item.path === "/"
-                  ? currentPath === "/"
-                  : currentPath === item.path || currentPath.startsWith(`${item.path}/`);
+              const active = isActive(item.path);
               return (
                 <li key={item.href}>
                   <Link
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     onClick={() => setOpen(false)}
-                    className={`block rounded-xl px-3 py-3 text-base font-semibold transition-colors ${
+                    className={`flex min-h-12 items-center rounded-xl px-3 text-base font-semibold transition-colors ${
                       active ? "bg-brand-100 text-brand-700" : "text-ink-700 hover:bg-brand-50"
                     }`}
                   >
@@ -169,20 +240,13 @@ function SiteHeaderInner({
                 </li>
               );
             })}
-            <li className="mt-2 flex gap-2">
-              <Link
-                href={switchLocalePath(pathname, targetLocale)}
-                hrefLang={targetLocale}
-                className="flex-1 rounded-xl border border-brand-300 px-3 py-3 text-center text-sm font-semibold text-brand-700"
-                aria-label={switchLanguageLabel}
-              >
-                {switchLanguage}
-              </Link>
+            <li className="mt-2">
               <Link
                 href={localizePath(locale, "/book")}
-                className="flex-1 rounded-xl bg-brand-600 px-3 py-3 text-center text-sm font-semibold text-white"
+                onClick={() => setOpen(false)}
+                className="flex min-h-12 items-center justify-center rounded-xl bg-brand-600 px-3 text-base font-semibold text-white transition-colors hover:bg-brand-700"
               >
-                {bookCta}
+                {bookCtaShort ?? bookCta}
               </Link>
             </li>
           </ul>

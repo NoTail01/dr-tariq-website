@@ -172,12 +172,12 @@
     },
     "sourceUrl": "https://www.niddk.nih.gov/health-information/kidney-disease/chronic-kidney-disease-ckd",
     "review": {
-      "status": "pending",
-      "notes": null,
-      "reviewedAt": null
+      "status": "approved",
+      "notes": "Approved by the client on 14 October 2026: the 10 medical articles were confirmed as approved.",
+      "reviewedAt": "2026-10-14T08:30:09.664Z"
     },
     "publishedAt": "2026-10-13T07:50:18.487Z",
-    "updatedAt": "2026-10-13T07:50:18.611Z"
+    "updatedAt": "2026-10-14T08:30:09.664Z"
   },
   {
     "id": "e2d11087-aa81-4f77-b3b4-6ef22a310d3e",
@@ -217,12 +217,12 @@
     },
     "sourceUrl": "https://www.niddk.nih.gov/health-information/kidney-disease/chronic-kidney-disease-ckd/tests-diagnosis",
     "review": {
-      "status": "pending",
-      "notes": null,
-      "reviewedAt": null
+      "status": "approved",
+      "notes": "Approved by the client on 14 October 2026: the 10 medical articles were confirmed as approved.",
+      "reviewedAt": "2026-10-14T08:30:09.672Z"
     },
     "publishedAt": "2026-10-13T07:50:18.487Z",
-    "updatedAt": "2026-10-13T07:50:18.611Z"
+    "updatedAt": "2026-10-14T08:30:09.672Z"
   },
   {
     "id": "60da38b7-4ff8-4b7f-8bf2-65c44a7c8fe0",
@@ -262,12 +262,12 @@
     },
     "sourceUrl": "https://www.niddk.nih.gov/health-information/kidney-disease/high-blood-pressure",
     "review": {
-      "status": "pending",
-      "notes": null,
-      "reviewedAt": null
+      "status": "approved",
+      "notes": "Approved by the client on 14 October 2026: the 10 medical articles were confirmed as approved.",
+      "reviewedAt": "2026-10-14T08:30:09.679Z"
     },
     "publishedAt": "2026-10-13T07:50:18.487Z",
-    "updatedAt": "2026-10-13T07:50:18.611Z"
+    "updatedAt": "2026-10-14T08:30:09.679Z"
   },
   {
     "id": "25029f66-bf47-4f86-b1fa-0862169765f8",
@@ -307,12 +307,12 @@
     },
     "sourceUrl": "https://www.niddk.nih.gov/health-information/diabetes/overview/preventing-problems/diabetic-kidney-disease",
     "review": {
-      "status": "pending",
-      "notes": null,
-      "reviewedAt": null
+      "status": "approved",
+      "notes": "Approved by the client on 14 October 2026: the 10 medical articles were confirmed as approved.",
+      "reviewedAt": "2026-10-14T08:30:09.685Z"
     },
     "publishedAt": "2026-10-13T07:50:18.487Z",
-    "updatedAt": "2026-10-13T07:50:18.611Z"
+    "updatedAt": "2026-10-14T08:30:09.685Z"
   },
   {
     "id": "64b79d2c-cc63-461d-bf04-1d7b64adbf24",
@@ -352,12 +352,12 @@
     },
     "sourceUrl": "https://www.niddk.nih.gov/health-information/kidney-disease/chronic-kidney-disease-ckd/tests-diagnosis/albuminuria-albumin-urine",
     "review": {
-      "status": "pending",
-      "notes": null,
-      "reviewedAt": null
+      "status": "approved",
+      "notes": "Approved by the client on 14 October 2026: the 10 medical articles were confirmed as approved.",
+      "reviewedAt": "2026-10-14T08:30:09.692Z"
     },
     "publishedAt": "2026-10-13T07:50:18.487Z",
-    "updatedAt": "2026-10-13T14:05:28.834Z"
+    "updatedAt": "2026-10-14T08:30:09.692Z"
   },
   {
     "id": "7e6c9c9f-e6ca-4a36-8168-a97450940e9e",
@@ -397,12 +397,12 @@
     },
     "sourceUrl": "https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/symptoms-causes",
     "review": {
-      "status": "pending",
-      "notes": null,
-      "reviewedAt": null
+      "status": "approved",
+      "notes": "Approved by the client on 14 October 2026: the 10 medical articles were confirmed as approved.",
+      "reviewedAt": "2026-10-14T08:30:09.736Z"
     },
     "publishedAt": "2026-10-13T07:50:18.487Z",
-    "updatedAt": "2026-10-13T07:50:18.611Z"
+    "updatedAt": "2026-10-14T08:30:09.736Z"
   },
   {
     "id": "594e43ef-7588-414c-8e82-c8b1da27229d",
@@ -442,12 +442,12 @@
     },
     "sourceUrl": "https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/eating-diet-nutrition",
     "review": {
-      "status": "pending",
-      "notes": null,
-      "reviewedAt": null
+      "status": "approved",
+      "notes": "Approved by the client on 14 October 2026: the 10 medical articles were confirmed as approved.",
+      "reviewedAt": "2026-10-14T08:30:09.743Z"
     },
     "publishedAt": "2026-10-13T07:50:18.487Z",
-    "updatedAt": "2026-10-13T07:50:18.611Z"
+    "updatedAt": "2026-10-14T08:30:09.743Z"
   },
   {
     "id": "61d48876-93ff-4a38-b0fc-a2eb6134ffe1",
@@ -487,12 +487,12 @@
     },
     "sourceUrl": "https://www.nhs.uk/conditions/acute-kidney-injury/",
     "review": {
-      "status": "pending",
-      "notes": null,
-      "reviewedAt": null
+      "status": "approved",
+      "notes": "Approved by the client on 14 October 2026: the 10 medical articles were confirmed as approved.",
+      "reviewedAt": "2026-10-14T08:30:09.750Z"
     },
     "publishedAt": "2026-10-13T07:50:18.487Z",
-    "updatedAt": "2026-10-13T07:50:18.611Z"
+    "updatedAt": "2026-10-14T08:30:09.750Z"
   },
   {
     "id": "d3113063-851b-4cd4-ad58-9603ac2051fc",
@@ -532,12 +532,12 @@
     },
     "sourceUrl": "https://www.nhs.uk/tests-and-treatments/blood-pressure-test/",
     "review": {
-      "status": "pending",
-      "notes": null,
-      "reviewedAt": null
+      "status": "approved",
+      "notes": "Approved by the client on 14 October 2026: the 10 medical articles were confirmed as approved.",
+      "reviewedAt": "2026-10-14T08:30:09.758Z"
     },
     "publishedAt": "2026-10-13T07:50:18.487Z",
-    "updatedAt": "2026-10-13T07:50:18.611Z"
+    "updatedAt": "2026-10-14T08:30:09.758Z"
   },
   {
     "id": "957f198e-9107-43ed-b07e-18c0187fcf89",
@@ -577,11 +577,11 @@
     },
     "sourceUrl": "https://www.niddk.nih.gov/health-information/kidney-disease/kidney-failure/kidney-transplant",
     "review": {
-      "status": "pending",
-      "notes": null,
-      "reviewedAt": null
+      "status": "approved",
+      "notes": "Approved by the client on 14 October 2026: the 10 medical articles were confirmed as approved.",
+      "reviewedAt": "2026-10-14T08:30:09.772Z"
     },
     "publishedAt": "2026-10-13T07:50:18.487Z",
-    "updatedAt": "2026-10-13T07:50:18.611Z"
+    "updatedAt": "2026-10-14T08:30:09.772Z"
   }
 ]

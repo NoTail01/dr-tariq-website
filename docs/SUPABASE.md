@@ -80,7 +80,22 @@ node scripts/migrate-to-supabase.mjs             # import
 - refuses to start without credentials, and prints the exact
   `export …` lines to use so no secret is ever typed into a chat.
 
-## 5. Booking requests
+## 5. Read fallback when the backend is unreachable
+
+`readAllArticles()` and `readSettings()` read SupABASE when it is
+configured. If that read fails:
+
+- **Development** — the local `content/` store is used, so the dashboard
+  keeps working while the project is paused or offline.
+- **Production** — the local file is a *build-time snapshot*. Serving it
+  after a failure would silently re-publish content that has since been
+  unpublished or edited, so the read **throws** and the page answers 503.
+  Set `SUPABASE_FALLBACK_TO_LOCAL=1` to opt into last-known-good instead
+  (availability over freshness) — the default stays strict.
+
+`SUPABASE_FALLBACK_TO_LOCAL` has no effect when no backend is configured.
+
+## 6. Booking requests
 
 `src/lib/booking-backend.ts` POSTs to `/rest/v1/appointment_requests` with
 these columns (unchanged from the initial release):
@@ -103,7 +118,7 @@ alter table appointment_requests enable row level security;
 With the variables set, the booking API returns `sent: true` and the form
 labels the submission as transmitted.
 
-## 6. Admin authentication
+## 7. Admin authentication
 
 `src/lib/admin-auth.ts` uses a signed session cookie compared against
 `ADMIN_TOKEN`:
