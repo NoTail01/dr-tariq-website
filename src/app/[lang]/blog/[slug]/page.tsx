@@ -175,7 +175,20 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[s
               })}
             </span>
             {article.isDemo ? <DevBadge label={dict.blog.demoArticleBadge} /> : null}
+            {article.review.status === "approved" ? null : (
+              <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
+                {dict.blog.reviewPendingBadge}
+              </span>
+            )}
           </div>
+
+          {/* Pending medical review is stated explicitly so a published
+              article is never mistaken for doctor-approved content. */}
+          {article.review.status === "approved" ? null : (
+            <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-relaxed text-amber-900">
+              {dict.blog.reviewPendingNote}
+            </p>
+          )}
 
           <h1 className="mt-4 text-3xl leading-tight font-bold text-navy-900 break-words-safe sm:text-4xl">
             {article.title[locale]}

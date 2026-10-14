@@ -47,6 +47,7 @@ type Props = {
     readInArabic: string;
     readInEnglish: string;
     category: { demo: string; guides: string; news: string };
+    reviewPendingBadge: string;
   };
 };
 
@@ -66,6 +67,11 @@ export default function ArticleCard({ article, locale, labels }: Props) {
             {categoryLabel(article.category, labels.category)}
           </span>
           {article.isDemo ? <DevBadge label={labels.demoBadge} /> : null}
+          {article.review.status === "approved" ? null : (
+            <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
+              {labels.reviewPendingBadge}
+            </span>
+          )}
         </div>
 
         <h3 className="mt-4 text-xl font-bold text-navy-900 break-words-safe">
@@ -99,6 +105,11 @@ export default function ArticleCard({ article, locale, labels }: Props) {
           {categoryLabel(article.category, labels.category)}
         </span>
         {article.isDemo ? <DevBadge label={labels.demoBadge} /> : null}
+        {article.review.status === "approved" ? null : (
+          <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
+            {labels.reviewPendingBadge}
+          </span>
+        )}
       </div>
 
       <h3 className="mt-4 text-xl font-bold text-navy-900 break-words-safe">

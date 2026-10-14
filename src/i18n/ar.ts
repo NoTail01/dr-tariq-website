@@ -157,6 +157,9 @@ export const ar: Dictionary = {
     categoryNews: "أخبار العيادة",
     demoArticleBadge: "مقال تجريبي — ليس محتوى طبياً",
     byAuthor: "بقلم",
+    reviewPendingBadge: "بانتظار المراجعة الطبية",
+    reviewPendingNote:
+      "هذا المقال منشور بانتظار مراجعة الدكتور له: لم يُراجعه الدكتور بعد، ولا يُنسب إليه كمؤلف أو مُراجِع. المصدر المذكور في أسفل المقال هو مرجعه.",
     notInLanguage: "هذا المقال غير متوفر بهذه اللغة حتى الآن.",
     readInArabic: "اقرأه بالعربية",
     readInEnglish: "اقرأه بالإنجليزية",

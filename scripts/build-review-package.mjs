@@ -160,7 +160,7 @@ async function main() {
 <header>
   <div class="inner">
     <h1>حزمة مراجعة المقالات الطبية</h1>
-    <p>الدكتور طارق أبو حويج — ${seeded.length} مقالات بانتظار المراجعة الطبية</p>
+    <p>الدكتور طارق أبو حويج — ${seeded.length} مقالات منشورة بانتظار المراجعة الطبية</p>
     <p>تاريخ الإعداد: ${generated} · هذه الوثيقة خاصة ولا تُنشر على الموقع</p>
   </div>
 </header>
@@ -175,7 +175,7 @@ async function main() {
   ${sections}
 </main>
 <footer>
-  <p>المقالات منشورة حالياً بحالة «بانتظار المراجعة الطبية»: تظهر للزوار، ولكن لا تُنسب إلى الدكتور كمؤلف أو مُراجع، ولا تُضاف بيانات منظمة خاصة بالمقال قبل الاعتماد.</p>
+  <p>المقالات منشورة حالياً بحالة «بانتظار المراجعة الطبية»: تظهر للزوار مع تنبيه واضح بذلك، ولا تُنسب إلى الدكتور كمؤلف أو مُراجع، ولا تُضاف بيانات منظمة خاصة بالمقال قبل الاعتماد. تسجيل الموافقة الطبية يتم من لوحة التحكم ويُختم تلقائياً بتاريخ القرار.</p>
 </footer>
 </body>
 </html>
@@ -185,9 +185,10 @@ async function main() {
 
   const checklistMd = `# Doctor review package — ${generated}
 
-${seeded.length} articles are published as **drafts awaiting medical review**.
-Review status is tracked separately from publication and stays truthful until
-the doctor records a decision.
+${seeded.length} articles are **published on the site while awaiting medical review**.
+Review status is a separate state from publication: publication never implies
+medical approval, and an approval only exists once the doctor records it (the
+server stamps that decision).
 
 ## How to use this package
 

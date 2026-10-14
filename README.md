@@ -57,9 +57,12 @@ brand reference and lives in `src/app/globals.css` as `brand-*` tokens.
 ## Documentation
 
 - `src/content/SOURCES.md` — source ledger; no medical fact ships without one.
-- `docs/MISSING-INFO.md` — launch checklist (address conflict, WhatsApp, hours, logo, domain, backend).
+- `docs/MISSING-INFO.md` — launch checklist (address conflict, hours, logo, domain, backend).
 - `docs/GOOGLE.md` — optional GA4 / GTM / Search Console / Maps setup.
-- `docs/SUPABASE.md` — activating the booking/storage/auth backend.
+- `docs/SUPABASE.md` — activating the article/settings/upload/booking backend.
+- `docs/doctor-review/` — private, printable review package for the 10 articles.
+- `docs/doctor-handover/` — review checklist, printable article copy, and the
+  confirmations the clinic must return (address/floor, hours, …).
 
 ## Dashboard (`/admin`, development or with `ADMIN_TOKEN`)
 
@@ -74,12 +77,13 @@ Editable from the dashboard (single system, no duplicate admin):
 | --- | --- |
 | Biography + qualifications (per language) | Settings → "Doctor biography & qualifications" |
 | Contact numbers (mobile/landline, national + international) | Settings → Contact |
-| WhatsApp activation flag (off until confirmed) | Settings → Contact |
+| WhatsApp activation flag + prefilled message | Settings → Contact |
 | Address, working hours (empty stays inactive) | Settings → Contact |
 | Google Maps embed + open-in-Maps link | Settings → Google Maps |
 | Brand color, emblem assets | Settings → Branding |
 | Social links | Settings → Social links |
 | Articles: drafts, publishing, SEO fields, cover image + alt | Articles / editor |
+| Medical review decision (pending / approved / needs changes) | Articles list or editor → "Medical review" |
 
 Unsaved edits are protected by a visible banner plus a `beforeunload`
 guard in both the settings page and the article editor. Saving reports
@@ -92,9 +96,31 @@ colors must be hex, and publishing an article requires title, slug,
 excerpt and body in **both** languages (so a missing translation can
 never produce a broken link).
 
-Persistence: articles and settings are JSON files under `content/`, and
-uploaded images go to `public/uploads/`. On Vercel the filesystem is
-ephemeral — see `docs/SUPABASE.md` before enabling deployment.
+## Publication vs medical review
+
+These are two independent states and the dashboard treats them that way:
+
+- **Publishing** makes an article visible to visitors. It never marks the
+  article as approved, and it is available without medical approval.
+- **Medical review** is a separate decision (pending / approved / needs
+  changes). It is an explicit action by the doctor or the site team, and the
+  **server** stamps the moment it changes — the browser never supplies the
+  review timestamp, so an approval cannot be back-dated or faked.
+
+A published article whose review is still pending shows a visible "Awaiting
+medical review" badge and note, is credited to the website editorial team
+(never to the doctor), and emits no `BlogPosting` structured data. The
+`BlogPosting` block is emitted only once the review is `approved`.
+
+## Persistence
+
+Articles and settings are JSON files under `content/`, and uploaded images go
+to `public/uploads/`. Once `SUPABASE_URL` **and** `SUPABASE_SERVICE_ROLE_KEY`
+are set, the same code reads and writes Supabase instead (articles, settings
+and Storage), without any code change — see `docs/SUPABASE.md`.
+
+In production with no backend configured, admin writes are **refused with
+HTTP 503** rather than silently disappearing with the container.
 
 ## Hosting
 
@@ -102,3 +128,8 @@ The repository is hosted on GitHub at
 `github.com/NoTail01/dr-tariq-website`. **No deployment pipeline is configured
 or connected** — builds are run locally with `npm run build` and reviewed
 before publishing.
+
+Note on deployment status: the absence of `vercel.json` and `.vercel/` is not
+proof that a Vercel project is disconnected. Whether the GitHub repository is
+wired to auto-deploy can only be confirmed in the Vercel dashboard (it is
+**unverified** from this repository). Nothing in this repo deploys on push.

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { guardAdmin } from "@/lib/admin-api";
+import { PersistenceBlockedError } from "@/lib/persistence";
 import { readAllArticles, writeArticles } from "@/lib/articles";
 import { makeId, validateArticleInput, type Article } from "@/lib/article-types";
 
@@ -45,7 +46,18 @@ export async function POST(request: Request) {
   } as Article;
 
   const existing = await readAllArticles();
-  await writeArticles([...existing, article]);
+
+  try {
+    await writeArticles([...existing, article]);
+  } catch (error) {
+    if (error instanceof PersistenceBlockedError) {
+      return NextResponse.json(
+        { ok: false, message: "Persistence is disabled in this environment." },
+        { status: 503 },
+      );
+    }
+    throw error;
+  }
 
   return NextResponse.json({ ok: true, article }, { status: 201 });
 }

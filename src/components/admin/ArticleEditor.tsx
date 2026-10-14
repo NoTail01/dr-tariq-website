@@ -144,7 +144,9 @@ export default function ArticleEditor({ article }: Props) {
       sourceUrl: form.sourceUrl || null,
       reviewStatus: form.reviewStatus,
       reviewNotes: form.reviewNotes,
-      reviewedAt: article?.review.reviewedAt ?? null,
+      // `reviewedAt` is deliberately NOT sent: the review timestamp is set
+      // by the server when the review decision changes, so the browser can
+      // never back-date or fake an approval.
       publishedAt: article?.publishedAt ?? null,
       coverImage: form.coverUrl
         ? { url: form.coverUrl, alt: { ar: form.coverAlt.ar, en: form.coverAlt.en } }
@@ -344,28 +346,16 @@ export default function ArticleEditor({ article }: Props) {
                 className={inputClass}
                 value={form.status}
                 onChange={(e) => {
-                  const next = e.target.value as FormState["status"];
-                  // Medical approval is a separate gate: publishing is
-                  // blocked until the doctor's review says "approved".
-                  if (next === "published" && form.reviewStatus !== "approved") {
-                    setNotice({ kind: "error", text: t.editor.publishGuard });
-                    return;
-                  }
-                  setForm((c) => ({ ...c, status: next }));
+                  // Publication and medical review are independent states:
+                  // publishing never implies that the doctor approved the
+                  // article, so no approval is required to go live.
+                  setForm((c) => ({ ...c, status: e.target.value as FormState["status"] }));
                 }}
               >
                 <option value="draft">{t.articles.statusDraft}</option>
-                <option
-                  value="published"
-                  disabled={form.reviewStatus !== "approved"}
-                >
-                  {t.articles.statusPublished}
-                  {form.reviewStatus !== "approved" ? " — " + t.articles.reviewPending : ""}
-                </option>
+                <option value="published">{t.articles.statusPublished}</option>
               </select>
-              {form.reviewStatus !== "approved" ? (
-                <p className="mt-1.5 text-xs text-amber-700">{t.editor.publishGuard}</p>
-              ) : null}
+              <p className="mt-1.5 text-xs text-slate-500">{t.editor.publishIndependent}</p>
             </div>
 
             <div className="mt-4">
@@ -438,7 +428,7 @@ export default function ArticleEditor({ article }: Props) {
               <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
                 {form.reviewStatus === "approved"
                   ? t.editor.reviewApproved
-                  : t.editor.publishGuard}
+                  : t.editor.reviewIndependent}
               </p>
             </div>
             <div className="mt-4">

@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { guardAdmin } from "@/lib/admin-api";
-import { readAllArticles, writeArticles } from "@/lib/articles";
+import { PersistenceBlockedError } from "@/lib/persistence";
+import { deleteArticle, readAllArticles, writeArticles } from "@/lib/articles";
 import { validateArticleInput, type Article } from "@/lib/article-types";
 
 type Params = { params: Promise<{ id: string }> };
@@ -47,9 +48,25 @@ export async function PATCH(request: Request, { params }: Params) {
   }
 
   const now = new Date().toISOString();
+
+  // Medical review is a separate, server-authoritative decision:
+  //  - a status that differs from the stored one is stamped with `now`
+  //    (the browser never supplies the review timestamp);
+  //  - an unchanged status keeps its existing timestamp;
+  //  - "pending" is the absence of a decision, so it carries no timestamp.
+  const previousStatus = current.review?.status ?? "pending";
+  const nextStatus = validation.value.review.status;
+  const review =
+    nextStatus === "pending"
+      ? { status: "pending" as const, notes: validation.value.review.notes, reviewedAt: null }
+      : nextStatus === previousStatus && current.review?.reviewedAt
+        ? { ...validation.value.review, reviewedAt: current.review.reviewedAt }
+        : { ...validation.value.review, reviewedAt: now };
+
   const updated: Article = {
     ...current,
     ...validation.value,
+    review,
     id: current.id,
     // Keep the original publication date once an article is live.
     publishedAt:
@@ -60,7 +77,17 @@ export async function PATCH(request: Request, { params }: Params) {
   } as Article;
 
   articles[index] = updated;
-  await writeArticles(articles);
+  try {
+    await writeArticles(articles);
+  } catch (error) {
+    if (error instanceof PersistenceBlockedError) {
+      return NextResponse.json(
+        { ok: false, message: "Persistence is disabled in this environment." },
+        { status: 503 },
+      );
+    }
+    throw error;
+  }
 
   return NextResponse.json({ ok: true, article: updated });
 }
@@ -72,11 +99,23 @@ export async function DELETE(_request: Request, { params }: Params) {
 
   const { id } = await params;
   const articles = await readAllArticles();
-  const next = articles.filter((a) => a.id !== id);
-  if (next.length === articles.length) {
+  if (!articles.some((a) => a.id === id)) {
     return NextResponse.json({ ok: false, message: "Not found" }, { status: 404 });
   }
 
-  await writeArticles(next);
+  try {
+    // Backend-aware: a backend requires an explicit row delete, because
+    // writeArticles only upserts the rows it is given.
+    await deleteArticle(id);
+  } catch (error) {
+    if (error instanceof PersistenceBlockedError) {
+      return NextResponse.json(
+        { ok: false, message: "Persistence is disabled in this environment." },
+        { status: 503 },
+      );
+    }
+    throw error;
+  }
+
   return NextResponse.json({ ok: true });
 }

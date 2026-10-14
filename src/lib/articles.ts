@@ -2,10 +2,15 @@ import { readFileSync } from "node:fs";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
+import { assertWritable } from "./persistence";
+import { isSupabaseConfigured, supabaseDelete, supabaseSelect, supabaseUpsert } from "./supabase";
 import type { Article, ArticleReview } from "./article-types";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 const ARTICLES_FILE = path.join(CONTENT_DIR, "articles.json");
+
+/** Supabase table name for articles (see supabase/migrations). */
+const SUPABASE_TABLE = "articles";
 
 /**
  * Review state for a stored article.
@@ -31,12 +36,36 @@ function normalizeReview(raw: unknown): ArticleReview {
 /**
  * Read every article (drafts included). Server-side only.
  *
- * Reads are synchronous so the public pages can prerender: awaiting an async
- * filesystem read inside a page body streams the route dynamically, which
- * would keep a page on its loading fallback under Cache Components.
- * Writes stay asynchronous (see `writeArticles`).
+ * Local reads are synchronous so the public pages can prerender: awaiting an
+ * async filesystem read inside a page body streams the route dynamically,
+ * which would keep a page on its loading fallback under Cache Components.
+ * When Supabase is configured the same function reads the remote table
+ * instead — the caller is already async either way.
  */
 export async function readAllArticles(): Promise<Article[]> {
+  if (isSupabaseConfigured()) {
+    try {
+      const rows = await supabaseSelect<{ id: string; data: Article }>(
+        SUPABASE_TABLE,
+        "select=id,data",
+      );
+      return rows
+        .map((row) => (row.data ? (row.data as Article) : null))
+        .filter((article): article is Article => Boolean(article))
+        .map((article) =>
+          article.review ? article : { ...article, review: normalizeReview(undefined) },
+        );
+    } catch {
+      // Never serve a broken page: fall back to the local store so a
+      // temporary backend outage degrades to the last published content.
+      return readLocalArticles();
+    }
+  }
+  return readLocalArticles();
+}
+
+/** Articles from the repository `content/articles.json`. */
+function readLocalArticles(): Article[] {
   try {
     const raw = readFileSync(ARTICLES_FILE, "utf8");
     const parsed = JSON.parse(raw) as unknown;
@@ -51,6 +80,23 @@ export async function readAllArticles(): Promise<Article[]> {
 }
 
 async function writeAll(articles: Article[]): Promise<void> {
+  if (isSupabaseConfigured()) {
+    // Service-role upsert on the primary key: repeatable and idempotent.
+    await supabaseUpsert(
+      SUPABASE_TABLE,
+      articles.map((article) => ({
+        id: article.id,
+        slug: article.slug,
+        status: article.status,
+        is_demo: article.isDemo === true,
+        updated_at: article.updatedAt,
+        data: article,
+      })),
+      "id",
+    );
+    return;
+  }
+  assertWritable("articles");
   await fs.mkdir(CONTENT_DIR, { recursive: true });
   const tmp = `${ARTICLES_FILE}.${process.pid}.tmp`;
   await fs.writeFile(tmp, `${JSON.stringify(articles, null, 2)}\n`, "utf8");
@@ -59,6 +105,26 @@ async function writeAll(articles: Article[]): Promise<void> {
 
 export async function writeArticles(articles: Article[]): Promise<void> {
   await writeAll(articles);
+}
+
+/**
+ * Remove a single article.
+ *
+ * Needed with a backend because `writeArticles` only upserts the remaining
+ * rows: without an explicit delete a removed article would reappear on the
+ * next read.
+ */
+export async function deleteArticle(id: string): Promise<void> {
+  if (isSupabaseConfigured()) {
+    await supabaseDelete(SUPABASE_TABLE, `id=eq.${encodeURIComponent(id)}`);
+    return;
+  }
+  assertWritable("articles");
+  const remaining = readLocalArticles().filter((article) => article.id !== id);
+  await fs.mkdir(CONTENT_DIR, { recursive: true });
+  const tmp = `${ARTICLES_FILE}.${process.pid}.tmp`;
+  await fs.writeFile(tmp, `${JSON.stringify(remaining, null, 2)}\n`, "utf8");
+  await fs.rename(tmp, ARTICLES_FILE);
 }
 
 export async function getArticleById(id: string): Promise<Article | null> {

@@ -2,7 +2,13 @@ import { readFileSync } from "node:fs";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
+import { assertWritable } from "./persistence";
+import { isSupabaseConfigured, supabaseSelect, supabaseUpsert } from "./supabase";
 import type { Localized } from "./article-types";
+
+/** Supabase table holding the single settings row (see supabase/migrations). */
+const SETTINGS_TABLE = "site_settings";
+const SETTINGS_ROW_ID = "site";
 
 export type Settings = {
   siteName: Localized;
@@ -177,6 +183,18 @@ export function mergeWithDefaults(raw: unknown): Settings {
 }
 
 export async function readSettings(): Promise<Settings> {
+  if (isSupabaseConfigured()) {
+    try {
+      const rows = await supabaseSelect<{ id: string; data: Partial<Settings> }>(
+        SETTINGS_TABLE,
+        "select=id,data&limit=1",
+      );
+      const remote = rows[0]?.data;
+      if (remote && typeof remote === "object") return mergeWithDefaults(remote);
+    } catch {
+      // Fall through to the local store on a backend error.
+    }
+  }
   try {
     const raw = readFileSync(SETTINGS_FILE, "utf8");
     return mergeWithDefaults(JSON.parse(raw));
@@ -186,8 +204,13 @@ export async function readSettings(): Promise<Settings> {
 }
 
 export async function writeSettings(settings: Settings): Promise<void> {
-  await fs.mkdir(path.dirname(SETTINGS_FILE), { recursive: true });
   const next: Settings = { ...settings, updatedAt: new Date().toISOString() };
+  if (isSupabaseConfigured()) {
+    await supabaseUpsert(SETTINGS_TABLE, [{ id: SETTINGS_ROW_ID, data: next }], "id");
+    return;
+  }
+  assertWritable("settings");
+  await fs.mkdir(path.dirname(SETTINGS_FILE), { recursive: true });
   const tmp = `${SETTINGS_FILE}.${process.pid}.tmp`;
   await fs.writeFile(tmp, `${JSON.stringify(next, null, 2)}\n`, "utf8");
   await fs.rename(tmp, SETTINGS_FILE);

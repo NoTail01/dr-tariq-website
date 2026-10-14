@@ -87,20 +87,16 @@ export default function AdminArticlesPage() {
   }
 
   async function togglePublish(article: Article) {
-    if (article.status === "draft" && article.review.status !== "approved") {
-      setError(t.articles.publishBlocked);
-      return;
-    }
+    // Publishing is independent of the medical review: going live never
+    // marks the article as doctor-approved.
     await patchArticle(article, {
       status: article.status === "published" ? "draft" : "published",
     });
   }
 
   async function setReview(article: Article, status: ReviewStatus) {
-    await patchArticle(article, {
-      reviewStatus: status,
-      reviewedAt: new Date().toISOString(),
-    });
+    // Only the review decision is sent; the server stamps the decision time.
+    await patchArticle(article, { reviewStatus: status });
     setNotice(status === "approved" ? t.articles.reviewApproved : t.articles.reviewNeedsChanges);
   }
 
@@ -322,9 +318,9 @@ export default function AdminArticlesPage() {
                         disabled={busyId === article.id}
                         onClick={() => togglePublish(article)}
                         title={
-                          article.status === "draft" && article.review.status !== "approved"
-                            ? t.articles.publishBlocked
-                            : undefined
+                          article.status === "draft"
+                            ? t.articles.publishHint
+                            : t.articles.unpublishHint
                         }
                         className="rounded-lg border border-brand-300 px-2.5 py-1.5 text-xs font-semibold text-brand-700 hover:bg-brand-50 disabled:opacity-50"
                       >

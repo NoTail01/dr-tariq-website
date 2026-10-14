@@ -45,6 +45,7 @@ type ListLabels = {
   notInLanguage: string;
   readInArabic: string;
   readInEnglish: string;
+  reviewPendingBadge: string;
   category: { demo: string; guides: string; news: string };
 };
 
@@ -178,6 +179,7 @@ export default async function BlogPage({ params, searchParams }: PageProps<"/[la
     notInLanguage: dict.blog.notInLanguage,
     readInArabic: dict.blog.readInArabic,
     readInEnglish: dict.blog.readInEnglish,
+    reviewPendingBadge: dict.blog.reviewPendingBadge,
     category: {
       demo: dict.blog.categoryDemo,
       guides: dict.blog.categoryGuides,

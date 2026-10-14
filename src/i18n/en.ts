@@ -159,6 +159,9 @@ export const en = {
     categoryNews: "Clinic news",
     demoArticleBadge: "Demo article — not medical content",
     byAuthor: "By",
+    reviewPendingBadge: "Awaiting medical review",
+    reviewPendingNote:
+      "This article is published awaiting the doctor's review: it has not been reviewed by him and is not attributed to him as author or reviewer. The source cited at the end of the article is its reference.",
     notInLanguage: "This article is not available in this language yet.",
     readInArabic: "Read it in Arabic",
     readInEnglish: "Read it in English",

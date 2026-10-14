@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { guardAdmin } from "@/lib/admin-api";
+import { PersistenceBlockedError } from "@/lib/persistence";
 import { defaultSettings, readSettings, writeSettings, type Settings } from "@/lib/settings";
 
 type Localized = { ar: string; en: string };
@@ -163,6 +164,16 @@ export async function PATCH(request: Request) {
     );
   }
 
-  await writeSettings(next);
+  try {
+    await writeSettings(next);
+  } catch (error) {
+    if (error instanceof PersistenceBlockedError) {
+      return NextResponse.json(
+        { ok: false, message: "Persistence is disabled in this environment." },
+        { status: 503 },
+      );
+    }
+    throw error;
+  }
   return NextResponse.json({ ok: true, settings: next });
 }

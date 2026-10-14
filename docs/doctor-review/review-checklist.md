@@ -1,8 +1,9 @@
-# Doctor review package — 2026-10-13
+# Doctor review package — 2026-10-14
 
-10 articles are published as **drafts awaiting medical review**.
-Review status is tracked separately from publication and stays truthful until
-the doctor records a decision.
+10 articles are **published on the site while awaiting medical review**.
+Review status is a separate state from publication: publication never implies
+medical approval, and an approval only exists once the doctor records it (the
+server stamps that decision).
 
 ## How to use this package
 

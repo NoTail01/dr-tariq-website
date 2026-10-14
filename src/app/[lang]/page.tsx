@@ -56,6 +56,7 @@ export default async function HomePage({
     notInLanguage: dict.blog.notInLanguage,
     readInArabic: dict.blog.readInArabic,
     readInEnglish: dict.blog.readInEnglish,
+    reviewPendingBadge: dict.blog.reviewPendingBadge,
     category: {
       demo: dict.blog.categoryDemo,
       guides: dict.blog.categoryGuides,

@@ -90,7 +90,8 @@ export const dashboardDict = {
       reviewNeedsChanges: "بحاجة لتعديلات",
       approve: "تحديد كموافَق طبيبياً",
       requestChanges: "طلب تعديلات",
-      publishBlocked: "لا يمكن النشر قبل الموافقة الطبية",
+      publishHint: "النشر متاح مباشرة — ولا يعني موافقة الدكتور الطبية.",
+      unpublishHint: "إخفاء المقال عن الزوار مع الاحتفاظ به كمسودة.",
       reviewNote: "ملاحظة المراجعة",
     },
     editor: {
@@ -139,7 +140,10 @@ export const dashboardDict = {
       reviewPending: "بانتظار المراجعة",
       reviewApproved: "موافَق طبيبياً",
       reviewNeedsChanges: "بحاجة لتعديلات",
-      publishGuard: "النشر متاح بعد الموافقة الطبية فقط — حالة المراجعة الحالية: بانتظار المراجعة.",
+      publishIndependent:
+        "النشر والمراجعة الطبية حالتان منفصلتان: يمكنك النشر الآن، ولن يُنسب المقال إلى الدكتور كمُراجِع قبل تسجيل قرار المراجعة.",
+      reviewIndependent:
+        "المراجعة الطبية قرار منفصل عن النشر، ويُسجَّل وقت اتخاذه تلقائياً على الخادم.",
     },
     settings: {
       title: "إعدادات الموقع",
@@ -289,7 +293,8 @@ export const dashboardDict = {
       reviewNeedsChanges: "Needs changes",
       approve: "Mark medically approved",
       requestChanges: "Request changes",
-      publishBlocked: "Publishing requires medical approval first",
+      publishHint: "Publish immediately — this does not mean the doctor approved it.",
+      unpublishHint: "Hide from visitors and keep it as a draft.",
       reviewNote: "Review note",
     },
     editor: {
@@ -338,7 +343,10 @@ export const dashboardDict = {
       reviewPending: "Awaiting review",
       reviewApproved: "Medically approved",
       reviewNeedsChanges: "Needs changes",
-      publishGuard: "Publishing is available after medical approval — current review status: awaiting review.",
+      publishIndependent:
+        "Publication and medical review are separate states: you can publish now, and the article will not be attributed to the doctor as reviewed until a review decision is recorded.",
+      reviewIndependent:
+        "The medical review is a decision separate from publication; its timestamp is recorded automatically by the server.",
     },
     settings: {
       title: "Site settings",

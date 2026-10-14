@@ -5,6 +5,8 @@ import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 
 import { guardAdmin } from "@/lib/admin-api";
+import { assertWritable } from "@/lib/persistence";
+import { isSupabaseConfigured, supabaseUpload } from "@/lib/supabase";
 
 const ALLOWED_TYPES: Record<string, string> = {
   "image/jpeg": ".jpg",
@@ -16,12 +18,19 @@ const ALLOWED_TYPES: Record<string, string> = {
 
 const MAX_BYTES = 4 * 1024 * 1024; // 4 MB
 
+/** Supabase Storage bucket for uploaded media (create it before enabling). */
+const STORAGE_BUCKET = "uploads";
+
 /**
- * POST /api/admin/upload — local image storage (authenticated only).
+ * POST /api/admin/upload — image storage (authenticated only).
  *
- * Files are written to `public/uploads/`. When Supabase is activated, this
- * handler switches to Supabase Storage — see docs/SUPABASE.md.
- * SVG uploads are rejected because they can carry scripts.
+ * - Supabase Storage when the backend is configured (returns the public
+ *   object URL, which survives deploys);
+ * - `public/uploads/` in development only;
+ * - in production with no backend the write is refused instead of being
+ *   silently lost with the container.
+ *
+ * SVG uploads are rejected in both modes because they can carry scripts.
  */
 export async function POST(request: Request) {
   const denied = await guardAdmin();
@@ -49,12 +58,32 @@ export async function POST(request: Request) {
     );
   }
 
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  const name = `${Date.now()}-${randomUUID().slice(0, 8)}${extension}`;
+
+  if (isSupabaseConfigured()) {
+    const url = await supabaseUpload(STORAGE_BUCKET, name, bytes, file.type);
+    return NextResponse.json({ ok: true, url, storage: "supabase" }, { status: 201 });
+  }
+
+  try {
+    // Development only: production without a backend must not pretend a
+    // local write is durable (see docs/SUPABASE.md).
+    assertWritable("uploads");
+  } catch {
+    return NextResponse.json(
+      {
+        ok: false,
+        message:
+          "Uploads are disabled: no storage backend is configured for this environment. See docs/SUPABASE.md.",
+      },
+      { status: 503 },
+    );
+  }
+
   const directory = path.join(process.cwd(), "public", "uploads");
   await fs.mkdir(directory, { recursive: true });
+  await fs.writeFile(path.join(directory, name), bytes);
 
-  const name = `${Date.now()}-${randomUUID().slice(0, 8)}${extension}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
-  await fs.writeFile(path.join(directory, name), buffer);
-
-  return NextResponse.json({ ok: true, url: `/uploads/${name}` }, { status: 201 });
+  return NextResponse.json({ ok: true, url: `/uploads/${name}`, storage: "local" }, { status: 201 });
 }
