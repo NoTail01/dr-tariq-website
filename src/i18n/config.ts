@@ -5,8 +5,9 @@ export type Locale = (typeof locales)[number];
 /** Arabic is the default locale and uses RTL layout. */
 export const defaultLocale: Locale = "ar";
 
+/** Open Graph locales use language_TERRITORY; ar_JO matches the clinic's Jordan number. */
 export const localeInfo: Record<Locale, { dir: "rtl" | "ltr"; htmlLang: string; ogLocale: string }> = {
-  ar: { dir: "rtl", htmlLang: "ar", ogLocale: "ar_AR" },
+  ar: { dir: "rtl", htmlLang: "ar", ogLocale: "ar_JO" },
   en: { dir: "ltr", htmlLang: "en", ogLocale: "en_US" },
 };
 

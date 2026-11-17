@@ -28,23 +28,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const articles = await getVisibleArticles(mode);
   const articleEntries: MetadataRoute.Sitemap = articles
-    .filter((article) => !article.isDemo && article.publishedAt)
-    .flatMap((article) =>
-      (["ar", "en"] as const)
-        .filter((locale) => article.slug[locale].length > 0)
-        .map((locale) => ({
-          url: `${SITE_URL}/${locale}/blog/${article.slug[locale]}`,
-          lastModified: new Date(article.updatedAt),
-          changeFrequency: "weekly" as const,
-          priority: 0.6,
-          alternates: {
-            languages: {
-              ar: `${SITE_URL}/ar/blog/${article.slug.ar}`,
-              en: `${SITE_URL}/en/blog/${article.slug.en}`,
-            },
-          },
-        })),
-    );
+    .filter(
+      (article) =>
+        !article.isDemo &&
+        article.publishedAt &&
+        article.review.status === "approved",
+    )
+    .flatMap((article) => {
+      const localized = (["ar", "en"] as const).filter(
+        (locale) => article.slug[locale].length > 0,
+      );
+      if (localized.length === 0) return [];
+
+      const languages: Record<string, string> = {};
+      for (const locale of localized) {
+        languages[locale] = `${SITE_URL}/${locale}/blog/${article.slug[locale]}`;
+      }
+
+      return localized.map((locale) => ({
+        url: languages[locale],
+        lastModified: new Date(article.updatedAt),
+        changeFrequency: "weekly" as const,
+        priority: 0.6,
+        alternates: { languages },
+      }));
+    });
 
   return [...staticEntries, ...articleEntries];
 }

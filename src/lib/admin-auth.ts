@@ -2,7 +2,9 @@ import { createHash, timingSafeEqual } from "node:crypto";
 
 import { cookies } from "next/headers";
 
-export const ADMIN_SESSION_COOKIE = "dt_admin_session";
+import { ADMIN_SESSION_COOKIE, expectedAdminSession } from "./admin-session";
+
+export { ADMIN_SESSION_COOKIE } from "./admin-session";
 
 /**
  * Access rules for the dashboard:
@@ -31,9 +33,7 @@ export function verifyToken(candidate: string, expected: string): boolean {
 
 /** Expected value of the session cookie for the current environment. */
 function expectedSession(): string | null {
-  if (process.env.NODE_ENV !== "production") return "local-development";
-  const token = process.env.ADMIN_TOKEN;
-  return token ? digest(token).toString("hex") : null;
+  return expectedAdminSession();
 }
 
 export function sessionCookieValue(): string | null {

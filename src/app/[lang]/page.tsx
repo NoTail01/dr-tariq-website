@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import ArticleCard from "@/components/ArticleCard";
+import JsonLd from "@/components/JsonLd";
 import ClinicMap from "@/components/ClinicMap";
 import DoctorPortrait from "@/components/DoctorPortrait";
 import { CtaBand, EmptyState, Section, SectionHeading } from "@/components/Layout";
@@ -100,12 +101,7 @@ export default async function HomePage({
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
+      <JsonLd data={jsonLd} />
 
       {/* ---------------- Hero ---------------- */}
       <section className="relative overflow-hidden bg-linear-to-b from-brand-50 to-white">

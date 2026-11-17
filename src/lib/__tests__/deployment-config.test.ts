@@ -1,0 +1,54 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { describe, expect, it } from "vitest";
+
+import { adminSessionValue } from "@/lib/admin-session";
+import { pageMetadata } from "@/lib/seo";
+
+const migration = readFileSync(
+  path.join(process.cwd(), "supabase/migrations/0001_init.sql"),
+  "utf8",
+);
+
+describe("Supabase migration", () => {
+  it("creates the booking table used by the public form", () => {
+    expect(migration).toContain("create table if not exists public.appointment_requests");
+  });
+
+  it("enables row level security on every content table", () => {
+    for (const table of ["articles", "site_settings", "appointment_requests"]) {
+      expect(migration).toContain("alter table public." + table + " enable row level security;");
+    }
+  });
+});
+
+describe("SEO metadata", () => {
+  it("uses the site name for og:site_name", () => {
+    const meta = pageMetadata({
+      locale: "en",
+      path: "/",
+      title: "Home",
+      description: "Clinic homepage",
+    });
+    expect(meta.openGraph?.siteName).toBe("Dr Tariq Abu Hweij");
+    expect(meta.openGraph?.siteName).not.toBe("Home");
+  });
+
+  it("uses a valid Open Graph locale for Arabic", () => {
+    const meta = pageMetadata({
+      locale: "ar",
+      path: "/",
+      title: "الرئيسية",
+      description: "الصفحة الرئيسية",
+    });
+    expect(meta.openGraph?.locale).toBe("ar_JO");
+  });
+});
+
+describe("Admin session", () => {
+  it("stores only a deterministic token hash in the cookie", () => {
+    expect(adminSessionValue("secret")).toBe(
+      "2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b",
+    );
+  });
+});

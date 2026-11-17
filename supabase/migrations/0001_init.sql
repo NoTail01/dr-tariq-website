@@ -37,6 +37,23 @@ create table if not exists public.site_settings (
 alter table public.site_settings enable row level security;
 -- No policies on purpose: service-role only.
 
+-- Appointment requests submitted by the public booking form. The form
+-- deliberately collects no medical information (name + contact only).
+create table if not exists public.appointment_requests (
+  id             uuid        primary key default gen_random_uuid(),
+  created_at     timestamptz not null default now(),
+  name           text        not null,
+  contact_method text        not null
+                 check (contact_method in ('email', 'phone', 'whatsapp')),
+  contact_value  text        not null,
+  preferred_time text,
+  message        text
+);
+
+alter table public.appointment_requests enable row level security;
+-- No policies on purpose: only the server's service-role key may read
+-- or insert patient contact details.
+
 -- ------------------------------------------------------------------
 -- Storage bucket for uploaded media (public read, server-only write).
 -- ------------------------------------------------------------------

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { localizePath, localeInfo, type Locale } from "@/i18n/config";
+import { defaultSettings } from "@/lib/settings";
 import { SITE_URL } from "@/lib/site";
 
 type PageMetadataInput = {
@@ -52,7 +53,7 @@ export function pageMetadata({
       title,
       description,
       url,
-      siteName: title,
+      siteName: defaultSettings.siteName[locale],
       locale: localeInfo[locale].ogLocale,
       type: ogType,
       ...(image ? { images: [{ url: image }] } : {}),

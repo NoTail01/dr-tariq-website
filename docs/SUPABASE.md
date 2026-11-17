@@ -97,6 +97,9 @@ configured. If that read fails:
 
 ## 6. Booking requests
 
+The table is created by supabase/migrations/0001_init.sql; no extra SQL is
+required.
+
 `src/lib/booking-backend.ts` POSTs to `/rest/v1/appointment_requests` with
 these columns (unchanged from the initial release):
 

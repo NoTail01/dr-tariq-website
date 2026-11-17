@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { categoryLabel, formatDate, readingTimeText } from "@/components/ArticleCard";
+import JsonLd from "@/components/JsonLd";
 import { DevBadge } from "@/components/PlaceholderImage";
 import { Section } from "@/components/Layout";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -121,20 +122,8 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[s
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbLd).replace(/</g, "\\u003c"),
-        }}
-      />
-      {jsonLd ? (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-          }}
-        />
-      ) : null}
+      <JsonLd data={breadcrumbLd} />
+      {jsonLd ? <JsonLd data={jsonLd} /> : null}
 
       <Section tone="soft" className="border-b border-brand-100">
         <div className="max-w-3xl">

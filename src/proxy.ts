@@ -1,7 +1,9 @@
+import { timingSafeEqual } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
 import { NextResponse, type NextRequest } from "next/server";
+import { ADMIN_SESSION_COOKIE, expectedAdminSession } from "@/lib/admin-session";
 import { defaultLocale, type Locale } from "@/i18n/config";
 
 /**
@@ -63,6 +65,25 @@ function knownArticleSlugs(): Set<string> | null {
   }
 }
 
+/** Redirect unauthenticated production requests away from dashboard pages. */
+function guardAdminPages(request: NextRequest): NextResponse | null {
+  const loginUrl = new URL("/admin/login", request.url);
+
+  // The login page must remain reachable so an operator can authenticate.
+  if (request.nextUrl.pathname === "/admin/login") return null;
+  if (process.env.NODE_ENV !== "production") return null;
+  if (process.env.ADMIN_ENABLED === "false") return NextResponse.redirect(loginUrl);
+
+  const expected = expectedAdminSession();
+  if (!expected) return NextResponse.redirect(loginUrl);
+
+  const candidate = request.cookies.get(ADMIN_SESSION_COOKIE)?.value ?? "";
+  const valid =
+    /^[a-f0-9]{64}$/.test(candidate) &&
+    timingSafeEqual(Buffer.from(candidate, "hex"), Buffer.from(expected, "hex"));
+  return valid ? null : NextResponse.redirect(loginUrl);
+}
+
 /**
  * Locale routing and unknown-article handling:
  * - "/about"  -> "/ar/about" (or "/en/about" when the browser prefers English)
@@ -71,8 +92,13 @@ function knownArticleSlugs(): Set<string> | null {
  * - "/{ar|en}/blog/{unknown-slug}" answers with a real 404 (the not-found
  *   UI is served through Next's `/_not-found` route) instead of a soft 404
  */
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
+
+  // Dashboard pages are guarded here; /api/admin/* routes guard themselves.
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+    return guardAdminPages(request) ?? undefined;
+  }
 
   // Unknown article slugs never reach the page renderer: the prerendered
   // shell would otherwise commit a 200 before notFound() runs.
@@ -105,6 +131,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Never run on Next internals, API routes, the admin area or real files.
-  matcher: ["/((?!_next|api|admin|uploads|.*\\..*).*)"],
+  // Run on dashboard pages too (for the auth guard); API routes and assets
+  // keep their own guards and are excluded.
+  matcher: ["/((?!_next|api|uploads|.*\\..*).*)"],
 };

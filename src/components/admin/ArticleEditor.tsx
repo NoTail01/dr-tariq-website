@@ -196,9 +196,9 @@ export default function ArticleEditor({ article }: Props) {
   ];
 
   const categoryLabels: Record<ArticleCategory, string> = {
-    demo: t.articles.colCategory, // replaced below with blog categories
-    guides: t.articles.colCategory,
-    news: t.articles.colCategory,
+    demo: t.articles.categoryDemo,
+    guides: t.articles.categoryGuides,
+    news: t.articles.categoryNews,
   };
 
   return (
