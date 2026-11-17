@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import { lang as rootLang } from "next/root-params";
 
@@ -93,11 +94,31 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
     { label: settings.contact.landline, href: phoneLink(settings.contact.landline, settings.contact.landlineIntl) },
   ].filter((entry): entry is { label: string; href: string } => Boolean(entry.label && entry.href));
 
+  // Only verified, non-empty social URLs are published. Labels are fixed
+  // platform names, not translated content.
+  const socialNames = {
+    facebook: "Facebook",
+    instagram: "Instagram",
+    x: "X",
+    linkedin: "LinkedIn",
+    youtube: "YouTube",
+  } as const;
+  const socialLinks = (Object.keys(socialNames) as (keyof typeof socialNames)[])
+    .filter((key) => Boolean(settings.social[key]))
+    .map((key) => ({ label: socialNames[key], href: settings.social[key] as string }));
+
+  // The editable accent colour is applied as an inline custom property so it
+  // overrides the compiled theme value. Invalid hex values are ignored.
+  const accent = /^#[0-9a-fA-F]{6}$/.test(settings.branding.brandColor)
+    ? settings.branding.brandColor
+    : null;
+
   return (
     <html
       lang={info.htmlLang}
       dir={info.dir}
       data-scroll-behavior="smooth"
+      style={accent ? ({ "--color-brand-500": accent } as CSSProperties) : undefined}
       className={`${plexArabic.variable} antialiased`}
     >
       <body className="flex min-h-screen flex-col">
@@ -136,6 +157,8 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
           address={settings.contact.address?.[locale] ?? null}
           phones={phoneEntries}
           whatsappNote={settings.contact.whatsappEnabled ? null : dict.book.whatsappPending}
+          socialTitle={dict.footer.followUs}
+          social={socialLinks}
           disclaimerTitle={dict.footer.disclaimerTitle}
           disclaimer={dict.footer.disclaimer}
           rights={dict.footer.rights}

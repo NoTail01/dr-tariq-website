@@ -26,7 +26,7 @@ export const en = {
         description: "Articles on kidney and internal medicine by Dr Tariq Abu Hweij, in Arabic and English.",
       },
       book: {
-        title: "Appointments & Clinic Contact — Dr Tariq Abu Hweij",
+        title: "Appointments & Clinic Contact",
         description:
           "Call the clinic to book an appointment with Dr Tariq Abu Hweij in Amman. Mobile and landline numbers, clinic location and map.",
       },
@@ -244,6 +244,7 @@ export const en = {
     developedNote: "Internal medicine and nephrology clinic — Amman.",
     quickLinks: "Quick links",
     contact: "Contact",
+    followUs: "Follow us",
     noContactYet: "Contact details will be published here.",
     disclaimerTitle: "Medical disclaimer",
     disclaimer:

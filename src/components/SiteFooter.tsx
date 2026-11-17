@@ -20,6 +20,10 @@ type Props = {
   phones: { label: string; href: string }[];
   /** Localized WhatsApp pending note (or null when unknown). */
   whatsappNote: string | null;
+  /** Localized heading for the optional social-link row. */
+  socialTitle: string;
+  /** Verified public social profiles (only non-empty URLs are passed). */
+  social: { label: string; href: string }[];
   disclaimerTitle: string;
   disclaimer: string;
   rights: string;
@@ -39,6 +43,8 @@ export default function SiteFooter({
   address,
   phones,
   whatsappNote,
+  socialTitle,
+  social,
   disclaimerTitle,
   disclaimer,
   rights,
@@ -98,6 +104,26 @@ export default function SiteFooter({
           ) : null}
           {whatsappNote ? (
             <p className="mt-2 text-xs text-amber-300/90 break-words-safe">{whatsappNote}</p>
+          ) : null}
+
+          {social.length > 0 ? (
+            <div className="mt-5">
+              <p className="text-xs font-bold tracking-wide text-white uppercase">{socialTitle}</p>
+              <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                {social.map((item) => (
+                  <li key={item.href}>
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex min-h-9 items-center text-sm text-brand-100/85 transition-colors hover:text-white"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ) : null}
 
           <div className="mt-6 rounded-xl border border-amber-400/40 bg-navy-800 p-4">

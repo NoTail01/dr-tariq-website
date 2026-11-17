@@ -18,9 +18,9 @@ export default function GlobalNotFound() {
     <html lang="en" dir="ltr" className={`${plexArabic.variable} antialiased`}>
       <body className="flex min-h-screen flex-col items-center justify-center bg-white px-6 text-center font-sans">
         <p className="text-sm font-bold tracking-widest text-brand-600 uppercase">404</p>
-        <h1 className="mt-3 text-3xl font-bold text-navy-900">Page not found</h1>
+        <h1 className="mt-3 text-3xl font-bold text-navy-900">الصفحة غير موجودة / Page not found</h1>
         <p className="mt-3 max-w-md text-ink-500">
-          The page you are looking for does not exist or has moved.
+          الصفحة التي تبحث عنها غير موجودة أو تم نقلها. / The page you are looking for does not exist or has moved.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Link

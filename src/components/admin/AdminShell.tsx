@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
 
+import { hasUnsavedChanges, setUnsavedChanges, subscribeUnsaved } from "./unsaved-guard";
 import { useDashboardLocale } from "./useDashboardLocale";
 
 export type AdminSession = {
@@ -44,6 +45,36 @@ function AdminShellInner({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [session, setSession] = useState<AdminSession | null>(null);
   const { locale, setLocale, t } = useDashboardLocale();
+  const dirty = useSyncExternalStore(subscribeUnsaved, hasUnsavedChanges, () => false);
+
+  // Block internal link navigation while an editor holds unsaved edits.
+  // A capture-phase listener runs before Next.js' own Link click handler.
+  useEffect(() => {
+    if (!dirty) return;
+    function onClick(event: MouseEvent) {
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const anchor = target.closest("a");
+      if (!anchor) return;
+      if (anchor.target && anchor.target !== "_self") return;
+      if (anchor.hasAttribute("download")) return;
+      const href = anchor.getAttribute("href");
+      if (!href || href.startsWith("#") || /^(mailto:|tel:|javascript:)/i.test(href)) return;
+      const url = new URL(anchor.href, window.location.href);
+      if (url.origin !== window.location.origin) return;
+      if (url.pathname === window.location.pathname) return;
+      if (!window.confirm(t.editor.discardConfirm)) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+      setUnsavedChanges(false);
+    }
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, [dirty, t.editor.discardConfirm]);
 
   useEffect(() => {
     let cancelled = false;

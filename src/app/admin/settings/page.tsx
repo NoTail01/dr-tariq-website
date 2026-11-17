@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 
 import { apiGet, apiSend } from "@/components/admin/api";
+import { setUnsavedChanges } from "@/components/admin/unsaved-guard";
 import { useDashboardLocale } from "@/components/admin/useDashboardLocale";
 import type { Settings } from "@/lib/settings";
 
@@ -66,6 +67,7 @@ export default function SettingsPage() {
   // Warn before losing unsaved edits on tab close / reload.
   const dirty = Boolean(settings) && JSON.stringify(settings) !== savedSnapshot;
   useEffect(() => {
+    setUnsavedChanges(dirty);
     if (!dirty) return;
     function onBeforeUnload(event: BeforeUnloadEvent) {
       event.preventDefault();
@@ -73,6 +75,8 @@ export default function SettingsPage() {
     window.addEventListener("beforeunload", onBeforeUnload);
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
   }, [dirty]);
+
+  useEffect(() => () => setUnsavedChanges(false), []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

@@ -10,7 +10,7 @@ export default function Loading() {
           <div key={i} className="h-56 animate-pulse rounded-2xl bg-brand-50" />
         ))}
       </div>
-      <span className="sr-only">Loading…</span>
+      <span className="sr-only">Loading… / جارٍ التحميل…</span>
     </div>
   );
 }

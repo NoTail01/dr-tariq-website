@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
 
 import { apiSend } from "@/components/admin/api";
+import { setUnsavedChanges } from "@/components/admin/unsaved-guard";
 import { useDashboardLocale } from "@/components/admin/useDashboardLocale";
 import {
   ARTICLE_CATEGORIES,
@@ -71,6 +72,7 @@ export default function ArticleEditor({ article }: Props) {
   // Warn before losing unsaved edits.
   const dirty = JSON.stringify(form) !== JSON.stringify(toFormState(article));
   useEffect(() => {
+    setUnsavedChanges(dirty);
     if (!dirty) return;
     function onBeforeUnload(event: BeforeUnloadEvent) {
       event.preventDefault();
@@ -78,6 +80,9 @@ export default function ArticleEditor({ article }: Props) {
     window.addEventListener("beforeunload", onBeforeUnload);
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
   }, [dirty]);
+
+  // Clear the shared flag when the editor unmounts after a confirmed navigation.
+  useEffect(() => () => setUnsavedChanges(false), []);
 
   const setLocalized = (field: keyof FormState, key: "ar" | "en", value: string) => {
     setForm((current) => ({
@@ -204,9 +209,14 @@ export default function ArticleEditor({ article }: Props) {
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-navy-900">
-          {article ? t.editor.editTitle : t.editor.newTitle}
-        </h1>
+        <div>
+          <h1 className="text-2xl font-bold text-navy-900">
+            {article ? t.editor.editTitle : t.editor.newTitle}
+          </h1>
+          <p className="mt-1 text-sm text-slate-500">
+            {article ? t.editor.editSubtitle : t.editor.newSubtitle}
+          </p>
+        </div>
         {dirty ? (
           <span className="rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-900">
             ⚠ {t.editor.unsaved}

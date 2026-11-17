@@ -103,6 +103,11 @@ export const dashboardDict = {
     editor: {
       newTitle: "مقال جديد",
       editTitle: "تعديل المقال",
+      newSubtitle: "املأ اللغتين. لا يظهر أي شيء للزوار قبل النشر.",
+      editSubtitle: "راجع المحتوى واحفظ التعديلات.",
+      notFound: "المقال غير موجود أو أنك غير مسجّل الدخول.",
+      backToArticles: "العودة إلى المقالات",
+      untitled: "(بدون عنوان)",
       titleAr: "العنوان (عربي)",
       titleEn: "العنوان (إنجليزي)",
       slugAr: "المعرّف (عربي)",
@@ -151,9 +156,18 @@ export const dashboardDict = {
       reviewIndependent:
         "المراجعة الطبية قرار منفصل عن النشر، ويُسجَّل وقت اتخاذه تلقائياً على الخادم.",
     },
+    preview: {
+      label: "معاينة",
+      demo: "تجريبي",
+      backToEditing: "العودة إلى التحرير",
+      untitled: "(بدون عنوان)",
+      seoTitle: "عنوان SEO",
+      seoDescription: "وصف SEO",
+      url: "الرابط",
+    },
     settings: {
       title: "إعدادات الموقع",
-      subtitle: "الحقول الفارية تبقى معطّلة على الموقع — لا يتم اختراع أي رقم أو عنوان.",
+      subtitle: "الحقول الفارغة تبقى معطّلة على الموقع — لا يتم اختراع أي رقم أو عنوان.",
       identity: "الهوية",
       siteNameAr: "اسم الموقع (عربي)",
       siteNameEn: "اسم الموقع (إنجليزي)",
@@ -312,6 +326,11 @@ export const dashboardDict = {
     editor: {
       newTitle: "New article",
       editTitle: "Edit article",
+      newSubtitle: "Fill in both languages. Nothing is visible to visitors until you publish.",
+      editSubtitle: "Review the content and save your changes.",
+      notFound: "Article not found or you are not signed in.",
+      backToArticles: "Back to articles",
+      untitled: "(untitled)",
       titleAr: "Title (AR)",
       titleEn: "Title (EN)",
       slugAr: "Slug (AR)",
@@ -359,6 +378,15 @@ export const dashboardDict = {
         "Publication and medical review are separate states: you can publish now, and the article will not be attributed to the doctor as reviewed until a review decision is recorded.",
       reviewIndependent:
         "The medical review is a decision separate from publication; its timestamp is recorded automatically by the server.",
+    },
+    preview: {
+      label: "Preview",
+      demo: "demo",
+      backToEditing: "Back to editing",
+      untitled: "(untitled)",
+      seoTitle: "SEO title",
+      seoDescription: "SEO description",
+      url: "URL",
     },
     settings: {
       title: "Site settings",

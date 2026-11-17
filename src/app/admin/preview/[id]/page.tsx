@@ -4,11 +4,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { apiGet } from "@/components/admin/api";
+import { useDashboardLocale } from "@/components/admin/useDashboardLocale";
 import Markdown from "@/components/Markdown";
 import type { Article } from "@/lib/article-types";
 
 /** Draft preview — never linked from the public site and marked noindex. */
 export default function PreviewArticlePage({ params }: { params: Promise<{ id: string }> }) {
+  const { t } = useDashboardLocale();
   const [article, setArticle] = useState<Article | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [id, setId] = useState<string | null>(null);
@@ -21,8 +23,8 @@ export default function PreviewArticlePage({ params }: { params: Promise<{ id: s
     if (!id) return;
     apiGet<{ article: Article }>(`/api/admin/articles/${id}`)
       .then((data) => setArticle(data.article))
-      .catch(() => setError("Article not found or you are not signed in."));
-  }, [id]);
+      .catch(() => setError(t.editor.notFound));
+  }, [id, t.editor.notFound]);
 
   if (error) {
     return <p className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</p>;
@@ -37,18 +39,18 @@ export default function PreviewArticlePage({ params }: { params: Promise<{ id: s
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-xs font-bold tracking-wide text-amber-700 uppercase">
-            Preview — {article.status}
-            {article.isDemo ? " · demo" : ""}
+            {t.preview.label} - {article.status}
+            {article.isDemo ? " - " + t.preview.demo : ""}
           </p>
           <h1 className="mt-1 text-2xl font-bold text-navy-900 break-words-safe">
-            {article.title.en || article.title.ar || "(untitled)"}
+            {article.title.en || article.title.ar || t.preview.untitled}
           </h1>
         </div>
         <Link
           href={`/admin/articles/${article.id}`}
           className="rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-100"
         >
-          Back to editing
+          {t.preview.backToEditing}
         </Link>
       </div>
 
@@ -85,13 +87,13 @@ export default function PreviewArticlePage({ params }: { params: Promise<{ id: s
 
           <div className="mt-6 rounded-xl bg-slate-50 p-4 text-xs text-slate-600">
             <p>
-              <strong>SEO title:</strong> {article.seo.title[locale] || "—"}
+              <strong>{t.preview.seoTitle}:</strong> {article.seo.title[locale] || "—"}
             </p>
             <p className="mt-1">
-              <strong>SEO description:</strong> {article.seo.description[locale] || "—"}
+              <strong>{t.preview.seoDescription}:</strong> {article.seo.description[locale] || "—"}
             </p>
             <p className="mt-1" dir="ltr">
-              <strong>URL:</strong> /{locale}/blog/{article.slug[locale] || "…"}
+              <strong>{t.preview.url}:</strong> /{locale}/blog/{article.slug[locale] || "…"}
             </p>
           </div>
         </section>
