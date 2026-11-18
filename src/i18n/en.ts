@@ -37,6 +37,7 @@ export const en = {
     about: "About the Doctor",
     blog: "Blog",
     book: "Appointments",
+    mainLabel: "Main navigation",
     skipToContent: "Skip to main content",
     openMenu: "Open menu",
     closeMenu: "Close menu",
@@ -45,6 +46,7 @@ export const en = {
   },
   common: {
     readMore: "Read more",
+    allArticles: "All articles",
     learnMore: "Learn more",
     bookingCta: "Contact the Clinic for an Appointment",
     bookingCtaShort: "Contact the Clinic",
@@ -196,6 +198,7 @@ export const en = {
     emailAction: "Send an email",
     requestTitle: "Appointment request",
     requestText: "Send a request with your preferred time. We only need minimal contact details.",
+    requiredField: "required",
     disabledNotice: "This channel is inactive until verified details are provided.",
     formNotice:
       "Local demo: this form does not send anything anywhere. No data leaves your computer. The only working booking channel today is a phone call to the clinic.",
@@ -210,6 +213,12 @@ export const en = {
       contactWhatsapp: "WhatsApp",
       contactValue: "Contact detail",
       contactValuePlaceholder: "Email or phone number",
+      contactValuePlaceholderEmail: "name@example.com",
+      contactValuePlaceholderPhone: "e.g. 05xxxxxxxx",
+      contactValuePlaceholderWhatsapp: "e.g. +9627xxxxxxxxx",
+      contactValueHintEmail: "Enter a valid email address.",
+      contactValueHintPhone: "Use digits, spaces and the symbols + ( ) - only.",
+      contactValueHintWhatsapp: "Enter the WhatsApp number in international format.",
       preferredTime: "Preferred time",
       preferredTimePlaceholder: "e.g. weekday morning",
       message: "Message (optional)",
@@ -227,6 +236,7 @@ export const en = {
       messageTooLong: "The message is too long (max 2000 characters).",
       consentRequired: "Please confirm you understand this is a demo submission.",
       invalidPayload: "The submitted data is not valid.",
+      summary: "Please review the highlighted fields.",
     },
     consent: "I understand that this local demo does not actually send my request.",
     result: {
@@ -237,6 +247,7 @@ export const en = {
       successText: "Your appointment request was submitted successfully. The clinic will contact you.",
       errorTitle: "The request could not be sent",
       errorText: "Please try again later or use another contact option.",
+      retry: "Try sending again",
     },
   },
   footer: {

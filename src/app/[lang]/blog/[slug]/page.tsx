@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { categoryLabel, formatDate, readingTimeText } from "@/components/ArticleCard";
 import JsonLd from "@/components/JsonLd";
+import { ArrowRightIcon } from "@/components/Icons";
 import { DevBadge } from "@/components/PlaceholderImage";
 import { Section } from "@/components/Layout";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -150,7 +151,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[s
             href={localizePath(locale, "/blog")}
             className="inline-flex items-center gap-2 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"
           >
-            <span aria-hidden="true" className="rtl:rotate-180">←</span>
+            <ArrowRightIcon className="h-4 w-4 rotate-180 rtl:rotate-0" />
             {dict.common.backToBlog}
           </Link>
 

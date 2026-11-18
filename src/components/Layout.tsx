@@ -19,7 +19,7 @@ export function SectionHeading({
   return (
     <div className={align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
       {kicker ? (
-        <p className="text-xs font-bold tracking-widest text-brand-600 uppercase">{kicker}</p>
+        <p className="text-sm font-bold tracking-wide text-brand-700 uppercase">{kicker}</p>
       ) : null}
       <Tag
         className={`mt-2 font-bold text-navy-900 break-words-safe ${
@@ -28,7 +28,7 @@ export function SectionHeading({
       >
         {title}
       </Tag>
-      {intro ? <p className="mt-4 leading-relaxed text-ink-500">{intro}</p> : null}
+      {intro ? <p className="mt-4 leading-relaxed text-ink-700 break-words-safe">{intro}</p> : null}
     </div>
   );
 }
@@ -79,11 +79,11 @@ export function EmptyState({
         <path d="M12 8v4l3 2" strokeLinecap="round" />
       </svg>
       <h3 className="mt-4 text-lg font-bold text-navy-900 break-words-safe">{title}</h3>
-      <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-ink-500 break-words-safe">{text}</p>
+      <p className="mx-auto mt-2 max-w-md text-base leading-relaxed text-ink-700 break-words-safe">{text}</p>
       {actionLabel && actionHref ? (
         <Link
           href={actionHref}
-          className="mt-5 inline-flex rounded-full bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
+          className="mt-5 inline-flex min-h-11 items-center rounded-full bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
         >
           {actionLabel}
         </Link>
@@ -108,10 +108,10 @@ export function CtaBand({
     <Section tone="navy">
       <Reveal className="mx-auto max-w-3xl text-center">
         <h2 className="text-2xl font-bold text-white break-words-safe sm:text-3xl">{title}</h2>
-        <p className="mt-4 leading-relaxed text-brand-100/85">{text}</p>
+        <p className="mt-4 leading-relaxed text-brand-100 break-words-safe">{text}</p>
         <Link
           href={actionHref}
-          className="mt-7 inline-flex rounded-full bg-white px-7 py-3 text-sm font-bold text-navy-900 transition-transform hover:-translate-y-0.5 hover:bg-brand-50"
+          className="mt-7 inline-flex min-h-12 items-center rounded-full bg-white px-7 py-3 text-sm font-bold text-navy-900 transition-transform hover:-translate-y-0.5 hover:bg-brand-50"
         >
           {actionLabel}
         </Link>

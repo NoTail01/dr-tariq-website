@@ -35,6 +35,23 @@ export type BookingValidation =
   | { ok: true; value: BookingInput }
   | { ok: false; errors: BookingErrors };
 
+/** Visual order of the form fields, used to focus the first invalid control. */
+export const BOOKING_FIELD_ORDER: readonly (keyof BookingInput)[] = [
+  "name",
+  "contactMethod",
+  "contactValue",
+  "preferredTime",
+  "message",
+  "consent",
+];
+
+export function firstBookingErrorField(errors: BookingErrors): keyof BookingInput | null {
+  for (const field of BOOKING_FIELD_ORDER) {
+    if (errors[field]) return field;
+  }
+  return null;
+}
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_PATTERN = /^\+?[0-9()[\]\s-]{6,24}$/;
 

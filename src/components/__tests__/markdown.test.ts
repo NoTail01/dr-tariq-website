@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import Markdown, { extractHeadings } from "@/components/Markdown";
+import Markdown, { extractHeadings, safeHref } from "@/components/Markdown";
 
 const URGENT_EN =
   "Severe pain, blood in the urine, or being unable to pass urine all call for prompt medical assessment.";
@@ -76,5 +76,22 @@ describe("article body structure used by the renderer", () => {
     expect(boldOnly.test(NOTE.trim())).toBe(true);
     expect(boldOnly.test(`**bold lead** ${ROUTINE}`)).toBe(false);
     expect(boldOnly.test(ROUTINE)).toBe(false);
+  });
+});
+
+
+describe("safeHref", () => {
+  it("accepts internal, HTTPS and tel targets", () => {
+    expect(safeHref("/en/blog/x")).toBe("/en/blog/x");
+    expect(safeHref("/")).toBe("/");
+    expect(safeHref("https://example.com/a")).toBe("https://example.com/a");
+    expect(safeHref("tel:+962790000000")).toBe("tel:+962790000000");
+  });
+
+  it("rejects protocol-relative and executable targets", () => {
+    expect(safeHref("//evil.com/x")).toBeNull();
+    expect(safeHref("/\\evil.com/x")).toBeNull();
+    expect(safeHref("javascript:alert(1)")).toBeNull();
+    expect(safeHref("data:text/html,x")).toBeNull();
   });
 });

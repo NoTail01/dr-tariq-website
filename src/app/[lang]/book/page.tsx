@@ -138,7 +138,7 @@ export default async function BookPage({ params }: PageProps<"/[lang]/book">) {
       {/* Compact booking actions on phones only — the page reserves space
           above so the bar never covers content or other controls. */}
       <MobileCallBar
-        callHref={phoneLink(settings.contact.phone, settings.contact.phoneIntl) ?? "#"}
+        callHref={phoneLink(settings.contact.phone, settings.contact.phoneIntl) ?? null}
         callLabel={dict.book.callAction}
         whatsappHref={
           settings.contact.whatsappEnabled

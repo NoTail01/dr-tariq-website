@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
+
+import { WarningIcon } from "@/components/Icons";
 
 import { apiGet, apiSend } from "@/components/admin/api";
 import { setUnsavedChanges } from "@/components/admin/unsaved-guard";
@@ -10,7 +12,7 @@ import type { Settings } from "@/lib/settings";
 type SettingsResponse = { ok: boolean; settings: Settings };
 
 const inputClass =
-  "mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm focus:border-brand-500 focus:outline-none";
+  "mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm focus:border-brand-600";
 
 function TextField({
   label,
@@ -27,7 +29,8 @@ function TextField({
   hint?: string;
   type?: string;
 }) {
-  const id = label.replace(/\s+/g, "-").toLowerCase();
+  const id = useId();
+  const hintId = `${id}-hint`;
   return (
     <div>
       <label htmlFor={id} className="text-sm font-semibold text-navy-900">
@@ -40,8 +43,13 @@ function TextField({
         className={inputClass}
         value={value}
         onChange={(event) => onChange(event.target.value)}
+        aria-describedby={hint ? hintId : undefined}
       />
-      {hint ? <p className="mt-1 text-xs text-slate-500">{hint}</p> : null}
+      {hint ? (
+        <p id={hintId} className="mt-1 text-xs text-slate-500">
+          {hint}
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -128,6 +136,7 @@ export default function SettingsPage() {
   const update = (patch: Partial<Settings>) => setSettings((current) => ({ ...current!, ...patch }));
 
   const qualifications = settings.doctor.qualifications;
+  const brandColorValid = /^#[0-9a-f]{6}$/i.test(settings.branding.brandColor);
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-8">
@@ -143,7 +152,7 @@ export default function SettingsPage() {
           role="status"
           className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm font-semibold text-amber-900"
         >
-          ⚠ {t.settings.unsaved} — {t.settings.unsavedHint}
+          <WarningIcon className="h-4 w-4" /> {t.settings.unsaved} — {t.settings.unsavedHint}
         </p>
       ) : null}
 
@@ -343,7 +352,6 @@ export default function SettingsPage() {
             type="tel"
             value={settings.contact.phone ?? ""}
             onChange={(value) => update({ contact: { ...settings.contact, phone: value || null } })}
-            hint={t.settings.mobileIntl}
           />
           <TextField
             label={t.settings.mobileIntl}
@@ -557,7 +565,21 @@ export default function SettingsPage() {
             onChange={(value) =>
               update({ branding: { ...settings.branding, brandColor: value } })
             }
+            hint={t.settings.brandColorHint}
           />
+          <p
+            role={brandColorValid ? undefined : "alert"}
+            className={`mt-2 inline-flex items-center gap-2 text-xs ${
+              brandColorValid ? "text-emerald-700" : "text-red-700"
+            }`}
+          >
+            <span
+              aria-hidden="true"
+              className="h-5 w-5 rounded border border-slate-300"
+              style={{ backgroundColor: brandColorValid ? settings.branding.brandColor : "transparent" }}
+            />
+            {brandColorValid ? t.settings.brandColorValid : t.settings.brandColorInvalid}
+          </p>
           <TextField
             label={t.settings.logoLight}
             dir="ltr"

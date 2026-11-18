@@ -33,6 +33,22 @@ type Labels = {
 
 const iconClass = "h-6 w-6 text-brand-600";
 
+function LockIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      className="h-4 w-4 shrink-0"
+    >
+      <rect x="4.75" y="10.75" width="14.5" height="10.5" rx="2.5" />
+      <path d="M8 10.75V7.5a4 4 0 0 1 8 0v3.25" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function ChannelIcon({ kind }: { kind: "phone" | "whatsapp" | "mail" }) {
   const paths: Record<string, React.ReactNode> = {
     phone: (
@@ -132,19 +148,19 @@ function Card({
           booking. Other channels stay silent — the page states the shared
           "does not confirm an appointment" warning once at the top. */}
       {kind === "whatsapp" && active && note ? (
-        <p className="mt-3 text-xs leading-relaxed text-ink-500 break-words-safe">{note}</p>
+        <p className="mt-3 text-sm leading-relaxed text-ink-500 break-words-safe">{note}</p>
       ) : null}
 
       {active && actionLabel && href ? (
         <a
           href={href}
-          className="mt-5 inline-flex w-fit items-center gap-2 rounded-full bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
+          className="mt-5 inline-flex min-h-11 w-fit items-center gap-2 rounded-full bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
         >
           {actionLabel}
         </a>
       ) : (
-        <p className="mt-5 inline-flex w-fit items-center gap-2 rounded-full border border-amber-300 bg-amber-50 px-4 py-2 text-xs font-semibold text-amber-800">
-          <span aria-hidden="true">🔒</span>
+        <p className="mt-5 inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800">
+          <LockIcon />
           {pendingLabel ?? disabledLabel}
         </p>
       )}

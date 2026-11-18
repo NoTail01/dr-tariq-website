@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { validateBooking, type BookingInput } from "@/lib/booking";
+import { firstBookingErrorField, validateBooking, type BookingInput } from "@/lib/booking";
 
 const valid: BookingInput = {
   name: "Ahmad Shalabieh",
@@ -90,5 +90,32 @@ describe("validateBooking", () => {
       ok: false,
       errors: { name: "nameRequired", contactValue: "contactValueInvalid", consent: "consentRequired" },
     });
+  });
+});
+
+describe("firstBookingErrorField", () => {
+  it("returns the first invalid field in visual form order", () => {
+    expect(
+      firstBookingErrorField({
+        consent: "consentRequired",
+        contactValue: "contactValueInvalid",
+        name: "nameRequired",
+      }),
+    ).toBe("name");
+  });
+
+  it("uses the field order when several errors are present", () => {
+    expect(
+      firstBookingErrorField({
+        consent: "consentRequired",
+        message: "messageTooLong",
+        contactMethod: "contactRequired",
+        preferredTime: "preferredTimeTooLong",
+      }),
+    ).toBe("contactMethod");
+  });
+
+  it("returns null for a clean form", () => {
+    expect(firstBookingErrorField({})).toBeNull();
   });
 });

@@ -7,7 +7,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { useDashboardLocale } from "@/components/admin/useDashboardLocale";
 
 export default function AdminLoginPage() {
-  const { t } = useDashboardLocale();
+  const { locale, t } = useDashboardLocale();
   const router = useRouter();
   const [token, setToken] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -83,9 +83,10 @@ export default function AdminLoginPage() {
                 id="admin-token"
                 type="password"
                 autoComplete="current-password"
+                required
                 value={token}
                 onChange={(event) => setToken(event.target.value)}
-                className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-brand-500 focus:outline-none"
+                className="mt-2 min-h-12 w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-brand-600"
                 placeholder={t.login.tokenPlaceholder}
               />
             </div>
@@ -109,7 +110,10 @@ export default function AdminLoginPage() {
         )}
 
         <div className="mt-6 border-t border-slate-100 pt-4">
-          <Link href="/ar" className="text-sm font-semibold text-brand-700 hover:underline">
+          <Link
+            href={locale === "ar" ? "/ar" : "/en"}
+            className="text-sm font-semibold text-brand-700 hover:underline"
+          >
             {t.login.backToSite}
           </Link>
         </div>

@@ -20,6 +20,8 @@ type Props = {
   phones: { label: string; href: string }[];
   /** Localized WhatsApp pending note (or null when unknown). */
   whatsappNote: string | null;
+  /** Shown only when no address or phone line is published. */
+  noContactNote: string;
   /** Localized heading for the optional social-link row. */
   socialTitle: string;
   /** Verified public social profiles (only non-empty URLs are passed). */
@@ -43,6 +45,7 @@ export default function SiteFooter({
   address,
   phones,
   whatsappNote,
+  noContactNote,
   socialTitle,
   social,
   disclaimerTitle,
@@ -73,7 +76,7 @@ export default function SiteFooter({
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="inline-flex min-h-9 items-center text-sm text-brand-100/85 transition-colors hover:text-white"
+                  className="inline-flex min-h-11 items-center text-sm text-brand-100/85 transition-colors hover:text-white"
                 >
                   {link.label}
                 </Link>
@@ -84,16 +87,19 @@ export default function SiteFooter({
 
         <div>
           <p className="text-sm font-bold tracking-wide text-white uppercase">{contactTitle}</p>
-          <p className="mt-4 text-sm text-brand-100/80 break-words-safe">
-            {address ?? developedNote}
-          </p>
+          {address ? (
+            <p className="mt-4 text-sm text-brand-100/80 break-words-safe">{address}</p>
+          ) : null}
+          {!address && phones.length === 0 && !whatsappNote ? (
+            <p className="mt-4 text-sm text-brand-100/80 break-words-safe">{noContactNote}</p>
+          ) : null}
           {phones.length > 0 ? (
             <ul className="mt-3 space-y-1">
               {phones.map((phone) => (
                 <li key={phone.href}>
                   <a
                     href={phone.href}
-                    className="inline-flex min-h-9 items-center text-sm font-semibold text-white transition-colors hover:text-brand-300"
+                    className="inline-flex min-h-11 items-center text-sm font-semibold text-white transition-colors hover:text-brand-300"
                     dir="ltr"
                   >
                     {phone.label}

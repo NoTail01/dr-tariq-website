@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { ArrowRightIcon } from "@/components/Icons";
+
 import { localizePath, type Locale } from "@/i18n/config";
 import type { Article, ArticleCategory } from "@/lib/article-types";
 import { DevBadge } from "@/components/PlaceholderImage";
@@ -78,7 +80,7 @@ export default function ArticleCard({ article, locale, labels }: Props) {
           {article.title[otherLocale] || labels.notInLanguage}
         </h3>
 
-        <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-500 break-words-safe">
+        <p className="mt-3 flex-1 text-base leading-relaxed text-ink-700 break-words-safe">
           {labels.notInLanguage}
         </p>
 
@@ -86,10 +88,11 @@ export default function ArticleCard({ article, locale, labels }: Props) {
           <Link
             href={localizePath(otherLocale, `/blog/${otherSlug}`)}
             hrefLang={otherLocale}
-            className="mt-4 inline-flex min-h-9 items-center gap-1.5 rounded-lg text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"
+            className="mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-lg text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"
           >
             {otherLocale === "ar" ? labels.readInArabic : labels.readInEnglish}
-            <span aria-hidden="true" className="rtl:rotate-180">→</span>
+            <span className="sr-only">: {article.title[otherLocale]}</span>
+            <ArrowRightIcon className="h-4 w-4 rtl:rotate-180" />
           </Link>
         ) : null}
       </article>
@@ -118,26 +121,27 @@ export default function ArticleCard({ article, locale, labels }: Props) {
         </Link>
       </h3>
 
-      <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-500 break-words-safe">
+      <p className="mt-3 flex-1 text-base leading-relaxed text-ink-700 break-words-safe">
         {article.excerpt[locale]}
       </p>
 
-      <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-brand-100 pt-4 text-xs text-ink-500">
+      <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-brand-100 pt-4 text-sm text-ink-700">
         {article.publishedAt ? (
           <time dateTime={article.publishedAt}>{formatDate(article.publishedAt, locale)}</time>
         ) : null}
         <span>{readingTimeText(article, locale)}</span>
-        <span className="text-ink-300">
+        <span className="text-ink-500">
           {labels.byAuthor} {article.author[locale]}
         </span>
       </div>
 
       <Link
         href={href}
-        className="mt-4 inline-flex min-h-9 items-center gap-1.5 rounded-lg text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"
+        className="mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-lg text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"
       >
         {labels.readMore}
-        <span aria-hidden="true" className="rtl:rotate-180">→</span>
+        <span className="sr-only">: {article.title[locale]}</span>
+        <ArrowRightIcon className="h-4 w-4 rtl:rotate-180" />
       </Link>
     </article>
   );

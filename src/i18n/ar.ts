@@ -38,6 +38,7 @@ export const ar: Dictionary = {
     about: "عن الدكتور",
     blog: "المدونة",
     book: "المواعيد",
+    mainLabel: "التنقل الرئيسي",
     skipToContent: "انتقل إلى المحتوى الرئيسي",
     openMenu: "فتح القائمة",
     closeMenu: "إغلاق القائمة",
@@ -46,6 +47,7 @@ export const ar: Dictionary = {
   },
   common: {
     readMore: "اقرأ المزيد",
+    allArticles: "كل المقالات",
     learnMore: "اعرف المزيد",
     bookingCta: "تواصل مع العيادة لتحديد موعد",
     bookingCtaShort: "تواصل لتحديد موعد",
@@ -194,6 +196,7 @@ export const ar: Dictionary = {
     emailAction: "أرسل بريداً",
     requestTitle: "طلب موعد",
     requestText: "أرسل طلبك مع الوقت المفضل. نحتاج فقط بيانات تواصل أساسية.",
+    requiredField: "مطلوب",
     disabledNotice: "هذه القناة غير مفعّلة حتى توفّر بيانات موثّقة.",
     formNotice:
       "نموذج محلي: هذا النموذج لا يرسل أي شيء إلى أي جهة. لا تغادر بياناتك جهازك. القناة الفعّالة الوحيدة للحجز اليوم هي الاتصال الهاتفي بالعيادة.",
@@ -207,6 +210,12 @@ export const ar: Dictionary = {
       contactWhatsapp: "واتساب",
       contactValue: "بيانات التواصل",
       contactValuePlaceholder: "البريد الإلكتروني أو رقم الهاتف",
+      contactValuePlaceholderEmail: "name@example.com",
+      contactValuePlaceholderPhone: "مثال: 05xxxxxxxx",
+      contactValuePlaceholderWhatsapp: "مثال: +9627xxxxxxxxx",
+      contactValueHintEmail: "أدخل بريداً إلكترونياً صحيحاً.",
+      contactValueHintPhone: "استخدم أرقاماً ومسافات ورموز + ( ) - فقط.",
+      contactValueHintWhatsapp: "أدخل رقم واتساب بالصيغة الدولية.",
       preferredTime: "الوقت المفضل",
       preferredTimePlaceholder: "مثال: صباح أيام الأسبوع",
       message: "رسالة (اختياري)",
@@ -224,6 +233,7 @@ export const ar: Dictionary = {
       messageTooLong: "الرسالة طويلة جداً (الحد الأقصى 2000 حرف).",
       consentRequired: "يرجى تأكيد أنك تعلم أن هذا إرسال تجريبي.",
       invalidPayload: "البيانات المرسلة غير صالحة.",
+      summary: "يرجى مراجعة الحقول الموضحة أدناه.",
     },
     consent: "أفهم أن هذا النموذج التجريبي المحلي لا يرسل طلبي فعلياً.",
     result: {
@@ -234,6 +244,7 @@ export const ar: Dictionary = {
       successText: "تم إرسال طلب موعدك بنجاح، وسيتواصل معك فريق العيادة.",
       errorTitle: "تعذّر إرسال الطلب",
       errorText: "يرجى المحاولة لاحقاً أو استخدام وسيلة تواصل أخرى.",
+      retry: "إعادة المحاولة",
     },
   },
   footer: {

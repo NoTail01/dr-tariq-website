@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import ArticleCard from "@/components/ArticleCard";
+import { ArrowRightIcon, CheckIcon, PlusIcon } from "@/components/Icons";
 import JsonLd from "@/components/JsonLd";
 import ClinicMap from "@/components/ClinicMap";
 import DoctorPortrait from "@/components/DoctorPortrait";
@@ -163,7 +164,7 @@ export default async function HomePage({
               className="mt-6 inline-flex items-center gap-2 rounded-lg py-1.5 text-sm font-bold text-brand-700 transition-colors hover:text-brand-600"
             >
               {dict.home.aboutLink}
-              <span aria-hidden="true" className="rtl:rotate-180">→</span>
+              <ArrowRightIcon className="h-4 w-4 rtl:rotate-180" />
             </Link>
           </Reveal>
 
@@ -179,7 +180,7 @@ export default async function HomePage({
                     key={item.en}
                     className="flex items-start gap-3 rounded-xl bg-white p-3 text-sm text-ink-700"
                   >
-                    <span aria-hidden="true" className="text-brand-600">✓</span>
+                    <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
                     <span className="break-words-safe">{item[locale]}</span>
                   </li>
                 ))}
@@ -207,7 +208,7 @@ export default async function HomePage({
                   aria-hidden="true"
                   className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-100 text-brand-700"
                 >
-                  ✚
+                  <PlusIcon className="h-5 w-5" />
                 </span>
                 <h3 className="mt-4 text-lg font-bold text-navy-900 break-words-safe">
                   {service.title}
@@ -253,10 +254,11 @@ export default async function HomePage({
         <div className="mt-8">
           <Link
             href={localizePath(locale, "/blog")}
-            className="inline-flex items-center gap-2 rounded-lg py-1.5 text-sm font-bold text-brand-700 transition-colors hover:text-brand-600"
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg py-1.5 text-sm font-bold text-brand-700 transition-colors hover:text-brand-600"
           >
             {dict.common.readMore}
-            <span aria-hidden="true" className="rtl:rotate-180">→</span>
+            <span className="sr-only">: {dict.common.allArticles}</span>
+            <ArrowRightIcon className="h-4 w-4 rtl:rotate-180" />
           </Link>
         </div>
       </Section>
@@ -328,7 +330,7 @@ export default async function HomePage({
                 }
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-6 inline-flex min-h-12 items-center gap-2.5 rounded-full border-2 border-[#25D366] bg-white px-6 text-sm font-bold text-[#128C7E] transition-colors hover:bg-[#25D366]/10"
+                className="mt-6 inline-flex min-h-12 items-center gap-2.5 rounded-full border-2 border-[#25D366] bg-white px-6 text-sm font-bold text-[#0F7B6E] transition-colors hover:bg-[#25D366]/10"
               >
                 <svg
                   aria-hidden="true"

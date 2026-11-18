@@ -25,8 +25,8 @@ export default function MobileCallBar({
   whatsappLabel,
   prompt,
 }: {
-  /** tel: link to the clinic. */
-  callHref: string;
+  /** tel: link to the clinic, or null when no phone is published. */
+  callHref: string | null;
   /** Localized call button label. */
   callLabel: string;
   /** wa.me link with the prefilled message, or null when WhatsApp is off. */
@@ -52,6 +52,9 @@ export default function MobileCallBar({
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
+
+  // Never render a bar of dead links when no contact channel is configured.
+  if (!callHref && !whatsappHref) return null;
 
   return (
     <>
@@ -86,8 +89,9 @@ export default function MobileCallBar({
                 <span className="truncate">{whatsappLabel}</span>
               </a>
             ) : null}
-            <a
-              href={callHref}
+            {callHref ? (
+              <a
+                href={callHref}
               className="inline-flex h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-brand-600 px-3 text-sm font-bold text-white transition-colors hover:bg-brand-700"
             >
               <svg
@@ -105,7 +109,8 @@ export default function MobileCallBar({
                 />
               </svg>
               <span className="truncate">{callLabel}</span>
-            </a>
+              </a>
+            ) : null}
           </div>
         </div>
       </div>

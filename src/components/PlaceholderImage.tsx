@@ -1,3 +1,5 @@
+import { WarningIcon } from "@/components/Icons";
+
 /**
  * `DevBadge` marks demo/development content (e.g. demo articles).
  *
@@ -8,7 +10,7 @@
 export function DevBadge({ label }: { label: string }) {
   return (
     <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300 bg-amber-50 px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-amber-800 uppercase">
-      <span aria-hidden="true">⚠</span>
+      <WarningIcon className="h-3.5 w-3.5" />
       {label}
     </span>
   );

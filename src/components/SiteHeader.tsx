@@ -12,6 +12,7 @@ type NavLabels = {
   about: string;
   blog: string;
   book: string;
+  mainLabel: string;
   skipToContent: string;
   openMenu: string;
   closeMenu: string;
@@ -152,7 +153,7 @@ function SiteHeaderInner({
           />
         </Link>
 
-        <nav aria-label={labels.skipToContent} className="hidden lg:block">
+        <nav aria-label={labels.mainLabel} className="hidden lg:block">
           <ul className="flex items-center gap-1">
             {navItems.map((item) => {
               const active = isActive(item.path);
@@ -161,7 +162,7 @@ function SiteHeaderInner({
                   <Link
                     href={item.href}
                     aria-current={active ? "page" : undefined}
-                    className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                    className={`inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                       active
                         ? "bg-brand-100 text-brand-700"
                         : "text-ink-700 hover:bg-brand-50 hover:text-brand-700"
@@ -181,15 +182,15 @@ function SiteHeaderInner({
           <Link
             href={switchLocalePath(pathname, targetLocale)}
             hrefLang={targetLocale}
-            className="inline-flex h-10 items-center rounded-full border border-brand-300 px-3 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-50"
-            aria-label={switchLanguageLabel}
+            className="inline-flex h-11 items-center rounded-full border border-brand-300 px-3 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-50"
+            aria-label={`${switchLanguageLabel}: ${switchLanguage}`}
           >
             {switchLanguage}
           </Link>
 
           <Link
             href={localizePath(locale, "/book")}
-            className="hidden h-10 items-center rounded-full bg-brand-600 px-4 text-sm font-semibold text-white transition-colors hover:bg-brand-700 sm:inline-flex"
+            className="hidden h-11 items-center rounded-full bg-brand-600 px-4 text-sm font-semibold text-white transition-colors hover:bg-brand-700 sm:inline-flex"
           >
             {bookCtaShort ?? bookCta}
           </Link>
@@ -197,7 +198,7 @@ function SiteHeaderInner({
           <button
             ref={triggerRef}
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-brand-100 text-navy-900 transition-colors hover:bg-brand-50 lg:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-brand-100 text-navy-900 transition-colors hover:bg-brand-50 lg:hidden"
             aria-expanded={open}
             aria-controls={menuId}
             onClick={() => (open ? close() : setOpen(true))}
@@ -217,12 +218,17 @@ function SiteHeaderInner({
       <div
         ref={panelRef}
         id={menuId}
-        hidden={!open}
+        aria-hidden={!open}
         inert={!open}
-        className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-brand-100 bg-white lg:hidden"
+        className={`grid border-brand-100 bg-white transition-all duration-200 ease-out lg:hidden ${
+          open
+            ? "grid-rows-[1fr] border-t opacity-100"
+            : "pointer-events-none grid-rows-[0fr] border-t-0 opacity-0"
+        }`}
       >
-        <nav aria-label={labels.skipToContent} className="mx-auto max-w-6xl px-4 py-3 sm:px-6">
-          <ul className="flex flex-col gap-1">
+        <div className="min-h-0 max-h-[calc(100dvh-4rem)] overflow-y-auto">
+          <nav aria-label={labels.mainLabel} className="mx-auto max-w-6xl px-4 py-3 sm:px-6">
+            <ul className="flex flex-col gap-1">
             {navItems.map((item) => {
               const active = isActive(item.path);
               return (
@@ -249,8 +255,9 @@ function SiteHeaderInner({
                 {bookCtaShort ?? bookCta}
               </Link>
             </li>
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        </div>
       </div>
     </header>
   );

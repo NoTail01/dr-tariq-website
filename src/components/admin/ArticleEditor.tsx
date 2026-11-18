@@ -1,7 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+
+import Markdown from "@/components/Markdown";
+import { CloseIcon, WarningIcon } from "@/components/Icons";
 
 import { apiSend } from "@/components/admin/api";
 import { setUnsavedChanges } from "@/components/admin/unsaved-guard";
@@ -57,20 +60,33 @@ function toFormState(article?: Article): FormState {
 }
 
 const inputClass =
-  "mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm focus:border-brand-500 focus:outline-none";
+  "mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm focus:border-brand-600";
+
+function cloneFormState(state: FormState): FormState {
+  return JSON.parse(JSON.stringify(state)) as FormState;
+}
+
+function safePreviewImage(url: string): string | null {
+  if (url.startsWith("/uploads/") || /^https:\/\//.test(url)) return url;
+  return null;
+}
 
 export default function ArticleEditor({ article }: Props) {
   const router = useRouter();
   const { t } = useDashboardLocale();
   const [form, setForm] = useState<FormState>(() => toFormState(article));
+  const [baseline, setBaseline] = useState<FormState>(() => toFormState(article));
   const [locale, setLocale] = useState<"ar" | "en">("ar");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState<{ kind: "success" | "error"; text: string } | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const previewRef = useRef<HTMLDivElement | null>(null);
+  const previewCloseRef = useRef<HTMLButtonElement | null>(null);
 
   // Warn before losing unsaved edits.
-  const dirty = JSON.stringify(form) !== JSON.stringify(toFormState(article));
+  const dirty = JSON.stringify(form) !== JSON.stringify(baseline);
   useEffect(() => {
     setUnsavedChanges(dirty);
     if (!dirty) return;
@@ -83,6 +99,47 @@ export default function ArticleEditor({ article }: Props) {
 
   // Clear the shared flag when the editor unmounts after a confirmed navigation.
   useEffect(() => () => setUnsavedChanges(false), []);
+
+  // Local preview is a focus-trapped modal over the current editor state.
+  // It never writes to the store, calls an API, or exposes a public URL.
+  useEffect(() => {
+    if (!previewOpen) return;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    previewCloseRef.current?.focus();
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setPreviewOpen(false);
+        return;
+      }
+      if (event.key !== "Tab" || !previewRef.current) return;
+      const nodes = Array.from(
+        previewRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((node) => !node.hasAttribute("disabled"));
+      if (nodes.length === 0) return;
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previousFocus?.focus();
+    };
+  }, [previewOpen]);
 
   const setLocalized = (field: keyof FormState, key: "ar" | "en", value: string) => {
     setForm((current) => ({
@@ -161,6 +218,7 @@ export default function ArticleEditor({ article }: Props) {
     try {
       if (article) {
         await apiSend("PATCH", `/api/admin/articles/${article.id}`, payload);
+        setBaseline(cloneFormState(form));
         setNotice({
           kind: "success",
           text: form.status === "published" ? t.editor.published : t.editor.saved,
@@ -172,6 +230,7 @@ export default function ArticleEditor({ article }: Props) {
           "/api/admin/articles",
           payload,
         )) as { article: Article };
+        setBaseline(toFormState(created.article));
         setNotice({ kind: "success", text: t.editor.saved });
         router.replace(`/admin/articles/${created.article.id}`);
         router.refresh();
@@ -181,19 +240,37 @@ export default function ArticleEditor({ article }: Props) {
       if (apiError.errors) setErrors(apiError.errors);
       setNotice({
         kind: "error",
-        text: apiError.status === 401 ? t.editor.unsaved : t.editor.saveFailed,
+        text: apiError.status === 401 ? t.editor.sessionExpired : t.editor.saveFailed,
       });
     } finally {
       setSaving(false);
     }
   }
 
+  const errorId = (key: string) => `field-error-${key.replace(/[^a-zA-Z0-9]/g, "-")}`;
+
+  const fieldA11y = (key: string) => {
+    const invalid = Boolean(errors[key]);
+    return {
+      "aria-invalid": invalid,
+      "aria-describedby": invalid ? errorId(key) : undefined,
+    };
+  };
+
   const err = (key: string) =>
     errors[key] ? (
-      <p className="mt-1 text-xs font-medium text-red-600" role="alert">
+      <p id={errorId(key)} className="mt-1 text-xs font-medium text-red-700" role="alert">
         {errors[key]}
       </p>
     ) : null;
+
+  function onTabKeyDown(event: React.KeyboardEvent<HTMLButtonElement>, key: "ar" | "en") {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    event.preventDefault();
+    const next = key === "ar" ? "en" : "ar";
+    setLocale(next);
+    window.requestAnimationFrame(() => document.getElementById(`content-tab-${next}`)?.focus());
+  }
 
   const tabs: { key: "ar" | "en"; label: string; dir: "rtl" | "ltr" }[] = [
     { key: "ar", label: t.common.arabic, dir: "rtl" },
@@ -219,21 +296,29 @@ export default function ArticleEditor({ article }: Props) {
         </div>
         {dirty ? (
           <span className="rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-900">
-            ⚠ {t.editor.unsaved}
+            <WarningIcon className="h-4 w-4" /> {t.editor.unsaved}
           </span>
         ) : null}
       </div>
 
       {/* Language tabs */}
-      <div className="flex gap-2" role="tablist" aria-label="Content language">
+      <div
+        className="flex gap-2"
+        role="tablist"
+        aria-label={t.editor.contentLanguage}
+      >
         {tabs.map((tab) => (
           <button
             key={tab.key}
+            id={`content-tab-${tab.key}`}
             type="button"
             role="tab"
             aria-selected={locale === tab.key}
+            aria-controls={`content-panel-${tab.key}`}
+            tabIndex={locale === tab.key ? 0 : -1}
             onClick={() => setLocale(tab.key)}
-            className={`rounded-full px-4 py-2 text-sm font-semibold ${
+            onKeyDown={(event) => onTabKeyDown(event, tab.key)}
+            className={`inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm font-semibold ${
               locale === tab.key
                 ? "bg-navy-900 text-white"
                 : "border border-slate-300 text-slate-600 hover:bg-slate-100"
@@ -247,7 +332,13 @@ export default function ArticleEditor({ article }: Props) {
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:items-start">
         {/* ---------------- Content ---------------- */}
         <div className="space-y-5 rounded-2xl border border-slate-200 bg-white p-6">
-          <div dir={locale === "ar" ? "rtl" : "ltr"} className="space-y-5">
+          <div
+          role="tabpanel"
+          id={`content-panel-${locale}`}
+          aria-labelledby={`content-tab-${locale}`}
+          dir={locale === "ar" ? "rtl" : "ltr"}
+          className="space-y-5"
+        >
             <div>
               <label className="text-sm font-semibold text-navy-900" htmlFor="title">
                 {locale === "ar" ? t.editor.titleAr : t.editor.titleEn}
@@ -257,6 +348,7 @@ export default function ArticleEditor({ article }: Props) {
                 className={inputClass}
                 value={form.title[locale]}
                 onChange={(e) => setLocalized("title", locale, e.target.value)}
+                {...fieldA11y(`title.${locale}`)}
               />
               {err(`title.${locale}`)}
             </div>
@@ -272,6 +364,7 @@ export default function ArticleEditor({ article }: Props) {
                 placeholder="my-article-slug"
                 value={form.slug[locale]}
                 onChange={(e) => setLocalized("slug", locale, e.target.value.toLowerCase())}
+                {...fieldA11y(`slug.${locale}`)}
               />
               <p className="mt-1 text-xs text-slate-500">{t.editor.slugInvalid}</p>
               {err(`slug.${locale}`)}
@@ -287,6 +380,7 @@ export default function ArticleEditor({ article }: Props) {
                 className={inputClass}
                 value={form.excerpt[locale]}
                 onChange={(e) => setLocalized("excerpt", locale, e.target.value)}
+                {...fieldA11y(`excerpt.${locale}`)}
               />
               {err(`excerpt.${locale}`)}
             </div>
@@ -301,6 +395,7 @@ export default function ArticleEditor({ article }: Props) {
                 className={`${inputClass} font-mono text-[13px]`}
                 value={form.body[locale]}
                 onChange={(e) => setLocalized("body", locale, e.target.value)}
+                {...fieldA11y(`body.${locale}`)}
               />
               {err(`body.${locale}`)}
             </div>
@@ -319,6 +414,7 @@ export default function ArticleEditor({ article }: Props) {
                   maxLength={70}
                   value={form.seoTitle[locale]}
                   onChange={(e) => setLocalized("seoTitle", locale, e.target.value)}
+                  {...fieldA11y(`seo.title.${locale}`)}
                 />
                 {err(`seo.title.${locale}`)}
               </div>
@@ -333,6 +429,7 @@ export default function ArticleEditor({ article }: Props) {
                   maxLength={170}
                   value={form.seoDescription[locale]}
                   onChange={(e) => setLocalized("seoDescription", locale, e.target.value)}
+                  {...fieldA11y(`seo.description.${locale}`)}
                 />
                 {err(`seo.description.${locale}`)}
               </div>
@@ -409,6 +506,7 @@ export default function ArticleEditor({ article }: Props) {
                 placeholder="https://…"
                 value={form.sourceUrl}
                 onChange={(e) => setForm((c) => ({ ...c, sourceUrl: e.target.value }))}
+                {...fieldA11y("sourceUrl")}
               />
               {err("sourceUrl")}
             </div>
@@ -503,7 +601,7 @@ export default function ArticleEditor({ article }: Props) {
                   —
                 </div>
               )}
-              <label className="cursor-pointer rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100">
+              <label className="inline-flex min-h-11 cursor-pointer items-center rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100">
                 {uploading ? t.common.saving : t.editor.upload}
                 <input
                   type="file"
@@ -542,6 +640,7 @@ export default function ArticleEditor({ article }: Props) {
                 className={inputClass}
                 value={form.coverAlt.ar}
                 onChange={(e) => setLocalized("coverAlt", "ar", e.target.value)}
+                {...fieldA11y("coverImage.alt")}
               />
             </div>
             <div className="mt-3">
@@ -554,6 +653,7 @@ export default function ArticleEditor({ article }: Props) {
                 className={inputClass}
                 value={form.coverAlt.en}
                 onChange={(e) => setLocalized("coverAlt", "en", e.target.value)}
+                {...fieldA11y("coverImage.alt")}
               />
               {err("coverImage.alt")}
             </div>
@@ -578,7 +678,7 @@ export default function ArticleEditor({ article }: Props) {
         <button
           type="submit"
           disabled={saving}
-          className="rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-60"
+          className="inline-flex min-h-12 items-center rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-60"
         >
           {saving
             ? t.common.saving
@@ -587,12 +687,23 @@ export default function ArticleEditor({ article }: Props) {
               : t.editor.saveDraft}
         </button>
 
+        <button
+          type="button"
+          onClick={() => setPreviewOpen(true)}
+          className="inline-flex min-h-12 items-center rounded-xl border border-brand-300 bg-brand-50 px-6 py-3 text-sm font-semibold text-brand-700 hover:bg-brand-100"
+        >
+          {t.editor.previewUnsaved}
+        </button>
+
         {article ? (
           <a
             href={`/admin/preview/${article.id}`}
             target="_blank"
             rel="noreferrer"
-            className="rounded-xl border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+            onClick={(event) => {
+              if (dirty && !window.confirm(t.editor.previewSavedConfirm)) event.preventDefault();
+            }}
+            className="inline-flex min-h-12 items-center rounded-xl border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100"
           >
             {t.editor.previewNewTab}
           </a>
@@ -602,13 +713,86 @@ export default function ArticleEditor({ article }: Props) {
           type="button"
           onClick={() => {
             if (dirty && !window.confirm(t.editor.discardConfirm)) return;
+            setUnsavedChanges(false);
             router.push("/admin/articles");
           }}
-          className="rounded-xl border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+          className="inline-flex min-h-12 items-center rounded-xl border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100"
         >
           {t.common.cancel}
         </button>
       </div>
+
+      {previewOpen ? (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-navy-950/60 p-4"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setPreviewOpen(false);
+          }}
+        >
+          <div
+            ref={previewRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="unsaved-preview-title"
+            className="max-h-[90dvh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl sm:p-6"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold tracking-wide text-brand-700 uppercase">
+                  {t.editor.previewUnsaved}
+                </p>
+                <h2 id="unsaved-preview-title" className="mt-1 text-xl font-bold text-navy-900 break-words-safe">
+                  {form.title.ar || form.title.en || t.editor.untitled}
+                </h2>
+                <p className="mt-1 text-sm text-ink-500">{t.editor.previewLocalNote}</p>
+              </div>
+              <button
+                ref={previewCloseRef}
+                type="button"
+                onClick={() => setPreviewOpen(false)}
+                aria-label={t.editor.previewClose}
+                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-300 text-slate-700 hover:bg-slate-100"
+              >
+                <CloseIcon className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="mt-5 space-y-5">
+              {tabs.map((tab) => {
+                const cover = safePreviewImage(form.coverUrl);
+                return (
+                  <section
+                    key={tab.key}
+                    dir={tab.dir}
+                    className="rounded-xl border border-slate-200 p-5"
+                  >
+                    <p className="text-xs font-bold tracking-wide text-slate-500 uppercase">
+                      {tab.label}
+                    </p>
+                    <h3 className="mt-2 text-lg font-bold text-navy-900 break-words-safe">
+                      {form.title[tab.key] || t.editor.untitled}
+                    </h3>
+                    <p className="mt-1 text-sm text-ink-500 break-words-safe">
+                      {form.excerpt[tab.key] || "-"}
+                    </p>
+                    {cover ? (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img src={cover} alt="" className="mt-3 max-h-56 w-full rounded-lg object-cover" />
+                    ) : null}
+                    <div className="article-body mt-4 text-sm text-ink-700">
+                      {form.body[tab.key] ? (
+                        <Markdown source={form.body[tab.key]} />
+                      ) : (
+                        <p>-</p>
+                      )}
+                    </div>
+                  </section>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </form>
   );
 }

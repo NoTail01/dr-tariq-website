@@ -47,6 +47,13 @@ function AdminShellInner({ children }: { children: ReactNode }) {
   const { locale, setLocale, t } = useDashboardLocale();
   const dirty = useSyncExternalStore(subscribeUnsaved, hasUnsavedChanges, () => false);
 
+  // The server renders the shell with the default EN document language;
+  // keep the real document language in sync with the staff locale switch.
+  useEffect(() => {
+    document.documentElement.lang = locale;
+    document.documentElement.dir = t.dir;
+  }, [locale, t.dir]);
+
   // Block internal link navigation while an editor holds unsaved edits.
   // A capture-phase listener runs before Next.js' own Link click handler.
   useEffect(() => {
@@ -116,7 +123,9 @@ function AdminShellInner({ children }: { children: ReactNode }) {
   }
 
   async function signOut() {
+    if (dirty && !window.confirm(t.editor.discardConfirm)) return;
     await fetch("/api/admin/logout", { method: "POST" }).catch(() => undefined);
+    setUnsavedChanges(false);
     router.replace("/admin/login");
     router.refresh();
   }

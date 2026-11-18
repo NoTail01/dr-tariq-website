@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import DoctorPortrait from "@/components/DoctorPortrait";
+import { BulletIcon, CheckIcon } from "@/components/Icons";
 import { CtaBand, Section, SectionHeading } from "@/components/Layout";
 import Reveal from "@/components/Reveal";
 import { doctor } from "@/content/doctor";
@@ -96,7 +97,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
                     key={item.en}
                     className="flex items-start gap-3 rounded-xl bg-white p-3.5 text-sm text-ink-700"
                   >
-                    <span aria-hidden="true" className="text-brand-600">✓</span>
+                    <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
                     <span className="break-words-safe">{item[locale]}</span>
                   </li>
                 ))}
@@ -114,7 +115,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
                     key={note}
                     className="flex items-start gap-3 rounded-xl border border-brand-100 bg-brand-50/60 p-3.5 text-sm text-ink-700"
                   >
-                    <span aria-hidden="true" className="text-brand-600">•</span>
+                    <BulletIcon className="mt-2 text-brand-600" />
                     <span className="break-words-safe">{note}</span>
                   </li>
                 ))}

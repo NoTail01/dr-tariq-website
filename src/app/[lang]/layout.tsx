@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 import { lang as rootLang } from "next/root-params";
 
 import "../globals.css";
@@ -76,6 +77,7 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
     about: dict.nav.about,
     blog: dict.nav.blog,
     book: dict.nav.book,
+    mainLabel: dict.nav.mainLabel,
     skipToContent: dict.nav.skipToContent,
     openMenu: dict.nav.openMenu,
     closeMenu: dict.nav.closeMenu,
@@ -122,6 +124,9 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
       className={`${plexArabic.variable} antialiased`}
     >
       <body className="flex min-h-screen flex-col">
+        <Script id="js-reveal" strategy="beforeInteractive">
+          {"document.documentElement.classList.add('js');"}
+        </Script>
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:start-2 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-brand-700 focus:shadow-lg"
@@ -157,6 +162,7 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
           address={settings.contact.address?.[locale] ?? null}
           phones={phoneEntries}
           whatsappNote={settings.contact.whatsappEnabled ? null : dict.book.whatsappPending}
+          noContactNote={dict.footer.noContactYet}
           socialTitle={dict.footer.followUs}
           social={socialLinks}
           disclaimerTitle={dict.footer.disclaimerTitle}

@@ -1,11 +1,13 @@
-"use client";
+﻿"use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 
 import {
+  firstBookingErrorField,
   validateBooking,
   type BookingErrorKey,
   type BookingErrors,
+  type BookingInput,
   type ContactMethod,
 } from "@/lib/booking";
 
@@ -13,6 +15,7 @@ type Labels = {
   intro: string;
   requestTitle: string;
   requestText: string;
+  requiredField: string;
   formNotice: string;
   privacyNotice: string;
   disabledNotice: string;
@@ -26,6 +29,12 @@ type Labels = {
     contactWhatsapp: string;
     contactValue: string;
     contactValuePlaceholder: string;
+    contactValuePlaceholderEmail: string;
+    contactValuePlaceholderPhone: string;
+    contactValuePlaceholderWhatsapp: string;
+    contactValueHintEmail: string;
+    contactValueHintPhone: string;
+    contactValueHintWhatsapp: string;
     preferredTime: string;
     preferredTimePlaceholder: string;
     message: string;
@@ -33,7 +42,7 @@ type Labels = {
     submit: string;
     submitting: string;
   };
-  validation: Record<BookingErrorKey, string>;
+  validation: Record<BookingErrorKey, string> & { summary: string };
   result: {
     demoTitle: string;
     demoText: string;
@@ -41,6 +50,7 @@ type Labels = {
     successText: string;
     errorTitle: string;
     errorText: string;
+    retry: string;
   };
 };
 
@@ -51,23 +61,109 @@ type SubmitState =
   | { kind: "success" }
   | { kind: "error" };
 
-const errorClass = "mt-1.5 text-sm font-medium text-red-700";
+const errorClass = "mt-1.5 text-sm font-semibold text-red-700";
 const inputClass =
-  "w-full rounded-xl border border-brand-300 bg-white px-4 py-3 text-navy-900 placeholder:text-ink-300 focus:border-brand-500 focus:outline-none";
+  "mt-2 min-h-12 w-full rounded-xl border border-brand-300 bg-white px-4 py-3 text-base text-navy-900 placeholder:text-ink-300 focus:border-brand-600";
+const hintClass = "mt-1.5 text-sm leading-relaxed text-ink-500";
+
+const FIELD_IDS: Record<keyof BookingInput, string> = {
+  name: "booking-name",
+  contactMethod: "booking-method-phone",
+  contactValue: "booking-contact",
+  preferredTime: "booking-time",
+  message: "booking-message",
+  consent: "booking-consent",
+};
+
+function describedBy(...ids: (string | false | undefined)[]): string | undefined {
+  const value = ids.filter(Boolean).join(" ");
+  return value || undefined;
+}
+
+function RequiredMark({ label }: { label: string }) {
+  return (
+    <>
+      <span aria-hidden="true"> *</span>
+      <span className="sr-only"> ({label})</span>
+    </>
+  );
+}
+
+function ArrowIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      className="h-4 w-4 rtl:rotate-180"
+    >
+      <path d="M5 12h14m-6-6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function Spinner() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-4 w-4 animate-spin"
+    >
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeOpacity="0.3" strokeWidth="3" />
+      <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 export default function BookForm({ labels }: { labels: Labels }) {
+  const formRef = useRef<HTMLFormElement | null>(null);
   const [errors, setErrors] = useState<BookingErrors>({});
   const [state, setState] = useState<SubmitState>({ kind: "idle" });
   const [method, setMethod] = useState<ContactMethod>("phone");
 
+  const contactConfig = {
+    email: {
+      type: "email",
+      inputMode: "email" as const,
+      autoComplete: "email",
+      placeholder: labels.fields.contactValuePlaceholderEmail,
+      hint: labels.fields.contactValueHintEmail,
+    },
+    phone: {
+      type: "tel",
+      inputMode: "tel" as const,
+      autoComplete: "tel",
+      placeholder: labels.fields.contactValuePlaceholderPhone,
+      hint: labels.fields.contactValueHintPhone,
+    },
+    whatsapp: {
+      type: "tel",
+      inputMode: "tel" as const,
+      autoComplete: "tel",
+      placeholder: labels.fields.contactValuePlaceholderWhatsapp,
+      hint: labels.fields.contactValueHintWhatsapp,
+    },
+  }[method];
+
+  const focusField = (field: keyof BookingInput) => {
+    requestAnimationFrame(() => document.getElementById(FIELD_IDS[field])?.focus());
+  };
+
+  function retry() {
+    setState({ kind: "idle" });
+    focusField("name");
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
-
+    const formData = new FormData(form);
     const payload = {
-      ...data,
-      consent: new FormData(form).get("consent") === "yes",
+      ...Object.fromEntries(formData.entries()),
+      consent: formData.get("consent") === "yes",
       contactMethod: method,
     };
 
@@ -75,6 +171,8 @@ export default function BookForm({ labels }: { labels: Labels }) {
     if (!validation.ok) {
       setErrors(validation.errors);
       setState({ kind: "idle" });
+      const first = firstBookingErrorField(validation.errors);
+      if (first) focusField(first);
       return;
     }
 
@@ -87,7 +185,6 @@ export default function BookForm({ labels }: { labels: Labels }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(validation.value),
       });
-
       const body = (await response.json().catch(() => null)) as
         | { ok?: boolean; sent?: boolean }
         | null;
@@ -105,9 +202,9 @@ export default function BookForm({ labels }: { labels: Labels }) {
     }
   }
 
-  const fieldError = (key: keyof BookingErrors) =>
-    key in errors && errors[key] ? (
-      <p className={errorClass} id={`err-${key}`} role="alert">
+  const fieldError = (key: keyof BookingInput) =>
+    errors[key] ? (
+      <p className={errorClass} id={`err-${key}`}>
         {labels.validation[errors[key] as BookingErrorKey]}
       </p>
     ) : null;
@@ -129,43 +226,60 @@ export default function BookForm({ labels }: { labels: Labels }) {
         <button
           type="button"
           onClick={() => setState({ kind: "idle" })}
-          className="mt-4 rounded-full border border-amber-400 px-4 py-2 text-sm font-semibold text-amber-900"
+          className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full border border-amber-400 px-4 py-2 text-sm font-semibold text-amber-900 transition-colors hover:bg-amber-100"
         >
-          ← {labels.requestTitle}
+          <ArrowIcon />
+          {labels.requestTitle}
         </button>
       </div>
     );
   }
-
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-5">
-      {errors._ ? (
-        <p className={errorClass} role="alert">
-          {labels.validation[errors._ as BookingErrorKey]}
-        </p>
-      ) : null}
+    <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-5">
+      <p className="sr-only" aria-live="polite" aria-atomic="true">
+        {state.kind === "submitting"
+          ? labels.fields.submitting
+          : state.kind === "error"
+            ? `${labels.result.errorTitle}. ${labels.result.errorText}`
+            : ""}
+      </p>
+
+      <div aria-live="polite" aria-atomic="true">
+        {errors._ ? (
+          <p className={errorClass}>{labels.validation[errors._ as BookingErrorKey]}</p>
+        ) : Object.keys(errors).length > 0 ? (
+          <p className={errorClass}>{labels.validation.summary}</p>
+        ) : null}
+      </div>
 
       <div>
-        <label htmlFor="booking-name" className="block text-sm font-semibold text-navy-900">
-          {labels.fields.name} <span aria-hidden="true">*</span>
+        <label htmlFor={FIELD_IDS.name} className="block text-sm font-semibold text-navy-900">
+          {labels.fields.name}
+          <RequiredMark label={labels.requiredField} />
         </label>
         <input
-          id="booking-name"
+          id={FIELD_IDS.name}
           name="name"
           type="text"
           autoComplete="name"
+          maxLength={120}
           required
           placeholder={labels.fields.namePlaceholder}
           aria-invalid={Boolean(errors.name)}
-          aria-describedby={errors.name ? "err-name" : undefined}
-          className={`${inputClass} mt-2`}
+          aria-describedby={describedBy(errors.name && "err-name")}
+          className={inputClass}
         />
         {fieldError("name")}
       </div>
 
-      <fieldset className="mt-2">
+      <fieldset
+        className="mt-2"
+        aria-invalid={Boolean(errors.contactMethod)}
+        aria-describedby={describedBy(errors.contactMethod && "err-contactMethod")}
+      >
         <legend className="text-sm font-semibold text-navy-900">
-          {labels.fields.contact} <span aria-hidden="true">*</span>
+          {labels.fields.contact}
+          <RequiredMark label={labels.requiredField} />
         </legend>
         <div className="mt-2 flex flex-wrap gap-2">
           {(
@@ -177,13 +291,14 @@ export default function BookForm({ labels }: { labels: Labels }) {
           ).map(([value, text]) => (
             <label
               key={value}
-              className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
+              className={`inline-flex min-h-11 cursor-pointer items-center rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
                 method === value
                   ? "border-brand-600 bg-brand-600 text-white"
                   : "border-brand-300 bg-white text-ink-700 hover:bg-brand-50"
               }`}
             >
               <input
+                id={`booking-method-${value}`}
                 type="radio"
                 name="contactMethod"
                 value={value}
@@ -199,63 +314,78 @@ export default function BookForm({ labels }: { labels: Labels }) {
       </fieldset>
 
       <div>
-        <label htmlFor="booking-contact" className="block text-sm font-semibold text-navy-900">
-          {labels.fields.contactValue} <span aria-hidden="true">*</span>
+        <label htmlFor={FIELD_IDS.contactValue} className="block text-sm font-semibold text-navy-900">
+          {labels.fields.contactValue}
+          <RequiredMark label={labels.requiredField} />
         </label>
         <input
-          id="booking-contact"
+          id={FIELD_IDS.contactValue}
           name="contactValue"
-          type="text"
+          type={contactConfig.type}
+          inputMode={contactConfig.inputMode}
+          autoComplete={contactConfig.autoComplete}
+          maxLength={120}
           required
-          placeholder={labels.fields.contactValuePlaceholder}
+          spellCheck={false}
+          placeholder={contactConfig.placeholder}
           aria-invalid={Boolean(errors.contactValue)}
-          aria-describedby={errors.contactValue ? "err-contactValue" : undefined}
-          className={`${inputClass} mt-2`}
+          aria-describedby={describedBy(
+            errors.contactValue && "err-contactValue",
+            "booking-contact-hint",
+          )}
+          className={inputClass}
         />
+        <p id="booking-contact-hint" className={hintClass}>
+          {contactConfig.hint}
+        </p>
         {fieldError("contactValue")}
       </div>
 
       <div>
-        <label htmlFor="booking-time" className="block text-sm font-semibold text-navy-900">
+        <label htmlFor={FIELD_IDS.preferredTime} className="block text-sm font-semibold text-navy-900">
           {labels.fields.preferredTime}
         </label>
         <input
-          id="booking-time"
+          id={FIELD_IDS.preferredTime}
           name="preferredTime"
           type="text"
+          autoComplete="off"
+          maxLength={200}
           placeholder={labels.fields.preferredTimePlaceholder}
           aria-invalid={Boolean(errors.preferredTime)}
-          aria-describedby={errors.preferredTime ? "err-preferredTime" : undefined}
-          className={`${inputClass} mt-2`}
+          aria-describedby={describedBy(errors.preferredTime && "err-preferredTime")}
+          className={inputClass}
         />
         {fieldError("preferredTime")}
       </div>
 
       <div>
-        <label htmlFor="booking-message" className="block text-sm font-semibold text-navy-900">
+        <label htmlFor={FIELD_IDS.message} className="block text-sm font-semibold text-navy-900">
           {labels.fields.message}
         </label>
         <textarea
-          id="booking-message"
+          id={FIELD_IDS.message}
           name="message"
           rows={4}
+          maxLength={2000}
           placeholder={labels.fields.messagePlaceholder}
           aria-invalid={Boolean(errors.message)}
-          aria-describedby={errors.message ? "err-message" : undefined}
-          className={`${inputClass} mt-2 resize-y`}
+          aria-describedby={describedBy(errors.message && "err-message")}
+          className={`${inputClass} resize-y`}
         />
         {fieldError("message")}
       </div>
 
       <div className="rounded-xl border border-brand-100 bg-brand-50 p-4">
-        <label htmlFor="booking-consent" className="flex items-start gap-3 text-sm text-ink-700">
+        <label htmlFor={FIELD_IDS.consent} className="flex min-h-11 cursor-pointer items-start gap-3 text-sm text-ink-700">
           <input
-            id="booking-consent"
+            id={FIELD_IDS.consent}
             name="consent"
             type="checkbox"
             value="yes"
+            required
             aria-invalid={Boolean(errors.consent)}
-            aria-describedby={errors.consent ? "err-consent" : undefined}
+            aria-describedby={describedBy(errors.consent && "err-consent")}
             className="mt-0.5 h-5 w-5 shrink-0 accent-[#0b74c9]"
           />
           <span>{labels.consent}</span>
@@ -266,15 +396,29 @@ export default function BookForm({ labels }: { labels: Labels }) {
       <button
         type="submit"
         disabled={state.kind === "submitting"}
-        className="w-full rounded-full bg-brand-600 px-6 py-3.5 text-sm font-bold text-white transition-colors hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-brand-600 px-6 py-3.5 text-sm font-bold text-white transition-colors hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
       >
-        {state.kind === "submitting" ? labels.fields.submitting : labels.fields.submit}
+        {state.kind === "submitting" ? (
+          <>
+            <Spinner />
+            <span>{labels.fields.submitting}</span>
+          </>
+        ) : (
+          labels.fields.submit
+        )}
       </button>
 
       {state.kind === "error" ? (
         <div className="rounded-xl border border-red-300 bg-red-50 p-4" role="alert">
           <p className="text-sm font-bold text-red-800">{labels.result.errorTitle}</p>
           <p className="mt-1 text-sm text-red-700">{labels.result.errorText}</p>
+          <button
+            type="button"
+            onClick={retry}
+            className="mt-3 inline-flex min-h-11 items-center rounded-full border border-red-400 px-4 py-2 text-sm font-semibold text-red-800 transition-colors hover:bg-red-100"
+          >
+            {labels.result.retry}
+          </button>
         </div>
       ) : null}
     </form>

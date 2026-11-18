@@ -15,9 +15,11 @@ import Link from "next/link";
  */
 
 /** Link targets are restricted to internal paths and safe outbound schemes. */
-function safeHref(url: string): string | null {
+export function safeHref(url: string): string | null {
   const trimmed = url.trim();
-  if (trimmed.startsWith("/")) return trimmed; // internal route
+  // A single leading slash is internal; "//host" and "/\host" are treated by
+  // browsers as protocol-relative URLs and must never become internal links.
+  if (trimmed === "/" || /^\/[^\/\\]/.test(trimmed)) return trimmed;
   if (/^https:\/\/(wa\.me|www\.google\.com)\//.test(trimmed)) return trimmed;
   if (/^tel:\+?[\d]+$/.test(trimmed)) return trimmed;
   if (/^https?:\/\//.test(trimmed)) return trimmed;
