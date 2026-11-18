@@ -135,7 +135,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
                     className="flex items-start gap-3 rounded-xl bg-white p-3.5 text-sm text-ink-700"
                   >
                     <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
-                    <span className="break-words-safe">{item[locale]}</span>
+                    <span className="min-w-0 break-words-safe">{item[locale]}</span>
                   </li>
                 ))}
               </ul>
@@ -152,8 +152,8 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
                     key={note}
                     className="flex items-start gap-3 rounded-xl border border-brand-100 bg-brand-50/60 p-3.5 text-sm text-ink-700"
                   >
-                    <BulletIcon className="mt-2 text-brand-600" />
-                    <span className="break-words-safe">{note}</span>
+                    <BulletIcon className="mt-2 h-2 w-2 shrink-0 text-brand-600" />
+                    <span className="min-w-0 break-words-safe">{note}</span>
                   </li>
                 ))}
               </ul>

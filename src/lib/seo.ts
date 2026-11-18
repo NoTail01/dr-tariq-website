@@ -149,7 +149,16 @@ export function pageMetadata({
       card: "summary_large_image",
       title: resolvedTitle,
       description,
-      images: [socialImage.url],
+      // Passing an object (not a bare URL) makes Next emit twitter:image:alt,
+      // so the card has a meaningful description in screen readers too.
+      images: [
+        {
+          url: socialImage.url,
+          alt: socialImage.alt,
+          ...(socialImage.width ? { width: socialImage.width } : {}),
+          ...(socialImage.height ? { height: socialImage.height } : {}),
+        },
+      ],
     },
   };
 }

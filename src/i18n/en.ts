@@ -23,7 +23,8 @@ export const en = {
       },
       blog: {
         title: "Blog: Kidney & Internal Medicine",
-        description: "Articles on kidney and internal medicine by Dr Tariq Abu Hweij, in Arabic and English.",
+        description:
+          "Patient guides on kidney health, blood pressure, diabetes, kidney stones and internal medicine by Dr Tariq Abu Hweij in Amman, in Arabic and English.",
       },
       book: {
         title: "Appointments & Clinic Contact",
