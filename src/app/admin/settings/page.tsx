@@ -270,7 +270,7 @@ export default function SettingsPage() {
                       const next = qualifications.filter((_, i) => i !== index);
                       update({ doctor: { ...settings.doctor, qualifications: next } });
                     }}
-                    className="mt-2 text-xs font-semibold text-red-600 hover:text-red-700"
+                    className="mt-2 inline-flex min-h-9 items-center rounded-lg px-2 text-xs font-semibold text-red-600 hover:bg-red-50 hover:text-red-700"
                   >
                     {t.common.remove}
                   </button>
@@ -394,7 +394,7 @@ export default function SettingsPage() {
             <input
               id="whatsapp-enabled"
               type="checkbox"
-              className="h-4 w-4 rounded border-slate-300"
+              className="h-6 w-6 shrink-0 rounded border-slate-300"
               checked={settings.contact.whatsappEnabled}
               onChange={(event) =>
                 update({

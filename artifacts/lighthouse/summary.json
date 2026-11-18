@@ -1,0 +1,808 @@
+{
+  "generatedAt": "2026-11-18T10:32:22.151Z",
+  "runs": [
+    {
+      "name": "about-en-mobile",
+      "lighthouseVersion": "13.6.0",
+      "fetchTime": "2026-11-18T10:30:52.580Z",
+      "formFactor": "mobile",
+      "url": "http://localhost:3000/en/about",
+      "categories": {
+        "performance": 91,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "audits": {
+        "first-contentful-paint": {
+          "score": 1,
+          "displayValue": "0.8 s",
+          "numericValue": 759.92,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "largest-contentful-paint": {
+          "score": 0.67,
+          "displayValue": "3.4 s",
+          "numericValue": 3394.85,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "cumulative-layout-shift": {
+          "score": 1,
+          "displayValue": "0",
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-blocking-time": {
+          "score": 0.99,
+          "displayValue": "80 ms",
+          "numericValue": 76,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "speed-index": {
+          "score": 1,
+          "displayValue": "0.8 s",
+          "numericValue": 759.92,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "interactive": {
+          "score": 0.9,
+          "displayValue": "3.8 s",
+          "numericValue": 3766.62,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-byte-weight": {
+          "score": 1,
+          "displayValue": "Total size was 423 KiB",
+          "numericValue": 432964,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "unused-javascript": {
+          "score": 0,
+          "displayValue": "Est savings of 29 KiB",
+          "numericValue": 300,
+          "overallSavingsMs": 300,
+          "overallSavingsBytes": 29222
+        },
+        "unused-css-rules": {
+          "score": 1,
+          "displayValue": null,
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "image-delivery-insight": {
+          "score": 0.5,
+          "displayValue": "Est savings of 6 KiB"
+        },
+        "image-size-responsive": {
+          "score": 1
+        },
+        "image-aspect-ratio": {
+          "score": 1
+        },
+        "unsized-images": {
+          "score": 1
+        }
+      },
+      "resourceBytes": {
+        "Document": 11304,
+        "Font": 201520,
+        "Image": 32053,
+        "Stylesheet": 11467,
+        "Script": 155914,
+        "Other": 3189,
+        "Fetch": 17517
+      }
+    },
+    {
+      "name": "admin-login-mobile",
+      "lighthouseVersion": "13.6.0",
+      "fetchTime": "2026-11-18T10:31:50.685Z",
+      "formFactor": "mobile",
+      "url": "http://localhost:3000/admin/login",
+      "categories": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 63
+      },
+      "audits": {
+        "first-contentful-paint": {
+          "score": 1,
+          "displayValue": "0.8 s",
+          "numericValue": 756.01,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "largest-contentful-paint": {
+          "score": 1,
+          "displayValue": "0.8 s",
+          "numericValue": 756.01,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "cumulative-layout-shift": {
+          "score": 1,
+          "displayValue": "0",
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-blocking-time": {
+          "score": 0.9,
+          "displayValue": "190 ms",
+          "numericValue": 195,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "speed-index": {
+          "score": 1,
+          "displayValue": "0.8 s",
+          "numericValue": 756.01,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "interactive": {
+          "score": 0.92,
+          "displayValue": "3.6 s",
+          "numericValue": 3557.01,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-byte-weight": {
+          "score": 1,
+          "displayValue": "Total size was 395 KiB",
+          "numericValue": 404697,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "unused-javascript": {
+          "score": 0.5,
+          "displayValue": "Est savings of 27 KiB",
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": 27212
+        },
+        "unused-css-rules": {
+          "score": 1,
+          "displayValue": null,
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "image-delivery-insight": {
+          "score": 1,
+          "displayValue": null
+        },
+        "image-size-responsive": {
+          "score": 1
+        },
+        "image-aspect-ratio": {
+          "score": 1
+        },
+        "unsized-images": {
+          "score": 1
+        }
+      },
+      "resourceBytes": {
+        "Document": 4906,
+        "Font": 201520,
+        "Stylesheet": 11467,
+        "Script": 170451,
+        "Other": 3189,
+        "Fetch": 13164
+      }
+    },
+    {
+      "name": "article-en-mobile",
+      "lighthouseVersion": "13.6.0",
+      "fetchTime": "2026-11-18T10:31:21.309Z",
+      "formFactor": "mobile",
+      "url": "http://localhost:3000/en/blog/chronic-kidney-disease",
+      "categories": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "audits": {
+        "first-contentful-paint": {
+          "score": 1,
+          "displayValue": "0.8 s",
+          "numericValue": 754.95,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "largest-contentful-paint": {
+          "score": 1,
+          "displayValue": "0.8 s",
+          "numericValue": 754.95,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "cumulative-layout-shift": {
+          "score": 1,
+          "displayValue": "0",
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-blocking-time": {
+          "score": 0.92,
+          "displayValue": "170 ms",
+          "numericValue": 171.02,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "speed-index": {
+          "score": 1,
+          "displayValue": "0.8 s",
+          "numericValue": 754.95,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "interactive": {
+          "score": 0.9,
+          "displayValue": "3.7 s",
+          "numericValue": 3684.54,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-byte-weight": {
+          "score": 1,
+          "displayValue": "Total size was 409 KiB",
+          "numericValue": 419103,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "unused-javascript": {
+          "score": 0.5,
+          "displayValue": "Est savings of 29 KiB",
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": 29513
+        },
+        "unused-css-rules": {
+          "score": 1,
+          "displayValue": null,
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "image-delivery-insight": {
+          "score": 0.5,
+          "displayValue": "Est savings of 6 KiB"
+        },
+        "image-size-responsive": {
+          "score": 1
+        },
+        "image-aspect-ratio": {
+          "score": 1
+        },
+        "unsized-images": {
+          "score": 1
+        }
+      },
+      "resourceBytes": {
+        "Document": 12658,
+        "Font": 201520,
+        "Image": 12684,
+        "Stylesheet": 11467,
+        "Script": 155914,
+        "Other": 3189,
+        "Fetch": 21671
+      }
+    },
+    {
+      "name": "blog-en-mobile",
+      "lighthouseVersion": "13.6.0",
+      "fetchTime": "2026-11-18T10:31:06.832Z",
+      "formFactor": "mobile",
+      "url": "http://localhost:3000/en/blog",
+      "categories": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "audits": {
+        "first-contentful-paint": {
+          "score": 1,
+          "displayValue": "0.9 s",
+          "numericValue": 914.12,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "largest-contentful-paint": {
+          "score": 1,
+          "displayValue": "0.9 s",
+          "numericValue": 914.12,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "cumulative-layout-shift": {
+          "score": 1,
+          "displayValue": "0",
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-blocking-time": {
+          "score": 0.94,
+          "displayValue": "150 ms",
+          "numericValue": 149.53,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "speed-index": {
+          "score": 1,
+          "displayValue": "0.9 s",
+          "numericValue": 914.12,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "interactive": {
+          "score": 0.92,
+          "displayValue": "3.5 s",
+          "numericValue": 3476.85,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-byte-weight": {
+          "score": 1,
+          "displayValue": "Total size was 418 KiB",
+          "numericValue": 427785,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "unused-javascript": {
+          "score": 0.5,
+          "displayValue": "Est savings of 28 KiB",
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": 29164
+        },
+        "unused-css-rules": {
+          "score": 1,
+          "displayValue": null,
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "image-delivery-insight": {
+          "score": 0.5,
+          "displayValue": "Est savings of 6 KiB"
+        },
+        "image-size-responsive": {
+          "score": 1
+        },
+        "image-aspect-ratio": {
+          "score": 1
+        },
+        "unsized-images": {
+          "score": 1
+        }
+      },
+      "resourceBytes": {
+        "Document": 21508,
+        "Font": 201520,
+        "Image": 12684,
+        "Stylesheet": 11467,
+        "Script": 155914,
+        "Other": 3189,
+        "Fetch": 21503
+      }
+    },
+    {
+      "name": "booking-en-mobile",
+      "lighthouseVersion": "13.6.0",
+      "fetchTime": "2026-11-18T10:31:35.605Z",
+      "formFactor": "mobile",
+      "url": "http://localhost:3000/en/book",
+      "categories": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "audits": {
+        "first-contentful-paint": {
+          "score": 1,
+          "displayValue": "0.9 s",
+          "numericValue": 910.61,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "largest-contentful-paint": {
+          "score": 1,
+          "displayValue": "0.9 s",
+          "numericValue": 910.61,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "cumulative-layout-shift": {
+          "score": 1,
+          "displayValue": "0",
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-blocking-time": {
+          "score": 0.94,
+          "displayValue": "150 ms",
+          "numericValue": 150,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "speed-index": {
+          "score": 1,
+          "displayValue": "0.9 s",
+          "numericValue": 910.61,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "interactive": {
+          "score": 0.78,
+          "displayValue": "4.9 s",
+          "numericValue": 4856.63,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-byte-weight": {
+          "score": 1,
+          "displayValue": "Total size was 864 KiB",
+          "numericValue": 884914,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "unused-javascript": {
+          "score": 0.5,
+          "displayValue": "Est savings of 28 KiB",
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": 28653
+        },
+        "unused-css-rules": {
+          "score": 1,
+          "displayValue": null,
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "image-delivery-insight": {
+          "score": 0.5,
+          "displayValue": "Est savings of 6 KiB"
+        },
+        "image-size-responsive": {
+          "score": 1
+        },
+        "image-aspect-ratio": {
+          "score": 1
+        },
+        "unsized-images": {
+          "score": 1
+        }
+      },
+      "resourceBytes": {
+        "Document": 17058,
+        "Font": 201520,
+        "Image": 22888,
+        "Stylesheet": 11467,
+        "Script": 609519,
+        "Fetch": 19227,
+        "XHR": 46,
+        "Other": 3189
+      }
+    },
+    {
+      "name": "home-ar-mobile",
+      "lighthouseVersion": "13.6.0",
+      "fetchTime": "2026-11-18T10:30:37.053Z",
+      "formFactor": "mobile",
+      "url": "http://localhost:3000/ar",
+      "categories": {
+        "performance": 87,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "audits": {
+        "first-contentful-paint": {
+          "score": 1,
+          "displayValue": "1.0 s",
+          "numericValue": 994.9,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "largest-contentful-paint": {
+          "score": 0.62,
+          "displayValue": "3.5 s",
+          "numericValue": 3542.56,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "cumulative-layout-shift": {
+          "score": 1,
+          "displayValue": "0",
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-blocking-time": {
+          "score": 0.87,
+          "displayValue": "230 ms",
+          "numericValue": 227.5,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "speed-index": {
+          "score": 1,
+          "displayValue": "1.0 s",
+          "numericValue": 994.9,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "interactive": {
+          "score": 0.75,
+          "displayValue": "5.1 s",
+          "numericValue": 5088.61,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-byte-weight": {
+          "score": 1,
+          "displayValue": "Total size was 892 KiB",
+          "numericValue": 913612,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "unused-javascript": {
+          "score": 0,
+          "displayValue": "Est savings of 28 KiB",
+          "numericValue": 300,
+          "overallSavingsMs": 300,
+          "overallSavingsBytes": 29089
+        },
+        "unused-css-rules": {
+          "score": 1,
+          "displayValue": null,
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "image-delivery-insight": {
+          "score": 0.5,
+          "displayValue": "Est savings of 6 KiB"
+        },
+        "image-size-responsive": {
+          "score": 1
+        },
+        "image-aspect-ratio": {
+          "score": 1
+        },
+        "unsized-images": {
+          "score": 1
+        }
+      },
+      "resourceBytes": {
+        "Document": 19903,
+        "Font": 201520,
+        "Image": 42257,
+        "Stylesheet": 11467,
+        "Script": 609517,
+        "Fetch": 25713,
+        "XHR": 46,
+        "Other": 3189
+      }
+    },
+    {
+      "name": "home-en-desktop",
+      "lighthouseVersion": "13.6.0",
+      "fetchTime": "2026-11-18T10:32:04.818Z",
+      "formFactor": "desktop",
+      "url": "http://localhost:3000/en",
+      "categories": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "audits": {
+        "first-contentful-paint": {
+          "score": 1,
+          "displayValue": "0.3 s",
+          "numericValue": 251.41,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "largest-contentful-paint": {
+          "score": 0.99,
+          "displayValue": "0.7 s",
+          "numericValue": 705.66,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "cumulative-layout-shift": {
+          "score": 1,
+          "displayValue": "0",
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-blocking-time": {
+          "score": 1,
+          "displayValue": "0 ms",
+          "numericValue": 1,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "speed-index": {
+          "score": 1,
+          "displayValue": "0.3 s",
+          "numericValue": 320.66,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "interactive": {
+          "score": 1,
+          "displayValue": "0.9 s",
+          "numericValue": 867.09,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-byte-weight": {
+          "score": 1,
+          "displayValue": "Total size was 893 KiB",
+          "numericValue": 914055,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "unused-javascript": {
+          "score": 0.5,
+          "displayValue": "Est savings of 28 KiB",
+          "numericValue": 10,
+          "overallSavingsMs": 10,
+          "overallSavingsBytes": 29089
+        },
+        "unused-css-rules": {
+          "score": 1,
+          "displayValue": null,
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "image-delivery-insight": {
+          "score": 1,
+          "displayValue": null
+        },
+        "image-size-responsive": {
+          "score": 1
+        },
+        "image-aspect-ratio": {
+          "score": 1
+        },
+        "unsized-images": {
+          "score": 1
+        }
+      },
+      "resourceBytes": {
+        "Document": 19163,
+        "Font": 201520,
+        "Image": 41489,
+        "Stylesheet": 11467,
+        "Script": 609518,
+        "Fetch": 27663,
+        "XHR": 46,
+        "Other": 3189
+      }
+    },
+    {
+      "name": "home-en-mobile",
+      "lighthouseVersion": "13.6.0",
+      "fetchTime": "2026-11-18T10:30:20.901Z",
+      "formFactor": "mobile",
+      "url": "http://localhost:3000/en",
+      "categories": {
+        "performance": 90,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "audits": {
+        "first-contentful-paint": {
+          "score": 1,
+          "displayValue": "1.0 s",
+          "numericValue": 992.53,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "largest-contentful-paint": {
+          "score": 0.65,
+          "displayValue": "3.5 s",
+          "numericValue": 3456.86,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "cumulative-layout-shift": {
+          "score": 1,
+          "displayValue": "0",
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-blocking-time": {
+          "score": 0.95,
+          "displayValue": "140 ms",
+          "numericValue": 144.5,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "speed-index": {
+          "score": 1,
+          "displayValue": "1.0 s",
+          "numericValue": 992.53,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "interactive": {
+          "score": 0.76,
+          "displayValue": "5.0 s",
+          "numericValue": 5003.44,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "total-byte-weight": {
+          "score": 1,
+          "displayValue": "Total size was 891 KiB",
+          "numericValue": 912531,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "unused-javascript": {
+          "score": 0,
+          "displayValue": "Est savings of 28 KiB",
+          "numericValue": 150,
+          "overallSavingsMs": 150,
+          "overallSavingsBytes": 29089
+        },
+        "unused-css-rules": {
+          "score": 1,
+          "displayValue": null,
+          "numericValue": 0,
+          "overallSavingsMs": null,
+          "overallSavingsBytes": null
+        },
+        "image-delivery-insight": {
+          "score": 0.5,
+          "displayValue": "Est savings of 6 KiB"
+        },
+        "image-size-responsive": {
+          "score": 1
+        },
+        "image-aspect-ratio": {
+          "score": 1
+        },
+        "unsized-images": {
+          "score": 1
+        }
+      },
+      "resourceBytes": {
+        "Document": 19057,
+        "Font": 201520,
+        "Image": 42258,
+        "Stylesheet": 11467,
+        "Script": 609518,
+        "Fetch": 25476,
+        "XHR": 46,
+        "Other": 3189
+      }
+    }
+  ]
+}

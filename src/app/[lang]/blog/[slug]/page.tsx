@@ -139,7 +139,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[s
                       {crumb.name}
                     </span>
                   ) : (
-                    <Link href={crumb.href} className="hover:text-brand-700">
+                    <Link href={crumb.href} className="inline-flex min-h-6 items-center hover:text-brand-700">
                       {crumb.name}
                     </Link>
                   )}
@@ -149,7 +149,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[s
           </nav>
           <Link
             href={localizePath(locale, "/blog")}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"
+            className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"
           >
             <ArrowRightIcon className="h-4 w-4 rotate-180 rtl:rotate-0" />
             {dict.common.backToBlog}
@@ -232,7 +232,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[s
                     </span>
                     <a
                       href={`#${heading.id}`}
-                      className="font-medium text-navy-800 underline decoration-brand-200 underline-offset-4 transition-colors hover:text-brand-700"
+                      className="inline-flex min-h-6 items-center font-medium text-navy-800 underline decoration-brand-200 underline-offset-4 transition-colors hover:text-brand-700"
                     >
                       {heading.text}
                     </a>

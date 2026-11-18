@@ -485,10 +485,10 @@ export default function ArticleEditor({ article }: Props) {
               </select>
             </div>
 
-            <label className="mt-4 flex items-start gap-3 text-sm text-slate-700">
+            <label className="mt-4 flex min-h-11 items-center gap-3 text-sm text-slate-700">
               <input
                 type="checkbox"
-                className="mt-0.5 h-4 w-4 accent-[#0b74c9]"
+                className="mt-0.5 h-6 w-6 shrink-0 accent-[#0b74c9]"
                 checked={form.isDemo}
                 onChange={(e) => setForm((c) => ({ ...c, isDemo: e.target.checked }))}
               />

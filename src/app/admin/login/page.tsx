@@ -54,7 +54,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+    <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
       <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
         <div className="flex items-center gap-3">
           <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy-900 text-sm font-bold text-white">
@@ -69,7 +69,7 @@ export default function AdminLoginPage() {
         {devMode === true ? (
           <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
             {t.login.devNotice}{" "}
-            <Link href="/admin/articles" className="font-semibold underline">
+            <Link href="/admin/articles" className="inline-flex min-h-11 items-center font-semibold underline">
               {t.login.articlesLink}
             </Link>
           </div>
@@ -112,12 +112,12 @@ export default function AdminLoginPage() {
         <div className="mt-6 border-t border-slate-100 pt-4">
           <Link
             href={locale === "ar" ? "/ar" : "/en"}
-            className="text-sm font-semibold text-brand-700 hover:underline"
+            className="inline-flex min-h-11 items-center text-sm font-semibold text-brand-700 hover:underline"
           >
             {t.login.backToSite}
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

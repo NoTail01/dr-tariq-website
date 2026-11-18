@@ -386,7 +386,7 @@ export default function BookForm({ labels }: { labels: Labels }) {
             required
             aria-invalid={Boolean(errors.consent)}
             aria-describedby={describedBy(errors.consent && "err-consent")}
-            className="mt-0.5 h-5 w-5 shrink-0 accent-[#0b74c9]"
+            className="mt-0.5 h-6 w-6 shrink-0 accent-[#0b74c9]"
           />
           <span>{labels.consent}</span>
         </label>

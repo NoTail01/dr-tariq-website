@@ -153,7 +153,7 @@ async function ArticleList({
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {visible.map((article, index) => (
             <Reveal key={article.id} delay={index * 60}>
-              <ArticleCard article={article} locale={locale} labels={labels} />
+              <ArticleCard article={article} locale={locale} labels={labels} headingLevel="h2" />
             </Reveal>
           ))}
         </div>

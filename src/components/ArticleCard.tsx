@@ -51,9 +51,11 @@ type Props = {
     category: { demo: string; guides: string; news: string };
     reviewPendingBadge: string;
   };
+  headingLevel?: "h2" | "h3";
 };
 
-export default function ArticleCard({ article, locale, labels }: Props) {
+export default function ArticleCard({ article, locale, labels, headingLevel = "h3" }: Props) {
+  const Heading = headingLevel;
   const slug = article.slug[locale];
   const otherLocale: Locale = locale === "ar" ? "en" : "ar";
   const otherSlug = article.slug[otherLocale];
@@ -76,9 +78,9 @@ export default function ArticleCard({ article, locale, labels }: Props) {
           )}
         </div>
 
-        <h3 className="mt-4 text-xl font-bold text-navy-900 break-words-safe">
+        <Heading className="mt-4 text-xl font-bold text-navy-900 break-words-safe">
           {article.title[otherLocale] || labels.notInLanguage}
-        </h3>
+        </Heading>
 
         <p className="mt-3 flex-1 text-base leading-relaxed text-ink-700 break-words-safe">
           {labels.notInLanguage}
@@ -115,11 +117,11 @@ export default function ArticleCard({ article, locale, labels }: Props) {
         )}
       </div>
 
-      <h3 className="mt-4 text-xl font-bold text-navy-900 break-words-safe">
+      <Heading className="mt-4 text-xl font-bold text-navy-900 break-words-safe">
         <Link href={href} className="transition-colors group-hover:text-brand-700">
           {article.title[locale]}
         </Link>
-      </h3>
+      </Heading>
 
       <p className="mt-3 flex-1 text-base leading-relaxed text-ink-700 break-words-safe">
         {article.excerpt[locale]}

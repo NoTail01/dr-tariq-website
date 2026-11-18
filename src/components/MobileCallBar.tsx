@@ -76,7 +76,7 @@ export default function MobileCallBar({
                 href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-full border-2 border-[#25D366] bg-white px-3 text-sm font-bold text-[#128C7E] transition-colors hover:bg-[#25D366]/10"
+                className="inline-flex h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-full border-2 border-[#25D366] bg-white px-3 text-sm font-bold text-[#0F766E] transition-colors hover:bg-[#25D366]/10"
               >
                 <svg
                   aria-hidden="true"
