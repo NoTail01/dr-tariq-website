@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-18T14:25:36.206Z",
+  "generatedAt": "2026-11-18T15:59:30.663Z",
   "servers": {
     "public": "http://localhost:3000",
     "devAdmin": "http://localhost:3001"
@@ -179,7 +179,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "About the Doctor",
+      "heading": "About Dr Tariq Abu Hweij",
       "docScrollWidth": 360,
       "clientWidth": 360,
       "overflowCount": 0,
@@ -193,7 +193,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "About the Doctor",
+      "heading": "About Dr Tariq Abu Hweij",
       "docScrollWidth": 390,
       "clientWidth": 390,
       "overflowCount": 0,
@@ -207,7 +207,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "About the Doctor",
+      "heading": "About Dr Tariq Abu Hweij",
       "docScrollWidth": 768,
       "clientWidth": 768,
       "overflowCount": 0,
@@ -221,7 +221,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "About the Doctor",
+      "heading": "About Dr Tariq Abu Hweij",
       "docScrollWidth": 1024,
       "clientWidth": 1024,
       "overflowCount": 0,
@@ -235,7 +235,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "About the Doctor",
+      "heading": "About Dr Tariq Abu Hweij",
       "docScrollWidth": 1440,
       "clientWidth": 1440,
       "overflowCount": 0,
@@ -249,7 +249,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "About the Doctor",
+      "heading": "About Dr Tariq Abu Hweij",
       "docScrollWidth": 1920,
       "clientWidth": 1920,
       "overflowCount": 0,
@@ -263,7 +263,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "عن الدكتور",
+      "heading": "نبذة عن الدكتور طارق أبو حويج",
       "docScrollWidth": 360,
       "clientWidth": 360,
       "overflowCount": 0,
@@ -277,7 +277,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "عن الدكتور",
+      "heading": "نبذة عن الدكتور طارق أبو حويج",
       "docScrollWidth": 390,
       "clientWidth": 390,
       "overflowCount": 0,
@@ -291,7 +291,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "عن الدكتور",
+      "heading": "نبذة عن الدكتور طارق أبو حويج",
       "docScrollWidth": 768,
       "clientWidth": 768,
       "overflowCount": 0,
@@ -305,7 +305,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "عن الدكتور",
+      "heading": "نبذة عن الدكتور طارق أبو حويج",
       "docScrollWidth": 1024,
       "clientWidth": 1024,
       "overflowCount": 0,
@@ -319,7 +319,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "عن الدكتور",
+      "heading": "نبذة عن الدكتور طارق أبو حويج",
       "docScrollWidth": 1440,
       "clientWidth": 1440,
       "overflowCount": 0,
@@ -333,7 +333,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "عن الدكتور",
+      "heading": "نبذة عن الدكتور طارق أبو حويج",
       "docScrollWidth": 1920,
       "clientWidth": 1920,
       "overflowCount": 0,
@@ -347,7 +347,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "Kidney & Internal Medicine Articles",
       "docScrollWidth": 360,
       "clientWidth": 360,
       "overflowCount": 0,
@@ -361,7 +361,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "Kidney & Internal Medicine Articles",
       "docScrollWidth": 390,
       "clientWidth": 390,
       "overflowCount": 0,
@@ -375,7 +375,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "Kidney & Internal Medicine Articles",
       "docScrollWidth": 768,
       "clientWidth": 768,
       "overflowCount": 0,
@@ -389,7 +389,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "Kidney & Internal Medicine Articles",
       "docScrollWidth": 1024,
       "clientWidth": 1024,
       "overflowCount": 0,
@@ -403,7 +403,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "Kidney & Internal Medicine Articles",
       "docScrollWidth": 1440,
       "clientWidth": 1440,
       "overflowCount": 0,
@@ -417,7 +417,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "Kidney & Internal Medicine Articles",
       "docScrollWidth": 1920,
       "clientWidth": 1920,
       "overflowCount": 0,
@@ -431,7 +431,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "مقالات في أمراض الكلى والباطنية",
       "docScrollWidth": 360,
       "clientWidth": 360,
       "overflowCount": 0,
@@ -445,7 +445,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "مقالات في أمراض الكلى والباطنية",
       "docScrollWidth": 390,
       "clientWidth": 390,
       "overflowCount": 0,
@@ -459,7 +459,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "مقالات في أمراض الكلى والباطنية",
       "docScrollWidth": 768,
       "clientWidth": 768,
       "overflowCount": 0,
@@ -473,7 +473,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "مقالات في أمراض الكلى والباطنية",
       "docScrollWidth": 1024,
       "clientWidth": 1024,
       "overflowCount": 0,
@@ -487,7 +487,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "مقالات في أمراض الكلى والباطنية",
       "docScrollWidth": 1440,
       "clientWidth": 1440,
       "overflowCount": 0,
@@ -501,7 +501,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "مقالات في أمراض الكلى والباطنية",
       "docScrollWidth": 1920,
       "clientWidth": 1920,
       "overflowCount": 0,
@@ -1019,7 +1019,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "Overview",
       "docScrollWidth": 360,
       "clientWidth": 360,
       "overflowCount": 0,
@@ -1033,7 +1033,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "Overview",
       "docScrollWidth": 390,
       "clientWidth": 390,
       "overflowCount": 0,
@@ -1047,7 +1047,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "Overview",
       "docScrollWidth": 768,
       "clientWidth": 768,
       "overflowCount": 0,
@@ -1061,7 +1061,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "Overview",
       "docScrollWidth": 1024,
       "clientWidth": 1024,
       "overflowCount": 0,
@@ -1075,7 +1075,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "Overview",
       "docScrollWidth": 1440,
       "clientWidth": 1440,
       "overflowCount": 0,
@@ -1089,7 +1089,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "Overview",
       "docScrollWidth": 1920,
       "clientWidth": 1920,
       "overflowCount": 0,
@@ -1103,7 +1103,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "نظرة عامة",
       "docScrollWidth": 360,
       "clientWidth": 360,
       "overflowCount": 0,
@@ -1117,7 +1117,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "نظرة عامة",
       "docScrollWidth": 390,
       "clientWidth": 390,
       "overflowCount": 0,
@@ -1131,7 +1131,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "نظرة عامة",
       "docScrollWidth": 768,
       "clientWidth": 768,
       "overflowCount": 0,
@@ -1145,7 +1145,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "نظرة عامة",
       "docScrollWidth": 1024,
       "clientWidth": 1024,
       "overflowCount": 0,
@@ -1159,7 +1159,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "نظرة عامة",
       "docScrollWidth": 1440,
       "clientWidth": 1440,
       "overflowCount": 0,
@@ -1173,7 +1173,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "نظرة عامة",
       "docScrollWidth": 1920,
       "clientWidth": 1920,
       "overflowCount": 0,
@@ -1187,7 +1187,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "All articles",
       "docScrollWidth": 360,
       "clientWidth": 360,
       "overflowCount": 0,
@@ -1201,7 +1201,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "All articles",
       "docScrollWidth": 390,
       "clientWidth": 390,
       "overflowCount": 0,
@@ -1215,7 +1215,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "All articles",
       "docScrollWidth": 768,
       "clientWidth": 768,
       "overflowCount": 0,
@@ -1229,7 +1229,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "All articles",
       "docScrollWidth": 1024,
       "clientWidth": 1024,
       "overflowCount": 0,
@@ -1243,7 +1243,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "All articles",
       "docScrollWidth": 1440,
       "clientWidth": 1440,
       "overflowCount": 0,
@@ -1257,7 +1257,7 @@
       "status": 200,
       "dir": "ltr",
       "lang": "en",
-      "heading": "Blog",
+      "heading": "All articles",
       "docScrollWidth": 1920,
       "clientWidth": 1920,
       "overflowCount": 0,
@@ -1271,7 +1271,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "كل المقالات",
       "docScrollWidth": 360,
       "clientWidth": 360,
       "overflowCount": 0,
@@ -1285,7 +1285,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "كل المقالات",
       "docScrollWidth": 390,
       "clientWidth": 390,
       "overflowCount": 0,
@@ -1299,7 +1299,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "كل المقالات",
       "docScrollWidth": 768,
       "clientWidth": 768,
       "overflowCount": 0,
@@ -1313,7 +1313,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "كل المقالات",
       "docScrollWidth": 1024,
       "clientWidth": 1024,
       "overflowCount": 0,
@@ -1327,7 +1327,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "كل المقالات",
       "docScrollWidth": 1440,
       "clientWidth": 1440,
       "overflowCount": 0,
@@ -1341,7 +1341,7 @@
       "status": 200,
       "dir": "rtl",
       "lang": "ar",
-      "heading": "المدونة",
+      "heading": "كل المقالات",
       "docScrollWidth": 1920,
       "clientWidth": 1920,
       "overflowCount": 0,
@@ -1748,7 +1748,7 @@
       "viewport": "360",
       "label": "About EN",
       "url": "http://localhost:3000/en/about",
-      "heading": "About the Doctor"
+      "heading": "About Dr Tariq Abu Hweij"
     },
     {
       "file": "artifacts/qa/screenshots/about-en-390.png",
@@ -1757,7 +1757,7 @@
       "viewport": "390",
       "label": "About EN",
       "url": "http://localhost:3000/en/about",
-      "heading": "About the Doctor"
+      "heading": "About Dr Tariq Abu Hweij"
     },
     {
       "file": "artifacts/qa/screenshots/about-en-1440.png",
@@ -1766,7 +1766,7 @@
       "viewport": "1440",
       "label": "About EN",
       "url": "http://localhost:3000/en/about",
-      "heading": "About the Doctor"
+      "heading": "About Dr Tariq Abu Hweij"
     },
     {
       "file": "artifacts/qa/screenshots/about-ar-360.png",
@@ -1775,7 +1775,7 @@
       "viewport": "360",
       "label": "About AR",
       "url": "http://localhost:3000/ar/about",
-      "heading": "عن الدكتور"
+      "heading": "نبذة عن الدكتور طارق أبو حويج"
     },
     {
       "file": "artifacts/qa/screenshots/about-ar-390.png",
@@ -1784,7 +1784,7 @@
       "viewport": "390",
       "label": "About AR",
       "url": "http://localhost:3000/ar/about",
-      "heading": "عن الدكتور"
+      "heading": "نبذة عن الدكتور طارق أبو حويج"
     },
     {
       "file": "artifacts/qa/screenshots/about-ar-1440.png",
@@ -1793,7 +1793,7 @@
       "viewport": "1440",
       "label": "About AR",
       "url": "http://localhost:3000/ar/about",
-      "heading": "عن الدكتور"
+      "heading": "نبذة عن الدكتور طارق أبو حويج"
     },
     {
       "file": "artifacts/qa/screenshots/blog-en-360.png",
@@ -1802,7 +1802,7 @@
       "viewport": "360",
       "label": "Blog EN",
       "url": "http://localhost:3000/en/blog",
-      "heading": "Blog"
+      "heading": "Kidney & Internal Medicine Articles"
     },
     {
       "file": "artifacts/qa/screenshots/blog-en-390.png",
@@ -1811,7 +1811,7 @@
       "viewport": "390",
       "label": "Blog EN",
       "url": "http://localhost:3000/en/blog",
-      "heading": "Blog"
+      "heading": "Kidney & Internal Medicine Articles"
     },
     {
       "file": "artifacts/qa/screenshots/blog-en-1440.png",
@@ -1820,7 +1820,7 @@
       "viewport": "1440",
       "label": "Blog EN",
       "url": "http://localhost:3000/en/blog",
-      "heading": "Blog"
+      "heading": "Kidney & Internal Medicine Articles"
     },
     {
       "file": "artifacts/qa/screenshots/blog-ar-360.png",
@@ -1829,7 +1829,7 @@
       "viewport": "360",
       "label": "Blog AR",
       "url": "http://localhost:3000/ar/blog",
-      "heading": "المدونة"
+      "heading": "مقالات في أمراض الكلى والباطنية"
     },
     {
       "file": "artifacts/qa/screenshots/blog-ar-390.png",
@@ -1838,7 +1838,7 @@
       "viewport": "390",
       "label": "Blog AR",
       "url": "http://localhost:3000/ar/blog",
-      "heading": "المدونة"
+      "heading": "مقالات في أمراض الكلى والباطنية"
     },
     {
       "file": "artifacts/qa/screenshots/blog-ar-1440.png",
@@ -1847,7 +1847,7 @@
       "viewport": "1440",
       "label": "Blog AR",
       "url": "http://localhost:3000/ar/blog",
-      "heading": "المدونة"
+      "heading": "مقالات في أمراض الكلى والباطنية"
     },
     {
       "file": "artifacts/qa/screenshots/article-en-360.png",
@@ -2018,7 +2018,7 @@
       "viewport": "360",
       "label": "Dashboard EN",
       "url": "http://localhost:3001/admin",
-      "heading": "Blog"
+      "heading": "Overview"
     },
     {
       "file": "artifacts/qa/screenshots/dashboard-en-390.png",
@@ -2027,7 +2027,7 @@
       "viewport": "390",
       "label": "Dashboard EN",
       "url": "http://localhost:3001/admin",
-      "heading": "Blog"
+      "heading": "Overview"
     },
     {
       "file": "artifacts/qa/screenshots/dashboard-en-1440.png",
@@ -2036,7 +2036,7 @@
       "viewport": "1440",
       "label": "Dashboard EN",
       "url": "http://localhost:3001/admin",
-      "heading": "Blog"
+      "heading": "Overview"
     },
     {
       "file": "artifacts/qa/screenshots/dashboard-ar-360.png",
@@ -2045,7 +2045,7 @@
       "viewport": "360",
       "label": "Dashboard AR",
       "url": "http://localhost:3001/admin",
-      "heading": "المدونة"
+      "heading": "نظرة عامة"
     },
     {
       "file": "artifacts/qa/screenshots/dashboard-ar-390.png",
@@ -2054,7 +2054,7 @@
       "viewport": "390",
       "label": "Dashboard AR",
       "url": "http://localhost:3001/admin",
-      "heading": "المدونة"
+      "heading": "نظرة عامة"
     },
     {
       "file": "artifacts/qa/screenshots/dashboard-ar-1440.png",
@@ -2063,7 +2063,7 @@
       "viewport": "1440",
       "label": "Dashboard AR",
       "url": "http://localhost:3001/admin",
-      "heading": "المدونة"
+      "heading": "نظرة عامة"
     },
     {
       "file": "artifacts/qa/screenshots/admin-articles-en-360.png",
@@ -2072,7 +2072,7 @@
       "viewport": "360",
       "label": "Admin articles EN",
       "url": "http://localhost:3001/admin/articles",
-      "heading": "Blog"
+      "heading": "All articles"
     },
     {
       "file": "artifacts/qa/screenshots/admin-articles-en-390.png",
@@ -2081,7 +2081,7 @@
       "viewport": "390",
       "label": "Admin articles EN",
       "url": "http://localhost:3001/admin/articles",
-      "heading": "Blog"
+      "heading": "All articles"
     },
     {
       "file": "artifacts/qa/screenshots/admin-articles-en-1440.png",
@@ -2090,7 +2090,7 @@
       "viewport": "1440",
       "label": "Admin articles EN",
       "url": "http://localhost:3001/admin/articles",
-      "heading": "Blog"
+      "heading": "All articles"
     },
     {
       "file": "artifacts/qa/screenshots/admin-articles-ar-360.png",
@@ -2099,7 +2099,7 @@
       "viewport": "360",
       "label": "Admin articles AR",
       "url": "http://localhost:3001/admin/articles",
-      "heading": "المدونة"
+      "heading": "كل المقالات"
     },
     {
       "file": "artifacts/qa/screenshots/admin-articles-ar-390.png",
@@ -2108,7 +2108,7 @@
       "viewport": "390",
       "label": "Admin articles AR",
       "url": "http://localhost:3001/admin/articles",
-      "heading": "المدونة"
+      "heading": "كل المقالات"
     },
     {
       "file": "artifacts/qa/screenshots/admin-articles-ar-1440.png",
@@ -2117,7 +2117,7 @@
       "viewport": "1440",
       "label": "Admin articles AR",
       "url": "http://localhost:3001/admin/articles",
-      "heading": "المدونة"
+      "heading": "كل المقالات"
     },
     {
       "file": "artifacts/qa/screenshots/editor-en-360.png",
@@ -2243,7 +2243,7 @@
           "name": "mobile-menu-about",
           "ok": true,
           "url": "http://localhost:3000/en/about",
-          "heading": "About the Doctor"
+          "heading": "About Dr Tariq Abu Hweij"
         },
         {
           "name": "browse-blog",
@@ -2294,7 +2294,7 @@
           "name": "dashboard",
           "ok": true,
           "url": "http://localhost:3001/admin",
-          "heading": "Blog"
+          "heading": "Overview"
         },
         {
           "name": "create-article-form",
@@ -2315,8 +2315,8 @@
         {
           "name": "save-draft",
           "ok": true,
-          "url": "http://localhost:3001/admin/articles/923c2104-213b-4c22-8864-4981a6c92ccd",
-          "id": "923c2104-213b-4c22-8864-4981a6c92ccd"
+          "url": "http://localhost:3001/admin/articles/937044e9-cfa0-41b6-98bf-d71805a50a4b",
+          "id": "937044e9-cfa0-41b6-98bf-d71805a50a4b"
         },
         {
           "name": "navigate-sections",
@@ -2324,7 +2324,7 @@
           "visited": [
             {
               "href": "/admin/articles",
-              "heading": "Blog"
+              "heading": "All articles"
             },
             {
               "href": "/admin/settings",
@@ -2332,7 +2332,7 @@
             },
             {
               "href": "/admin",
-              "heading": "Blog"
+              "heading": "Overview"
             }
           ]
         }
@@ -2340,7 +2340,7 @@
       "status": "passed",
       "errors": [],
       "dialogMessage": "Discard unsaved changes?",
-      "createdArticleId": "923c2104-213b-4c22-8864-4981a6c92ccd"
+      "createdArticleId": "937044e9-cfa0-41b6-98bf-d71805a50a4b"
     }
   },
   "performance": {

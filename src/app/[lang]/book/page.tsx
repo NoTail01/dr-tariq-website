@@ -2,14 +2,23 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import BookForm from "@/components/BookForm";
+import JsonLd from "@/components/JsonLd";
 import ClinicMap from "@/components/ClinicMap";
 import ContactOptions, { whatsappHref } from "@/components/ContactOptions";
 import MobileCallBar from "@/components/MobileCallBar";
 import { Section, SectionHeading } from "@/components/Layout";
 import Reveal from "@/components/Reveal";
 import { getDictionary } from "@/i18n/dictionaries";
-import { isLocale, locales, type Locale } from "@/i18n/config";
+import { isLocale, localizePath, locales, type Locale } from "@/i18n/config";
 import { pageMetadata } from "@/lib/seo";
+import { SITE_URL } from "@/lib/site";
+import {
+  breadcrumbNode,
+  clinicNode,
+  jsonLdGraph,
+  organizationNode,
+  CLINIC_ID,
+} from "@/lib/structured-data";
 import { phoneLink } from "@/lib/settings";
 import { readSettings } from "@/lib/settings";
 
@@ -43,6 +52,29 @@ export default async function BookPage({ params }: PageProps<"/[lang]/book">) {
   const dict = await getDictionary(locale);
   const settings = await readSettings();
 
+  const pageUrl = SITE_URL + localizePath(locale, "/book");
+  const jsonLd = jsonLdGraph([
+    organizationNode(locale, settings),
+    clinicNode(locale, settings),
+    {
+      "@type": "ContactPage",
+      "@id": pageUrl + "#contact",
+      url: pageUrl,
+      name: dict.book.title,
+      description: dict.book.description,
+      inLanguage: locale,
+      mainEntity: { "@id": CLINIC_ID },
+      breadcrumb: { "@id": pageUrl + "#breadcrumb" },
+    },
+    {
+      ...breadcrumbNode([
+        { name: dict.nav.home, url: SITE_URL + localizePath(locale, "/") },
+        { name: dict.book.title, url: pageUrl },
+      ]),
+      "@id": pageUrl + "#breadcrumb",
+    },
+  ]);
+
   const channelLabels = {
     mobileTitle: dict.book.mobileTitle,
     mobileText: dict.book.mobileText,
@@ -62,10 +94,12 @@ export default async function BookPage({ params }: PageProps<"/[lang]/book">) {
 
   return (
     <>
+      <JsonLd data={jsonLd} />
+
       <Section tone="soft" className="border-b border-brand-100">
         <Reveal>
           <SectionHeading
-            kicker={dict.common.bookingCta}
+            kicker={dict.nav.book}
             title={dict.book.title}
             intro={dict.book.intro}
             as="h1"

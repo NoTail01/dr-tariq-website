@@ -195,3 +195,10 @@ label:has(input:focus-visible) {
   outline: 3px solid var(--color-brand-700);
   outline-offset: 2px;
 }
+
+/* Arabic is a connected script: letter-spacing breaks the joins between
+   letters. Uppercase has no effect there either, so neutralise both. */
+[dir="rtl"] .tracking-wide,
+[dir="rtl"] .tracking-widest {
+  letter-spacing: normal;
+}

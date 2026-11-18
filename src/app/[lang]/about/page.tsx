@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import DoctorPortrait from "@/components/DoctorPortrait";
+import JsonLd from "@/components/JsonLd";
 import { BulletIcon, CheckIcon } from "@/components/Icons";
 import { CtaBand, Section, SectionHeading } from "@/components/Layout";
 import Reveal from "@/components/Reveal";
@@ -10,6 +11,15 @@ import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale, localizePath, type Locale } from "@/i18n/config";
 import { locales } from "@/i18n/config";
 import { pageMetadata } from "@/lib/seo";
+import { SITE_URL } from "@/lib/site";
+import {
+  breadcrumbNode,
+  clinicNode,
+  jsonLdGraph,
+  organizationNode,
+  physicianNode,
+  PHYSICIAN_ID,
+} from "@/lib/structured-data";
 import { readSettings } from "@/lib/settings";
 
 /** Both locales are known at build time so the page is prerendered. */
@@ -43,6 +53,30 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
   const dict = await getDictionary(locale);
   const settings = await readSettings();
 
+  const pageUrl = SITE_URL + localizePath(locale, "/about");
+  const jsonLd = jsonLdGraph([
+    organizationNode(locale, settings),
+    physicianNode(locale, settings),
+    clinicNode(locale, settings),
+    {
+      "@type": "ProfilePage",
+      "@id": pageUrl + "#profile",
+      url: pageUrl,
+      name: dict.about.title,
+      description: dict.about.description,
+      inLanguage: locale,
+      mainEntity: { "@id": PHYSICIAN_ID },
+      breadcrumb: { "@id": pageUrl + "#breadcrumb" },
+    },
+    {
+      ...breadcrumbNode([
+        { name: dict.nav.home, url: SITE_URL + localizePath(locale, "/") },
+        { name: dict.about.title, url: pageUrl },
+      ]),
+      "@id": pageUrl + "#breadcrumb",
+    },
+  ]);
+
   // Biography and qualifications are editable from the dashboard; the
   // verified content file remains the fallback for fresh installs.
   const biography = settings.doctor.biography[locale] || doctor.biography[locale];
@@ -53,6 +87,8 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
 
   return (
     <>
+      <JsonLd data={jsonLd} />
+
       <Section tone="soft" className="border-b border-brand-100">
         <Reveal immediate>
           <SectionHeading
@@ -159,14 +195,11 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
                 {dict.about.sourcesText}
               </p>
               <ul className="mt-4 space-y-2 text-xs text-brand-100/70">
-                {doctor.qualifications.map((item) => (
-                  <li key={`source-${item.en}`} className="break-words-safe">
-                    {item[locale]} — {item.source}
+                {dict.about.sourcesList.map((source) => (
+                  <li key={source} className="break-words-safe">
+                    {source}
                   </li>
                 ))}
-                <li className="break-words-safe">
-                  {dict.about.membershipsTitle} — {dict.about.membershipsNotes[0]}
-                </li>
               </ul>
             </div>
           </Reveal>

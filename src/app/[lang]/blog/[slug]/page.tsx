@@ -13,6 +13,7 @@ import { findVisibleArticle, readAllArticles } from "@/lib/articles";
 import Markdown, { extractHeadings } from "@/components/Markdown";
 import { pageMetadata } from "@/lib/seo";
 import { getSiteMode, SITE_URL } from "@/lib/site";
+import { breadcrumbNode, jsonLdGraph, ORGANIZATION_ID } from "@/lib/structured-data";
 
 type Params = { lang: string; slug: string };
 
@@ -56,15 +57,28 @@ export async function generateMetadata({
   const title = article.seo.title[lang] || article.title[lang];
   const description = article.seo.description[lang] || article.excerpt[lang];
 
+  // Only link a language version that actually exists, so hreflang never
+  // points at a 404.
+  const alternatePaths = {
+    ar: article.slug.ar ? `/blog/${article.slug.ar}` : null,
+    en: article.slug.en ? `/blog/${article.slug.en}` : null,
+  };
+
   return pageMetadata({
     locale: lang,
     path: `/blog/${article.slug[lang]}`,
     title,
     description,
-    noindex: article.isDemo,
+    // Content awaiting the doctor review is not approved medical content:
+    // keep it out of search results until it is signed off.
+    noindex: article.isDemo || article.review.status !== "approved",
     ogType: "article",
     publishedTime: article.publishedAt ?? undefined,
     modifiedTime: article.updatedAt,
+    alternatePaths,
+    image: article.coverImage
+      ? { url: article.coverImage.url, alt: article.coverImage.alt[lang] }
+      : undefined,
   });
 }
 
@@ -91,40 +105,52 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[s
     { name: article.title[locale], href: localizePath(locale, `/blog/${article.slug[locale]}`) },
   ];
   const breadcrumbLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: crumbs.map((crumb, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: crumb.name,
-      item: `${SITE_URL}${crumb.href}`,
-    })),
+    ...breadcrumbNode(
+      crumbs.map((crumb) => ({ name: crumb.name, url: `${SITE_URL}${crumb.href}` })),
+    ),
+    "@id": `${articleUrl}#breadcrumb`,
   };
 
   // Article structured data is emitted only for medically approved,
   // published articles — never for content awaiting the doctor's review,
   // and never with a fabricated reviewer or author.
-  const jsonLd =
+  const articleLd =
     article.review.status === "approved" && article.status === "published"
       ? {
-          "@context": "https://schema.org",
           "@type": "BlogPosting",
+          "@id": `${articleUrl}#article`,
           headline: article.title[locale],
           description: article.excerpt[locale],
           inLanguage: locale,
           url: articleUrl,
+          mainEntityOfPage: articleUrl,
           datePublished: article.publishedAt ?? undefined,
           dateModified: article.updatedAt,
-          author: { "@type": "Organization", name: article.author[locale] },
-          publisher: { "@type": "Organization", name: dict.meta.siteName },
-          ...(article.coverImage ? { image: `${SITE_URL}${article.coverImage.url}` } : {}),
+          author: { "@id": ORGANIZATION_ID },
+          publisher: { "@id": ORGANIZATION_ID },
+          isPartOf: {
+            "@type": "Blog",
+            "@id": `${SITE_URL}${localizePath(locale, "/blog")}#blog`,
+          },
+          ...(article.coverImage
+            ? {
+                image: {
+                  "@type": "ImageObject",
+                  url: `${SITE_URL}${article.coverImage.url}`,
+                },
+              }
+            : {}),
         }
       : null;
 
+  const jsonLd = jsonLdGraph([
+    ...(articleLd ? [articleLd] : []),
+    breadcrumbLd,
+  ]);
+
   return (
     <>
-      <JsonLd data={breadcrumbLd} />
-      {jsonLd ? <JsonLd data={jsonLd} /> : null}
+      <JsonLd data={jsonLd} />
 
       <Section tone="soft" className="border-b border-brand-100">
         <div className="max-w-3xl">
@@ -249,7 +275,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[s
           {article.sourceUrl ? (
             <div className="mt-8 rounded-2xl border border-brand-200 bg-brand-50 p-5">
               <p className="text-xs font-bold tracking-wide text-brand-700 uppercase">
-                {dict.about.sourcesTitle}
+                {dict.blog.sourceTitle}
               </p>
               <a
                 href={article.sourceUrl}

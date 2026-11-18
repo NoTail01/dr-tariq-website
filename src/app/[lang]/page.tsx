@@ -17,7 +17,14 @@ import { getVisibleArticles } from "@/lib/articles";
 import { pageMetadata } from "@/lib/seo";
 import { phoneLink } from "@/lib/settings";
 import { readSettings } from "@/lib/settings";
-import { getSiteMode, SITE_URL } from "@/lib/site";
+import { getSiteMode } from "@/lib/site";
+import {
+  clinicNode,
+  jsonLdGraph,
+  organizationNode,
+  physicianNode,
+  websiteNode,
+} from "@/lib/structured-data";
 
 export async function generateMetadata({
   params,
@@ -76,29 +83,12 @@ export default async function HomePage({
   // Structured data uses only verified/supplied facts: identity, title and
   // specialties from the brand image; qualifications from the hospital page.
   // No address (conflicting sources), no geo coordinates, no ratings.
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Physician",
-    name: doctor.fullName[locale],
-    jobTitle: doctor.professionalTitle[locale],
-    url: `${SITE_URL}${localizePath(locale, "/")}`,
-    image: `${SITE_URL}/images/dr-tariq-portrait.png`,
-    inLanguage: locale,
-    medicalSpecialty: ["InternalMedicine", "Nephrology", "Hypertension"],
-    knowsLanguage: doctor.languagesSource
-      ? locale === "ar"
-        ? doctor.languages
-        : doctor.languagesEn
-      : undefined,
-    availableService: doctor.specialties.map((specialty) => ({
-      "@type": "MedicalProcedure",
-      name: specialty[locale],
-    })),
-    workLocation: {
-      "@type": "MedicalClinic",
-      name: dict.home.contactTitle,
-    },
-  };
+  const jsonLd = jsonLdGraph([
+    organizationNode(locale, settings),
+    websiteNode(locale, settings),
+    physicianNode(locale, settings),
+    clinicNode(locale, settings),
+  ]);
 
   return (
     <>

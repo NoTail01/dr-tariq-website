@@ -72,9 +72,7 @@ export default function AdminOverviewPage() {
             {t.shell.brand}:{" "}
             <strong>{session?.enabled ? t.home.enabledYes : t.home.enabledNo}</strong>
           </li>
-          <li className="break-words-safe">
-            {t.home.backend} — <code>docs/SUPABASE.md</code>
-          </li>
+          <li className="break-words-safe">{t.home.backend}</li>
         </ul>
 
         <div className="mt-5 flex flex-wrap gap-3">

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import ArticleCard from "@/components/ArticleCard";
+import JsonLd from "@/components/JsonLd";
 import { EmptyState, Section, SectionHeading } from "@/components/Layout";
 import Reveal from "@/components/Reveal";
 import { ARTICLE_CATEGORIES, type Article, type ArticleCategory } from "@/lib/article-types";
@@ -11,7 +12,14 @@ import { getVisibleArticles } from "@/lib/articles";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale, localizePath, locales, type Locale } from "@/i18n/config";
 import { pageMetadata } from "@/lib/seo";
-import { getSiteMode } from "@/lib/site";
+import { getSiteMode, SITE_URL } from "@/lib/site";
+import { readSettings } from "@/lib/settings";
+import {
+  breadcrumbNode,
+  jsonLdGraph,
+  organizationNode,
+  ORGANIZATION_ID,
+} from "@/lib/structured-data";
 
 /** Both locales are known at build time so the page is prerendered. */
 export function generateStaticParams() {
@@ -168,6 +176,47 @@ export default async function BlogPage({ params, searchParams }: PageProps<"/[la
 
   const locale = lang as Locale;
   const dict = await getDictionary(locale);
+  const settings = await readSettings();
+
+  const pageUrl = SITE_URL + localizePath(locale, "/blog");
+  const articles = await getVisibleArticles(getSiteMode());
+  const approved = articles.filter(
+    (article) =>
+      !article.isDemo &&
+      article.review.status === "approved" &&
+      article.publishedAt &&
+      article.slug[locale].length > 0,
+  );
+
+  const jsonLd = jsonLdGraph([
+    organizationNode(locale, settings),
+    {
+      "@type": "Blog",
+      "@id": pageUrl + "#blog",
+      name: dict.blog.title,
+      description: dict.blog.description,
+      url: pageUrl,
+      inLanguage: locale,
+      publisher: { "@id": ORGANIZATION_ID },
+      blogPost: approved.map((article) => ({
+        "@type": "BlogPosting",
+        headline: article.title[locale],
+        url: SITE_URL + localizePath(locale, "/blog/" + article.slug[locale]),
+        datePublished: article.publishedAt,
+        dateModified: article.updatedAt,
+        ...(article.coverImage
+          ? { image: SITE_URL + article.coverImage.url }
+          : {}),
+      })),
+    },
+    {
+      ...breadcrumbNode([
+        { name: dict.nav.home, url: SITE_URL + localizePath(locale, "/") },
+        { name: dict.blog.title, url: pageUrl },
+      ]),
+      "@id": pageUrl + "#breadcrumb",
+    },
+  ]);
 
   const labels: ListLabels = {
     readMore: dict.common.readMore,
@@ -196,11 +245,13 @@ export default async function BlogPage({ params, searchParams }: PageProps<"/[la
 
   return (
     <>
+      <JsonLd data={jsonLd} />
+
       <Section tone="soft" className="border-b border-brand-100">
         <Reveal>
           <SectionHeading
             kicker={dict.nav.blog}
-            title={dict.blog.title}
+            title={dict.blog.heading}
             intro={dict.blog.description}
             as="h1"
           />

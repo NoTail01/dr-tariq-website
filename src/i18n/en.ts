@@ -9,20 +9,20 @@ export const en = {
     titleTemplate: "%s | Dr Tariq Abu Hweij",
     defaultTitle: "Dr Tariq Abu Hweij | Internal Medicine & Nephrology in Amman",
     defaultDescription:
-      "Official website of Dr Tariq Abu Hweij, consultant in internal medicine, nephrology, kidney transplantation and hypertension in Amman. Verified qualifications, specialties, and booking.",
+      "Official website of Dr Tariq Abu Hweij, consultant in internal medicine, nephrology and hypertension in Amman. Verified qualifications and booking.",
     seo: {
       home: {
         title: "Dr Tariq Abu Hweij | Internal Medicine & Nephrology in Amman",
         description:
-          "Official website of Dr Tariq Abu Hweij, consultant in internal medicine, nephrology, kidney transplantation and hypertension in Amman. Verified qualifications, specialties, and booking.",
+          "Official website of Dr Tariq Abu Hweij, consultant in internal medicine, nephrology and hypertension in Amman. Verified qualifications and booking.",
       },
       about: {
-        title: "About Dr Tariq Abu Hweij — Qualifications & Specialties | Amman Clinic",
+        title: "About the Doctor: Qualifications",
         description:
-          "Biography and verified qualifications of Dr Tariq Abu Hweij: Jordanian Board in Internal Medicine, Jordanian Board in Nephrology, and German Board. Consultant in internal medicine and nephrology in Amman.",
+          "Verified qualifications and specialties of Dr Tariq Abu Hweij: Jordanian and German boards. Consultant in internal medicine and nephrology in Amman.",
       },
       blog: {
-        title: "Blog — Dr Tariq Abu Hweij",
+        title: "Blog: Kidney & Internal Medicine",
         description: "Articles on kidney and internal medicine by Dr Tariq Abu Hweij, in Arabic and English.",
       },
       book: {
@@ -123,7 +123,7 @@ export const en = {
       "To arrange an appointment with Dr Tariq Abu Hweij, contact the clinic by phone or WhatsApp to enquire about availability.",
   },
   about: {
-    title: "About the Doctor",
+    title: "About Dr Tariq Abu Hweij",
     description: "Biography, verified qualifications, and specialties of Dr Tariq Abu Hweij.",
     bioTitle: "Biography",
     portraitNote: "Dr Tariq Abu Hweij — consultant in internal medicine and nephrology.",
@@ -142,12 +142,17 @@ export const en = {
       "Informational sections based on the professional title printed on the clinic's supplied branding.",
     languagesTitle: "Languages",
     languagesIntro: "Languages listed on the hospital doctor profile page.",
-    sourcesTitle: "Source of published information",
+    sourcesTitle: "Sources of published information",
     sourcesText:
-      "Every published fact about the doctor is traceable to a source: the Specialty Hospital doctor profile page and the clinic's supplied brand image. See SOURCES.md in the project repository.",
+      "Every fact published about the doctor on this page is based on a verified source; no unverified information has been added.",
+    sourcesList: [
+      "Specialty Hospital doctor profile page — verified October 2026.",
+      "Supplied clinic branding — October 2026.",
+    ],
   },
   blog: {
     title: "Blog",
+    heading: "Kidney & Internal Medicine Articles",
     description: "Articles by Dr Tariq Abu Hweij in Arabic and English.",
     emptyTitle: "No published articles yet",
     emptyText: "Articles will appear here once they are written and published from the dashboard.",
@@ -167,6 +172,7 @@ export const en = {
       "This article is published awaiting the doctor's review: it has not been reviewed by him and is not attributed to him as author or reviewer. The source cited at the end of the article is its reference.",
     notInLanguage: "This article is not available in this language yet.",
     tocTitle: "In this article",
+    sourceTitle: "Source",
     contactCtaTitle: "Want to discuss your case with the doctor?",
     contactCtaText:
       "Contact the clinic by phone or WhatsApp to enquire about available appointment times. This content is general information and does not replace an individual medical assessment.",
