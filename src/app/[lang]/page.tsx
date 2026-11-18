@@ -107,7 +107,7 @@ export default async function HomePage({
       {/* ---------------- Hero ---------------- */}
       <section className="relative overflow-hidden bg-linear-to-b from-brand-50 to-white">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[1.15fr_0.85fr]">
-          <Reveal>
+          <Reveal immediate>
             <p className="text-xs font-bold tracking-widest text-brand-600 uppercase">
               {dict.home.heroKicker}
             </p>
@@ -137,7 +137,7 @@ export default async function HomePage({
             </div>
           </Reveal>
 
-          <Reveal delay={120}>
+          <Reveal delay={120} immediate>
             <figure className="mx-auto max-w-sm">
               <div className="aspect-[4/5] w-full overflow-hidden rounded-2xl border border-brand-100 bg-brand-50 shadow-[0_24px_60px_-32px_rgba(8,33,63,0.45)]">
                 <DoctorPortrait

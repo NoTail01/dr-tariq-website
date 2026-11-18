@@ -7,20 +7,30 @@ type Props = {
   /** Stagger delay in ms for stacked elements. */
   delay?: number;
   className?: string;
+  /**
+   * Above-the-fold content: animate from CSS on first paint so it is never
+   * hidden waiting for hydration (keeps LCP independent of JavaScript).
+   */
+  immediate?: boolean;
 };
 
 /**
  * Adds a subtle entrance animation the first time an element scrolls into
  * view. Users who prefer reduced motion see the content immediately.
  */
-export default function Reveal({ children, delay = 0, className = "" }: Props) {
+export default function Reveal({
+  children,
+  delay = 0,
+  className = "",
+  immediate = false,
+}: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
 
   // Visibility is toggled on the DOM node itself (not React state) so the
   // entrance animation never triggers a re-render cascade.
   useEffect(() => {
     const node = ref.current;
-    if (!node) return;
+    if (!node || immediate) return;
 
     const reveal = () => node.classList.add("is-visible");
 
@@ -47,12 +57,12 @@ export default function Reveal({ children, delay = 0, className = "" }: Props) {
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [immediate]);
 
   return (
     <div
       ref={ref}
-      className={`reveal ${className}`}
+      className={`reveal ${immediate ? "reveal-immediate " : ""}${className}`}
       style={delay ? { animationDelay: `${delay}ms` } : undefined}
     >
       {children}

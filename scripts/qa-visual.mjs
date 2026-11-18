@@ -424,9 +424,14 @@ function escapeHtml(value) {
 
 async function writeGallery() {
   const cards = results.screenshots
-    .map(
-      (shot) => `<article class="card"><div class="meta"><strong>${escapeHtml(shot.label)}</strong><span>${escapeHtml(shot.locale.toUpperCase())} - ${escapeHtml(shot.viewport)}px</span></div><a href="${escapeHtml(shot.file)}"><img loading="lazy" src="${escapeHtml(shot.file)}" alt="${escapeHtml(shot.label)} at ${escapeHtml(shot.viewport)}px"></a><p class="url">${escapeHtml(shot.url)}</p></article>`,
-    )
+    .map((shot) => {
+      // The gallery lives in artifacts/qa, so image URLs must be relative to
+      // that folder (report.json keeps repo-relative paths).
+      const href = path
+        .relative(artifactDir, path.join(root, shot.file))
+        .replace(/\\/g, "/");
+      return `<article class="card"><div class="meta"><strong>${escapeHtml(shot.label)}</strong><span>${escapeHtml(shot.locale.toUpperCase())} - ${escapeHtml(shot.viewport)}px</span></div><a href="${escapeHtml(href)}"><img loading="lazy" src="${escapeHtml(href)}" alt="${escapeHtml(shot.label)} at ${escapeHtml(shot.viewport)}px"></a><p class="url">${escapeHtml(shot.url)}</p></article>`;
+    })
     .join("\n");
   const issueRows = results.issues
     .slice(0, 60)

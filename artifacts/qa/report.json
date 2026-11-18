@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-18T10:27:12.554Z",
+  "generatedAt": "2026-11-18T14:25:36.206Z",
   "servers": {
     "public": "http://localhost:3000",
     "devAdmin": "http://localhost:3001"
@@ -2315,8 +2315,8 @@
         {
           "name": "save-draft",
           "ok": true,
-          "url": "http://localhost:3001/admin/articles/5aa97d28-bbf0-45c4-a0c2-3f2e01cb65ad",
-          "id": "5aa97d28-bbf0-45c4-a0c2-3f2e01cb65ad"
+          "url": "http://localhost:3001/admin/articles/923c2104-213b-4c22-8864-4981a6c92ccd",
+          "id": "923c2104-213b-4c22-8864-4981a6c92ccd"
         },
         {
           "name": "navigate-sections",
@@ -2340,7 +2340,7 @@
       "status": "passed",
       "errors": [],
       "dialogMessage": "Discard unsaved changes?",
-      "createdArticleId": "5aa97d28-bbf0-45c4-a0c2-3f2e01cb65ad"
+      "createdArticleId": "923c2104-213b-4c22-8864-4981a6c92ccd"
     }
   },
   "performance": {

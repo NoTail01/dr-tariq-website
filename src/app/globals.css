@@ -118,11 +118,17 @@ li {
   opacity: 1;
 }
 
-.js .reveal {
+.js .reveal:not(.reveal-immediate) {
   opacity: 0;
 }
 
 .js .reveal.is-visible {
+  animation: reveal-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Above-the-fold content animates from CSS on first paint. It is deliberately
+   not gated on the `js` class or hydration, so it can never delay LCP. */
+.reveal-immediate {
   animation: reveal-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 

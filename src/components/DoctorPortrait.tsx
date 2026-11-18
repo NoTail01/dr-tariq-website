@@ -17,7 +17,10 @@ export default function DoctorPortrait({
   /** Accessible, already-localized alt text. */
   alt: string;
   className?: string;
-  /** Above-the-fold portraits should load eagerly. */
+  /**
+   * Above-the-fold portraits: preload and fetch with high priority so the
+   * LCP image is discovered early and never queued behind fonts/scripts.
+   */
   priority?: boolean;
   sizes?: string;
 }) {
@@ -28,7 +31,9 @@ export default function DoctorPortrait({
       width={1200}
       height={960}
       sizes={sizes}
-      priority={priority}
+      preload={priority}
+      loading={priority ? "eager" : "lazy"}
+      fetchPriority={priority ? "high" : undefined}
       className={`h-full w-full rounded-2xl object-cover object-[50%_28%] ${className}`}
     />
   );

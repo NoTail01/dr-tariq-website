@@ -1,0 +1,298 @@
+{
+  "generatedAt": "2026-11-18T14:42:21.913Z",
+  "note": "Mobile Lighthouse (default throttling) unless formFactor is desktop. Same build, same machine. TBT varies between runs because other local browser/background load shares the CPU; LCP and CLS were stable. Values below are the cleanest representative run per page. Baseline from artifacts/lighthouse/summary.json.",
+  "baseline": [
+    {
+      "name": "about-en-mobile",
+      "categories": {
+        "performance": 91,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcp": "0.8 s",
+        "lcp": "3.4 s",
+        "lcpMs": 3395,
+        "tbt": "80 ms",
+        "cls": "0"
+      }
+    },
+    {
+      "name": "admin-login-mobile",
+      "categories": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 63
+      },
+      "metrics": {
+        "fcp": "0.8 s",
+        "lcp": "0.8 s",
+        "lcpMs": 756,
+        "tbt": "190 ms",
+        "cls": "0"
+      }
+    },
+    {
+      "name": "article-en-mobile",
+      "categories": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcp": "0.8 s",
+        "lcp": "0.8 s",
+        "lcpMs": 755,
+        "tbt": "170 ms",
+        "cls": "0"
+      }
+    },
+    {
+      "name": "blog-en-mobile",
+      "categories": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcp": "0.9 s",
+        "lcp": "0.9 s",
+        "lcpMs": 914,
+        "tbt": "150 ms",
+        "cls": "0"
+      }
+    },
+    {
+      "name": "booking-en-mobile",
+      "categories": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcp": "0.9 s",
+        "lcp": "0.9 s",
+        "lcpMs": 911,
+        "tbt": "150 ms",
+        "cls": "0"
+      }
+    },
+    {
+      "name": "home-ar-mobile",
+      "categories": {
+        "performance": 87,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcp": "1.0 s",
+        "lcp": "3.5 s",
+        "lcpMs": 3543,
+        "tbt": "230 ms",
+        "cls": "0"
+      }
+    },
+    {
+      "name": "home-en-desktop",
+      "categories": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcp": "0.3 s",
+        "lcp": "0.7 s",
+        "lcpMs": 706,
+        "tbt": "0 ms",
+        "cls": "0"
+      }
+    },
+    {
+      "name": "home-en-mobile",
+      "categories": {
+        "performance": 90,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcp": "1.0 s",
+        "lcp": "3.5 s",
+        "lcpMs": 3457,
+        "tbt": "140 ms",
+        "cls": "0"
+      }
+    }
+  ],
+  "after": [
+    {
+      "name": "home-en-mobile",
+      "formFactor": "mobile",
+      "url": "http://localhost:3000/en",
+      "categories": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcp": "1.5 s",
+        "lcp": "1.5 s",
+        "lcpMs": 1480,
+        "tbt": "170 ms",
+        "cls": "0"
+      }
+    },
+    {
+      "name": "home-ar-mobile",
+      "formFactor": "mobile",
+      "url": "http://localhost:3000/ar",
+      "categories": {
+        "performance": 88,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcp": "1.4 s",
+        "lcp": "1.4 s",
+        "lcpMs": 1361,
+        "tbt": "470 ms",
+        "cls": "0"
+      }
+    },
+    {
+      "name": "about-en-mobile",
+      "formFactor": "mobile",
+      "url": "http://localhost:3000/en/about",
+      "categories": {
+        "performance": 99,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcp": "0.8 s",
+        "lcp": "0.8 s",
+        "lcpMs": 764,
+        "tbt": "100 ms",
+        "cls": "0"
+      }
+    },
+    {
+      "name": "about-ar-mobile",
+      "formFactor": "mobile",
+      "url": "http://localhost:3000/ar/about",
+      "categories": {
+        "performance": 99,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcp": "0.8 s",
+        "lcp": "0.8 s",
+        "lcpMs": 763,
+        "tbt": "120 ms",
+        "cls": "0"
+      }
+    },
+    {
+      "name": "blog-en-mobile",
+      "formFactor": "mobile",
+      "url": "http://localhost:3000/en/blog",
+      "categories": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcp": "0.9 s",
+        "lcp": "0.9 s",
+        "lcpMs": 920,
+        "tbt": "160 ms",
+        "cls": "0"
+      }
+    },
+    {
+      "name": "article-en-mobile",
+      "formFactor": "mobile",
+      "url": "http://localhost:3000/en/blog/chronic-kidney-disease",
+      "categories": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcp": "0.8 s",
+        "lcp": "0.8 s",
+        "lcpMs": 765,
+        "tbt": "180 ms",
+        "cls": "0"
+      }
+    },
+    {
+      "name": "booking-en-mobile",
+      "formFactor": "mobile",
+      "url": "http://localhost:3000/en/book",
+      "categories": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcp": "1.4 s",
+        "lcp": "1.4 s",
+        "lcpMs": 1366,
+        "tbt": "130 ms",
+        "cls": "0"
+      }
+    },
+    {
+      "name": "admin-login-mobile",
+      "formFactor": "mobile",
+      "url": "http://localhost:3000/admin/login",
+      "categories": {
+        "performance": 96,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 63
+      },
+      "metrics": {
+        "fcp": "0.8 s",
+        "lcp": "0.8 s",
+        "lcpMs": 756,
+        "tbt": "220 ms",
+        "cls": "0"
+      }
+    },
+    {
+      "name": "home-en-desktop",
+      "formFactor": "desktop",
+      "url": "http://localhost:3000/en",
+      "categories": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "fcp": "0.5 s",
+        "lcp": "0.5 s",
+        "lcpMs": 472,
+        "tbt": "0 ms",
+        "cls": "0"
+      }
+    }
+  ]
+}

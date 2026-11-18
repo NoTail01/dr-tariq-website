@@ -54,7 +54,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
   return (
     <>
       <Section tone="soft" className="border-b border-brand-100">
-        <Reveal>
+        <Reveal immediate>
           <SectionHeading
             kicker={dict.nav.about}
             title={dict.about.title}
@@ -66,11 +66,12 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
 
       <Section tone="white">
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-          <Reveal>
+          <Reveal immediate>
             <figure>
               <div className="aspect-[4/5] w-full overflow-hidden rounded-2xl border border-brand-100 bg-brand-50 shadow-[0_24px_60px_-32px_rgba(8,33,63,0.45)]">
                 <DoctorPortrait
                   alt={dict.common.portraitAlt}
+                  priority
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 60vw, 90vw"
                 />
               </div>
