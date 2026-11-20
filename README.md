@@ -5,7 +5,8 @@ Bilingual (Arabic / English) website for Dr Tariq Abu Hweij, built with Next.js.
 - **Public site** — `/en` (LTR) and `/ar` (RTL): home, about, blog, booking.
   Root `/` redirects to the preferred language.
 - **Admin dashboard** — `/admin`: article editor, settings, media uploads.
-  Requires server-only `ADMIN_USERNAME` and `ADMIN_PASSWORD_HASH` in every environment; see `docs/ADMIN-AUTH.md`.
+  Uses Supabase Auth email-and-password accounts and a server-only User ID
+  allowlist; see `docs/ADMIN-AUTH.md`. There is no local credential file.
 - **Backend-optional** — booking submissions and uploads run locally until
   Supabase credentials are configured (`docs/SUPABASE.md`).
 
@@ -17,7 +18,7 @@ npm run dev
 ```
 
 - Site: http://localhost:3000
-- Dashboard: http://localhost:3000/admin (configure credentials first)
+- Dashboard: http://localhost:3000/admin (configure Supabase Auth and the admin allowlist first)
 
 ## Scripts
 
@@ -60,12 +61,12 @@ brand reference and lives in `src/app/globals.css` as `brand-*` tokens.
 - `docs/MISSING-INFO.md` — launch checklist (address conflict, hours, logo, domain, backend).
 - `docs/GOOGLE.md` — optional GA4 / GTM / Search Console / Maps setup.
 - `docs/SUPABASE.md` — activating the article/settings/upload/booking backend.
-- `docs/ADMIN-AUTH.md` — dashboard credentials, sessions and Vercel variables.
+- `docs/ADMIN-AUTH.md` — Supabase Auth accounts, allowlist, sessions and Vercel variables.
 - `docs/doctor-review/` — private, printable review package for the 10 articles.
 - `docs/doctor-handover/` — review checklist, printable article copy, and the
   confirmations the clinic must return (address/floor, hours, …).
 
-## Dashboard (`/admin`, username + password)
+## Dashboard (`/admin`, Supabase Auth)
 
 The dashboard is used by clinic staff, so its chrome carries an **AR/EN
 language switch** (persisted per browser, shared across all pages) —
@@ -119,6 +120,8 @@ Articles and settings are JSON files under `content/`, and uploaded images go
 to `public/uploads/`. Once `SUPABASE_URL` **and** `SUPABASE_SERVICE_ROLE_KEY`
 are set, the same code reads and writes Supabase instead (articles, settings
 and Storage), without any code change — see `docs/SUPABASE.md`.
+Dashboard sign-in separately needs `NEXT_PUBLIC_SUPABASE_URL`, a publishable
+key, and the server-only `ADMIN_ALLOWED_USER_IDS` allowlist.
 
 In production with no backend configured, admin writes are **refused with
 HTTP 503** rather than silently disappearing with the container.

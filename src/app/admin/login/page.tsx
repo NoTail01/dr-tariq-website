@@ -9,7 +9,7 @@ import { useDashboardLocale } from "../../../components/admin/useDashboardLocale
 export default function AdminLoginPage() {
   const { locale, t } = useDashboardLocale();
   const router = useRouter();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -41,7 +41,7 @@ export default function AdminLoginPage() {
       const response = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
       const body = (await response.json().catch(() => null)) as {
         ok?: boolean;
@@ -49,8 +49,10 @@ export default function AdminLoginPage() {
       } | null;
 
       if (!response.ok || !body?.ok) {
-        if (body?.reason === "disabled" || response.status === 403) {
+        if (body?.reason === "disabled" || response.status === 403 && body?.reason !== "not_authorized") {
           setError(t.login.disabled);
+        } else if (body?.reason === "not_authorized") {
+          setError(t.login.notAuthorized);
         } else if (body?.reason === "rate_limited" || response.status === 429) {
           setError(t.login.rateLimited);
         } else {
@@ -89,19 +91,21 @@ export default function AdminLoginPage() {
         ) : enabled === true ? (
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <div>
-              <label htmlFor="admin-username" className="block text-sm font-semibold text-navy-900">
-                {t.login.username}
+              <label htmlFor="admin-email" className="block text-sm font-semibold text-navy-900">
+                {t.login.email}
               </label>
               <input
-                id="admin-username"
-                name="username"
-                type="text"
+                id="admin-email"
+                name="email"
+                type="email"
+                inputMode="email"
                 autoComplete="username"
                 required
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
+                maxLength={320}
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
                 className="mt-2 min-h-12 w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-brand-600"
-                placeholder={t.login.usernamePlaceholder}
+                placeholder={t.login.emailPlaceholder}
               />
             </div>
 
@@ -115,6 +119,7 @@ export default function AdminLoginPage() {
                 type="password"
                 autoComplete="current-password"
                 required
+                maxLength={512}
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 className="mt-2 min-h-12 w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-brand-600"

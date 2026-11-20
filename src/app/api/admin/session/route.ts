@@ -1,21 +1,20 @@
-import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
+import { connection, NextResponse } from "next/server";
 
-import { isAuthenticated, isDashboardEnabled } from "@/lib/admin-auth";
+import { getAdminIdentity, isAdminAuthConfigured } from "@/lib/admin-auth";
 
 // GET /api/admin/session - used by the dashboard UI to gate itself.
+// connection() keeps this endpoint request-specific under Cache Components.
 export async function GET() {
-  // Always read request cookies so this endpoint is never statically cached.
-  await cookies();
-
-  const enabled = isDashboardEnabled();
-  const authenticated = await isAuthenticated();
+  await connection();
+  const enabled = isAdminAuthConfigured();
+  const admin = await getAdminIdentity();
 
   return NextResponse.json(
     {
       enabled,
-      authenticated,
-      mode: enabled ? "credentials" : "disabled",
+      authenticated: admin !== null,
+      mode: enabled ? "supabase" : "disabled",
+      email: admin?.email ?? null,
     },
     { headers: { "Cache-Control": "no-store" } },
   );

@@ -1,15 +1,16 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
+import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { isAdminAuthConfigured } from "@/lib/admin-config";
-import { ADMIN_SESSION_COOKIE, verifyAdminSession } from "@/lib/admin-session";
-import { defaultLocale, type Locale } from "@/i18n/config";
 
-/**
- * Pick a locale from the Accept-Language header.
- * Arabic stays the fallback because it is the site default.
- */
+import { defaultLocale, type Locale } from "@/i18n/config";
+import {
+  secureAuthCookieOptions,
+  supabaseAuthConfig,
+} from "@/lib/supabase-auth-config";
+
+/** Pick a locale from Accept-Language; Arabic remains the site default. */
 function negotiateLocale(header: string | null): Locale {
   if (!header) return defaultLocale;
 
@@ -19,9 +20,12 @@ function negotiateLocale(header: string | null): Locale {
       const [tag, ...params] = part.trim().split(";");
       const qParam = params.find((p) => p.trim().startsWith("q="));
       const quality = qParam ? Number.parseFloat(qParam.split("q=")[1]) : 1;
-      return { tag: tag.trim().toLowerCase(), quality: Number.isNaN(quality) ? 1 : quality };
+      return {
+        tag: tag.trim().toLowerCase(),
+        quality: Number.isNaN(quality) ? 1 : quality,
+      };
     })
-    .filter((c) => c.tag && c.tag !== "*")
+    .filter((candidate) => candidate.tag && candidate.tag !== "*")
     .sort((a, b) => b.quality - a.quality);
 
   for (const { tag } of candidates) {
@@ -39,14 +43,10 @@ const hasLocalePrefix = (pathname: string) =>
   pathname.startsWith("/ar/") ||
   pathname.startsWith("/en/");
 
-/** `/{ar|en}/blog/{slug}` — the public article route. */
+// Public article route: /{ar|en}/blog/{slug}.
 const ARTICLE_PATH = /^\/(ar|en)\/blog\/([^/]+)\/?$/;
 
-/**
- * Slugs of every stored article, in both locales. Read from the same JSON
- * store the public pages use, so an article added through the dashboard is
- * routable immediately (after the next build).
- */
+/** Slugs of every stored article, in both locales. */
 function knownArticleSlugs(): Set<string> | null {
   try {
     const raw = readFileSync(path.join(process.cwd(), "content", "articles.json"), "utf8");
@@ -65,37 +65,63 @@ function knownArticleSlugs(): Set<string> | null {
   }
 }
 
-/** Redirect unauthenticated requests away from dashboard pages. */
-async function guardAdminPages(request: NextRequest): Promise<NextResponse | null> {
-  const loginUrl = new URL("/admin/login", request.url);
+/**
+ * Refresh Supabase Auth cookies before a protected page renders. Authorization
+ * is still verified again by the protected layout and every API guard; the
+ * proxy only keeps the short-lived access token alive.
+ */
+async function refreshAdminSession(request: NextRequest): Promise<NextResponse> {
+  let response = NextResponse.next({ request });
+  const config = supabaseAuthConfig();
+  if (!config) return response;
 
-  // The login page must remain reachable so an operator can authenticate.
-  if (request.nextUrl.pathname === "/admin/login") return null;
-  if (!isAdminAuthConfigured()) return NextResponse.redirect(loginUrl);
+  const supabase = createServerClient(config.url, config.key, {
+    cookies: {
+      getAll() {
+        return request.cookies.getAll();
+      },
+      setAll(cookiesToSet, headers) {
+        cookiesToSet.forEach(({ name, value }) => {
+          request.cookies.set(name, value);
+        });
+        response = NextResponse.next({ request });
+        cookiesToSet.forEach(({ name, value, options }) => {
+          response.cookies.set(name, value, secureAuthCookieOptions(options));
+        });
+        for (const [key, value] of Object.entries(headers)) {
+          response.headers.set(key, value);
+        }
+      },
+    },
+  });
 
-  const value = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
-  const session = await verifyAdminSession(value);
-  return session ? null : NextResponse.redirect(loginUrl);
+  try {
+    await supabase.auth.getClaims();
+  } catch {
+    // Fail closed in the layout/API guard; a proxy error only means the token
+    // was not refreshed on this request.
+  }
+
+  response.headers.set("Cache-Control", "private, no-store");
+  return response;
 }
 
 /**
  * Locale routing and unknown-article handling:
- * - "/about"  -> "/ar/about" (or "/en/about" when the browser prefers English)
+ * - "/about" -> "/ar/about" (or "/en/about" for English-preferring browsers)
  * - "/ar/..." and "/en/..." pass through untouched
  * - "/admin", "/api" and static assets are never prefixed
- * - "/{ar|en}/blog/{unknown-slug}" answers with a real 404 (the not-found
- *   UI is served through Next's `/_not-found` route) instead of a soft 404
+ * - unknown article slugs answer with a real 404
  */
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
-  // Dashboard pages are guarded here; /api/admin/* routes guard themselves.
+  // Supabase sessions are refreshed for dashboard pages only. API routes
+  // create their own request-specific client and guard themselves.
   if (pathname === "/admin" || pathname.startsWith("/admin/")) {
-    return (await guardAdminPages(request)) ?? undefined;
+    return refreshAdminSession(request);
   }
 
-  // Unknown article slugs never reach the page renderer: the prerendered
-  // shell would otherwise commit a 200 before notFound() runs.
   const articleMatch = pathname.match(ARTICLE_PATH);
   if (articleMatch) {
     const slugs = knownArticleSlugs();
@@ -112,7 +138,6 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith("/api") ||
     pathname.startsWith("/admin") ||
     pathname.startsWith("/uploads") ||
-    // Files with an extension (favicon.ico, robots.txt, images, ...)
     /\.[a-z0-9]+$/i.test(pathname)
   ) {
     return;
@@ -120,12 +145,11 @@ export async function proxy(request: NextRequest) {
 
   const locale = negotiateLocale(request.headers.get("accept-language"));
   const suffix = pathname === "/" ? "" : pathname;
-
-  return NextResponse.redirect(new URL(`/${locale}${suffix}${search}`, request.url));
+  return NextResponse.redirect(new URL("/" + locale + suffix + search, request.url));
 }
 
 export const config = {
-  // Run on dashboard pages too (for the auth guard); API routes and assets
-  // keep their own guards and are excluded.
+  // Run on dashboard pages to refresh Supabase Auth cookies. API routes and
+  // assets keep their own guards and are excluded.
   matcher: ["/((?!_next|api|uploads|.*\\..*).*)"],
 };

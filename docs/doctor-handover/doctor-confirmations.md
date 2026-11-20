@@ -79,7 +79,7 @@ structured data.
 | --- | --- |
 | Final domain | `NEXT_PUBLIC_SITE_URL` still defaults to `http://localhost:3000`, so canonical URLs, Open Graph tags and the sitemap point at localhost |
 | Supabase backend | Articles, settings and uploads are stored on the server filesystem; on ephemeral hosting they would be lost. Activate per [`../SUPABASE.md`](../SUPABASE.md) |
-| `ADMIN_USERNAME` + `ADMIN_PASSWORD_HASH` | Required for the dashboard; without them every admin API returns 403 |
+| Supabase Auth user + `ADMIN_ALLOWED_USER_IDS` | Required for the dashboard; the account must exist in Supabase and its User UID must be allowlisted, or every admin API returns 403 |
 | Deployment status | Whether the GitHub repository is connected to auto-deploy on Vercel is **unverified** from this repository and must be checked in the Vercel dashboard |
 
 ## How to return your answers

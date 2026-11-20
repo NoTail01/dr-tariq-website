@@ -1,109 +1,145 @@
-import bcrypt from "bcryptjs";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { isAdminAuthConfigured } from "@/lib/admin-config";
 import { assertSameOrigin } from "@/lib/admin-csrf";
 import { checkLoginRateLimit, LOGIN_RATE_LIMIT } from "@/lib/admin-login";
 import {
-  ADMIN_SESSION_COOKIE,
-  ADMIN_SESSION_MAX_AGE_SECONDS,
-  adminSessionCookieOptions,
-  createAdminSession,
-  verifyAdminSession,
-} from "@/lib/admin-session";
+  adminIdentityFromClaims,
+  allowedAdminUserIds,
+  isAdminAuthConfigured,
+  secureAuthCookieOptions,
+  supabaseAuthConfig,
+} from "@/lib/supabase-auth-config";
 
-const originalEnv = {
-  ADMIN_USERNAME: process.env.ADMIN_USERNAME,
-  ADMIN_PASSWORD_HASH: process.env.ADMIN_PASSWORD_HASH,
-  ADMIN_ENABLED: process.env.ADMIN_ENABLED,
-  NODE_ENV: process.env.NODE_ENV,
-};
+const ALLOWED_ID = "11111111-1111-4111-8111-111111111111";
+const OTHER_ID = "22222222-2222-4222-8222-222222222222";
+const ENV_KEYS = [
+  "NEXT_PUBLIC_SUPABASE_URL",
+  "SUPABASE_URL",
+  "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+  "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+  "ADMIN_ALLOWED_USER_IDS",
+  "NODE_ENV",
+] as const;
 
-function setEnv(username?: string, hash?: string, enabled?: string) {
-  for (const [key, value] of Object.entries({ ADMIN_USERNAME: username, ADMIN_PASSWORD_HASH: hash, ADMIN_ENABLED: enabled })) {
+const originalEnv = Object.fromEntries(ENV_KEYS.map((key) => [key, process.env[key]]));
+
+function setEnv(values: Partial<Record<(typeof ENV_KEYS)[number], string | undefined>>) {
+  for (const [key, value] of Object.entries(values)) {
     if (value === undefined) delete process.env[key];
     else process.env[key] = value;
   }
+}
+
+function configureValidAuth() {
+  setEnv({
+    NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co/",
+    SUPABASE_URL: undefined,
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "public-test-key",
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: undefined,
+    ADMIN_ALLOWED_USER_IDS: ALLOWED_ID,
+  });
 }
 
 afterEach(() => {
-  for (const [key, value] of Object.entries(originalEnv)) {
-    if (value === undefined) delete process.env[key];
-    else process.env[key] = value;
-  }
+  setEnv(originalEnv);
 });
 
-function testHash() {
-  const password = `test-only-${Math.random().toString(36).slice(2)}`;
-  return { password, hash: bcrypt.hashSync(password, 10) };
-}
+describe("Supabase Auth configuration", () => {
+  it("requires a valid project URL and a publishable key", () => {
+    setEnv({
+      NEXT_PUBLIC_SUPABASE_URL: undefined,
+      SUPABASE_URL: undefined,
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: undefined,
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: undefined,
+    });
+    expect(supabaseAuthConfig()).toBeNull();
 
-describe("admin credential configuration", () => {
-  it("fails closed unless both server-only variables are valid", () => {
-    const { hash } = testHash();
+    setEnv({ NEXT_PUBLIC_SUPABASE_URL: "localhost:3000", NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "key" });
+    expect(supabaseAuthConfig()).toBeNull();
 
-    setEnv(undefined, undefined);
+    setEnv({
+      NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co/",
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "public-test-key",
+    });
+    expect(supabaseAuthConfig()).toEqual({
+      url: "https://example.supabase.co",
+      key: "public-test-key",
+    });
+
+    setEnv({
+      NEXT_PUBLIC_SUPABASE_URL: undefined,
+      SUPABASE_URL: "https://fallback.supabase.co",
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: undefined,
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: "legacy-anon-key",
+    });
+    expect(supabaseAuthConfig()).toEqual({
+      url: "https://fallback.supabase.co",
+      key: "legacy-anon-key",
+    });
+  });
+
+  it("fails closed unless auth and a well-formed allowlist exist", () => {
+    setEnv({
+      NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co",
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "key",
+      ADMIN_ALLOWED_USER_IDS: undefined,
+    });
     expect(isAdminAuthConfigured()).toBe(false);
 
-    setEnv("staff-user", undefined);
-    expect(isAdminAuthConfigured()).toBe(false);
-
-    setEnv("staff-user", "plaintext-password");
-    expect(isAdminAuthConfigured()).toBe(false);
-
-    setEnv("staff-user", hash);
+    setEnv({ ADMIN_ALLOWED_USER_IDS: ALLOWED_ID });
     expect(isAdminAuthConfigured()).toBe(true);
 
-    setEnv("staff-user", hash, "false");
-    expect(isAdminAuthConfigured()).toBe(false);
-  });
+    setEnv({ ADMIN_ALLOWED_USER_IDS: " " + ALLOWED_ID.toUpperCase() + " , " + ALLOWED_ID + " " });
+    expect(allowedAdminUserIds()).toEqual([ALLOWED_ID]);
+    expect(isAdminAuthConfigured()).toBe(true);
 
-  it("rejects bcrypt hashes with an unsafe work factor", () => {
-    const weakHash = bcrypt.hashSync(`test-only-${Math.random()}`, 8);
-    setEnv("staff-user", weakHash);
+    // A single typo disables the whole allowlist instead of widening access.
+    setEnv({ ADMIN_ALLOWED_USER_IDS: ALLOWED_ID + ",not-a-uuid" });
+    expect(allowedAdminUserIds()).toEqual([]);
     expect(isAdminAuthConfigured()).toBe(false);
   });
 });
 
-describe("signed admin sessions", () => {
-  it("creates a signed, expiring session that verifies", async () => {
-    const { hash } = testHash();
-    setEnv("staff-user", hash);
-    const now = 1_700_000_000_000;
+describe("verified admin identity", () => {
+  it("accepts only allowlisted UUIDs from verified claims", () => {
+    configureValidAuth();
 
-    const session = await createAdminSession(now);
-    expect(session.split(".")).toHaveLength(2);
-    expect(ADMIN_SESSION_COOKIE).toBe("dt_admin_session");
-
-    const verified = await verifyAdminSession(session, now + 1_000);
-    expect(verified).not.toBeNull();
-    expect(verified?.exp).toBe(now + ADMIN_SESSION_MAX_AGE_SECONDS * 1000);
+    expect(
+      adminIdentityFromClaims({ sub: ALLOWED_ID, email: "admin@example.test" }),
+    ).toEqual({ id: ALLOWED_ID, email: "admin@example.test" });
+    expect(adminIdentityFromClaims({ sub: OTHER_ID, email: "other@example.test" })).toBeNull();
+    expect(adminIdentityFromClaims({ sub: "not-a-uuid" })).toBeNull();
+    expect(adminIdentityFromClaims({ sub: 42 })).toBeNull();
+    expect(adminIdentityFromClaims(null)).toBeNull();
+    expect(adminIdentityFromClaims({ email: "admin@example.test" })).toBeNull();
   });
 
-  it("rejects expired, tampered and wrong-configuration sessions", async () => {
-    const { hash } = testHash();
-    setEnv("staff-user", hash);
-    const now = 1_700_000_000_000;
-    const session = await createAdminSession(now);
-
-    expect(await verifyAdminSession(session, now + ADMIN_SESSION_MAX_AGE_SECONDS * 1000 + 1)).toBeNull();
-
-    const [body, signature] = session.split(".") as [string, string];
-    const flipped = signature.endsWith("A") ? `${signature.slice(0, -1)}B` : `${signature.slice(0, -1)}A`;
-    expect(await verifyAdminSession(`${body}.${flipped}`, now)).toBeNull();
-
-    setEnv("different-user", hash);
-    expect(await verifyAdminSession(session, now)).toBeNull();
+  it("never trusts an allowlist entry when auth is disabled", () => {
+    setEnv({
+      NEXT_PUBLIC_SUPABASE_URL: undefined,
+      SUPABASE_URL: undefined,
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: undefined,
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: undefined,
+      ADMIN_ALLOWED_USER_IDS: ALLOWED_ID,
+    });
+    expect(adminIdentityFromClaims({ sub: ALLOWED_ID })).toBeNull();
   });
+});
 
-  it("uses secure cookie flags in production", () => {
-    Reflect.set(process.env, "NODE_ENV", "production");
-    expect(adminSessionCookieOptions()).toMatchObject({
+describe("Supabase cookie protections", () => {
+  it("uses httpOnly and same-site cookies in every environment", () => {
+    expect(secureAuthCookieOptions({ maxAge: 60 })).toMatchObject({
       httpOnly: true,
-      secure: true,
       sameSite: "lax",
       path: "/",
+      secure: false,
+      maxAge: 60,
     });
+  });
+
+  it("adds the secure flag in production", () => {
+    Reflect.set(process.env, "NODE_ENV", "production");
+    expect(secureAuthCookieOptions({})).toMatchObject({ secure: true, httpOnly: true });
   });
 });
 
@@ -127,7 +163,7 @@ describe("admin CSRF guard", () => {
 
 describe("login throttling", () => {
   it("blocks repeated attempts from the same client", () => {
-    const ip = `192.0.2.${Math.floor(Math.random() * 200) + 1}`;
+    const ip = "192.0.2." + String(Math.floor(Math.random() * 200) + 1);
     const request = () =>
       new Request("https://admin.example.test/api/admin/login", {
         method: "POST",

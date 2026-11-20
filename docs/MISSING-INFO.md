@@ -64,19 +64,28 @@ Three different location wordings are on record:
 - Articles, settings and uploads persist to the local filesystem only -
   on Vercel the filesystem is ephemeral, so content writes would be lost.
 - **Action:** activate the backend per `docs/SUPABASE.md`
-  (`appointment_requests` table, Storage), then set `ADMIN_USERNAME`
-  and `ADMIN_PASSWORD_HASH` using `npm run setup:admin`.
+  (`appointment_requests` table, Storage), then create the staff account in
+  Supabase Dashboard → Authentication → Users and copy its User UID.
+- **Action:** set `NEXT_PUBLIC_SUPABASE_URL`, a publishable key, and the
+  server-only `ADMIN_ALLOWED_USER_IDS` allowlist in Vercel for Production
+  (and Preview if needed). Keep `SUPABASE_URL` and
+  `SUPABASE_SERVICE_ROLE_KEY` server-only. Disable public sign-up, then
+  redeploy. See `docs/ADMIN-AUTH.md`.
 
 ## 7. Production authentication
 
-- The dashboard is disabled until both server-only credential variables are
-  set. Every `/api/admin/*` read and write returns 403 in that state.
-- Login accepts a username and password, verifies the password with bcrypt,
-  and returns the same generic 401 message for either bad field.
-- The session cookie is HMAC-signed, expires after 8 hours, and is
-  `HttpOnly; Secure; SameSite=lax` in production. There is no development bypass.
+- The dashboard is disabled until the Supabase URL, publishable key, and at
+  least one well-formed User ID are configured. Every `/api/admin/*` read
+  and write returns 403 in that state.
+- Login accepts a Supabase Auth email and password. Invalid credentials
+  return the same generic 401; a valid user not on the allowlist is signed
+  out and gets `403 not_authorized`.
+- Supabase SSR cookies are `HttpOnly; SameSite=Lax`, and `Secure` in
+  production. The proxy refreshes them; the protected layout and every API
+  guard re-verify signed JWT claims and the allowlist on each request.
 - Login is rate-limited, state-changing requests require a same-origin
-  `Origin` header, and no credential appears in any client bundle.
+  `Origin` header, no password is stored by the application, and no
+  service-role credential appears in a client bundle.
 
 ## 8. Map verification (browser, 2026-10-12)
 

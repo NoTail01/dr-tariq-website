@@ -8,12 +8,12 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "setup:admin": "node scripts/setup-admin-credentials.mjs"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@next/third-parties": "16.4.6",
-    "bcryptjs": "3.0.3",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.119.2",
     "next": "16.4.6",
     "react": "19.3.0",
     "react-dom": "19.3.0"

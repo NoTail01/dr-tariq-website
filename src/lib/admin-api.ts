@@ -1,17 +1,17 @@
 import { NextResponse } from "next/server";
 
+import { getAdminIdentity, isAdminAuthConfigured } from "./admin-auth";
 import { assertSameOrigin } from "./admin-csrf";
-import { isAuthenticated, isDashboardEnabled } from "./admin-auth";
 
 /**
- * Server-side gate for every admin API.
- * Returns an error response when the caller may not proceed, otherwise null.
+ * Server-side gate for every admin API. Returns an error response when the
+ * caller may not proceed, otherwise null.
  */
 export async function guardAdmin(request: Request): Promise<NextResponse | null> {
   const csrfDenied = assertSameOrigin(request);
   if (csrfDenied) return csrfDenied;
 
-  if (!isDashboardEnabled()) {
+  if (!isAdminAuthConfigured()) {
     return NextResponse.json(
       {
         ok: false,
@@ -22,7 +22,7 @@ export async function guardAdmin(request: Request): Promise<NextResponse | null>
     );
   }
 
-  if (!(await isAuthenticated())) {
+  if (!(await getAdminIdentity())) {
     return NextResponse.json(
       { ok: false, reason: "unauthenticated", message: "Authentication required." },
       { status: 401 },

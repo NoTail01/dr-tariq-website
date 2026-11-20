@@ -10,7 +10,7 @@ import { useDashboardLocale } from "./useDashboardLocale";
 export type AdminSession = {
   enabled: boolean;
   authenticated: boolean;
-  mode: "credentials" | "disabled";
+  mode: "supabase" | "disabled";
 };
 
 const navItems: { href: string; labelKey: "overview" | "articles" | "newArticle" | "settings" }[] = [
@@ -144,7 +144,7 @@ function AdminShellInner({ children }: { children: ReactNode }) {
               <div>
                 <p className="text-sm font-bold text-navy-900">{t.shell.brand}</p>
                 <p className="text-xs text-slate-500">
-                  {session?.mode === "credentials" ? t.shell.authMode : t.shell.disabledMode}
+                  {session?.mode === "supabase" ? t.shell.authMode : t.shell.disabledMode}
                 </p>
               </div>
             </div>

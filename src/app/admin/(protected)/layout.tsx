@@ -1,11 +1,11 @@
 import { connection } from "next/server";
 
-import { requireAdminSession } from "@/lib/admin-auth";
+import { requireAdminUser } from "@/lib/admin-auth";
 
 /**
- * Server-side gate for every protected dashboard page. Proxy performs the
- * fast redirect, but this layout verifies the signed session again on the
- * server before any protected page content is rendered.
+ * Server-side gate for every protected dashboard page. The proxy refreshes
+ * Supabase session cookies, but this layout verifies the signed JWT claims and
+ * the administrator allowlist again before any protected page is rendered.
  */
 export const instant = false;
 
@@ -14,9 +14,7 @@ export default async function ProtectedAdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // The session check compares an expiry with the current time, so it must
-  // run per request rather than during prerendering.
   await connection();
-  await requireAdminSession();
+  await requireAdminUser();
   return <>{children}</>;
 }

@@ -5,8 +5,9 @@ The site runs fully without a backend: booking requests show a clear
 and uploads are stored under `public/uploads/`. This guide describes how to
 move **articles, settings and uploads** onto Supabase.
 
-Nothing here requires a code change. Everything is driven by two
-environment variables.
+Backend activation requires no code change and is driven by two server-only
+variables. Supabase Auth for the admin dashboard uses additional variables
+described in section 7 and in `docs/ADMIN-AUTH.md`.
 
 ## 1. Variables
 
@@ -123,24 +124,31 @@ labels the submission as transmitted.
 
 ## 7. Admin authentication
 
-The dashboard uses a server-only username and bcrypt password hash. See
-`docs/ADMIN-AUTH.md` for the setup script and the exact Vercel variables.
+The dashboard uses the same Supabase project for official email-and-password
+authentication. Accounts are created only in **Authentication → Users**; public
+sign-up is disabled. See `docs/ADMIN-AUTH.md` for exact dashboard steps and the
+list of Vercel variables.
 
-- `isDashboardEnabled()` returns false unless both `ADMIN_USERNAME`
-  and a valid `ADMIN_PASSWORD_HASH` are configured, in every environment;
-  there is no open development dashboard.
-- `guardAdmin()` rejects every `/api/admin/*` call with 403
-  when disabled or 401 without a valid signed session, and checks the
-  same-origin `Origin` header on state-changing requests.
-- A successful login returns an HMAC-signed, 8-hour session cookie with
-  `HttpOnly; SameSite=Lax; Secure` (Secure in deployed environments).
-- Proxy and a protected server layout both verify that cookie before any
-  dashboard page content renders.
-- The Supabase service-role key is never sent to the browser.
+| Variable | Where | Purpose |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | public (or server-only `SUPABASE_URL`) | Project URL for Supabase Auth |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | public | Publishable key; `NEXT_PUBLIC_SUPABASE_ANON_KEY` is accepted for older projects |
+| `ADMIN_ALLOWED_USER_IDS` | **server only** | Comma-separated Supabase Auth User UUIDs allowed to enter `/admin` |
 
-Supabase Auth can replace this layer later: swap the cookie check in
-`getAuthenticatedSession()` for a `supabase.auth.getUser()` call and keep
-the fail-closed enable check when no provider is configured.
+- `isAdminAuthConfigured()` returns false unless the project URL, publishable
+  key, and at least one well-formed User ID are present, in every environment.
+  There is no open development dashboard and no username/password fallback.
+- `guardAdmin()` rejects every `/api/admin/*` call with 403 when
+  unconfigured, 401 without a verified session, and checks the same-origin
+  `Origin` header on state-changing requests.
+- Login calls `signInWithPassword`, then verifies the new JWT with
+  `getClaims()`; a valid user outside the allowlist is signed out and gets
+  `403 not_authorized`.
+- Supabase SSR cookies are `HttpOnly; SameSite=Lax`, with `Secure` in
+  production. The proxy refreshes them, and the protected layout plus every API
+  guard re-verify signed claims and the allowlist on each request.
+- `SUPABASE_SERVICE_ROLE_KEY` remains server-only and is never used by the
+  browser auth client.
 
 ## Privacy
 

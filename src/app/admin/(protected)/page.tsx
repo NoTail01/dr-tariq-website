@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useDashboardLocale } from "@/components/admin/useDashboardLocale";
 import type { Article } from "@/lib/article-types";
 
-type Session = { enabled: boolean; authenticated: boolean; mode: "credentials" | "disabled" };
+type Session = { enabled: boolean; authenticated: boolean; mode: "supabase" | "disabled" };
 
 export default function AdminOverviewPage() {
   const { t } = useDashboardLocale();
@@ -65,7 +65,7 @@ export default function AdminOverviewPage() {
           <li>
             {t.home.environment}:{" "}
             <strong>
-              {session?.mode === "credentials" ? t.home.prodMode : t.home.disabledMode}
+              {session?.mode === "supabase" ? t.home.prodMode : t.home.disabledMode}
             </strong>
           </li>
           <li>
