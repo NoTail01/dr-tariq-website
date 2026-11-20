@@ -52,3 +52,27 @@ describe("Admin session", () => {
     );
   });
 });
+
+const hardeningMigration = readFileSync(
+  path.join(process.cwd(), "supabase/migrations/0002_booking_hardening.sql"),
+  "utf8",
+);
+
+describe("booking hardening migration", () => {
+  it("limits stored appointment field lengths", () => {
+    for (const name of [
+      "appointment_requests_name_len",
+      "appointment_requests_contact_len",
+      "appointment_requests_preferred_time_len",
+      "appointment_requests_message_len",
+    ]) {
+      expect(hardeningMigration).toContain(name);
+    }
+  });
+
+  it("caps upload bucket size and MIME types without granting anon policies", () => {
+    expect(hardeningMigration).toContain("file_size_limit = 4194304");
+    expect(hardeningMigration).toContain("allowed_mime_types");
+    expect(hardeningMigration).not.toMatch(/create policy/i);
+  });
+});

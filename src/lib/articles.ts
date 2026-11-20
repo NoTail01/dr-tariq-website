@@ -147,13 +147,14 @@ export async function getArticleById(id: string): Promise<Article | null> {
  * Articles a visitor is allowed to see.
  *
  * - drafts are never returned;
+ * - non-demo articles require a recorded medical approval;
  * - demo/template articles are only visible while the site runs in
  *   development mode, and are excluded from indexing everywhere.
  */
 export function isVisibleArticle(article: Article, mode: "development" | "production"): boolean {
   if (article.status !== "published") return false;
-  if (article.isDemo && mode === "production") return false;
-  return true;
+  if (article.isDemo) return mode === "development";
+  return article.review.status === "approved";
 }
 
 export async function getVisibleArticles(mode: "development" | "production"): Promise<Article[]> {

@@ -15,15 +15,15 @@ clinic has not yet confirmed — those items are in
 | 2 | English site opens LTR at `/en` | Pass |
 | 3 | `/` redirects to the visitor's preferred language | Pass |
 | 4 | Home, About, Blog, Appointments pages render in both languages | Pass |
-| 5 | Blog lists the 10 published articles in both languages | Pass |
-| 6 | Every article page renders Arabic + English content | Pass |
+| 5 | Blog shows no articles: all 10 are held (draft / pending review) | Pass |
+| 6 | Article URLs return 404 while review is pending (no public article pages) | Pass |
 | 7 | Language switch keeps the current page | Pass |
 | 8 | Every internal link in every article resolves to a real article | Pass (automated test) |
 | 9 | Google Maps embed renders the clinic area | Pass |
 | 10 | "Open in Google Maps" points to the clinic listing | Pass |
 | 11 | Published clinic numbers produce working `tel:` links | Pass |
-| 12 | WhatsApp button opens `wa.me/962799101101` with a prefilled message | Pass |
-| 13 | Every WhatsApp button states that it does not confirm an appointment | Pass |
+| 12 | WhatsApp links are disabled; published phone numbers still produce `tel:` links | Pass |
+| 13 | No WhatsApp buttons are rendered until written confirmation exists | Pass |
 | 14 | Appointment wording is "contact the clinic", never "book/confirmed" | Pass |
 | 15 | 404 for an unknown article returns a real 404 (not a soft 404) | Pass |
 | 16 | Demo/template articles are hidden entirely in production | Pass |
@@ -35,16 +35,16 @@ clinic has not yet confirmed — those items are in
 
 | # | Check | Result |
 | --- | --- | --- |
-| 20 | All 10 articles are **published** | Pass |
-| 21 | All 10 articles are **medically approved** (client-confirmed 14 Oct 2026) | Pass |
-| 22 | Publication never marks an article doctor-approved | Pass |
+| 20 | All 10 articles are **held as drafts** | Pass |
+| 21 | No medical approval is recorded for any article | Pass |
+| 22 | An article with pending review is never publicly visible, even if published | Pass |
 | 22b | Pending templates never carry a doctor-review badge | Pass |
-| 23 | No pending-review badge or note on the 10 approved articles | Pass |
+| 23 | No pending-review badge appears publicly because the pages are hidden | Pass |
 | 23b | Demo templates keep their "not medical content" + pending badges | Pass |
 | 24 | No article is attributed to the doctor as author or reviewer | Pass |
 | 25 | Articles are credited to the website editorial team | Pass |
 | 26 | Each article cites its source (NIDDK / NHS) and links to it | Pass |
-| 27 | Article (BlogPosting) structured data is emitted for all 10 approved articles in both languages | Pass |
+| 27 | No BlogPosting structured data is emitted while review is pending | Pass |
 | 28 | No review timestamp exists until the doctor records a decision | Pass |
 | 29 | A review timestamp can only be set by the server, never by the browser | Pass |
 | 30 | No success rates, patient counts, ratings or guarantees are published | Pass |
@@ -59,13 +59,13 @@ clinic has not yet confirmed — those items are in
 | 34 | Session cookie is `HttpOnly; Secure; SameSite=lax` | Pass |
 | 35 | A forged development cookie is rejected in production | Pass |
 | 36 | Drafts are never visible to visitors | Pass |
-| 37 | Publishing a draft needs no medical approval (by design) | Pass |
+| 37 | Publishing alone never exposes an article; approval is required for public visibility | Pass |
 | 38 | Approval is a separate action that records its own timestamp | Pass |
 | 39 | Dashboard interface is fully bilingual (AR/EN) | Pass |
 | 40 | Unsaved changes are guarded by a banner + `beforeunload` | Pass |
 | 41 | Saving reports success only after the server confirms the write | Pass |
 | 42 | Settings validation rejects non-embed map URLs and non-hex colors | Pass |
-| 43 | WhatsApp can never be switched on implicitly | Pass |
+| 43 | WhatsApp stays off until written confirmation; the admin toggle is read-only | Pass |
 
 ## 4. Backend and deploy safety
 
@@ -83,7 +83,7 @@ clinic has not yet confirmed — those items are in
 
 | # | Check | Result |
 | --- | --- | --- |
-| 51 | `npm run test` — 92/92 passing (10 suites) | Pass |
+| 51 | `npm run test` - 127 passing (14 suites) | Pass |
 | 52 | `npx tsc --noEmit` | Pass |
 | 53 | `npm run lint` | Pass |
 | 54 | `npm run build` | Pass |

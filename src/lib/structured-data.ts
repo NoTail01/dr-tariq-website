@@ -17,6 +17,11 @@ export const PHYSICIAN_ID = SITE_URL + "/#physician";
 export const CLINIC_ID = SITE_URL + "/#clinic";
 export const WEBSITE_ID = SITE_URL + "/#website";
 
+/** Stable Blog entity id shared by the blog index and article pages. */
+export function blogId(locale: Locale): string {
+  return SITE_URL + localizePath(locale, "/blog") + "#blog";
+}
+
 const PORTRAIT = "/images/dr-tariq-portrait.png";
 const PORTRAIT_WIDTH = 1200;
 const PORTRAIT_HEIGHT = 960;
@@ -41,17 +46,6 @@ function phoneNumbers(settings: Settings): string[] {
   return [settings.contact.phoneIntl, settings.contact.landlineIntl].filter(
     (value): value is string => typeof value === "string" && value.length > 0,
   );
-}
-
-function postalAddress(settings: Settings, locale: Locale) {
-  const street = settings.contact.address?.[locale];
-  if (!street) return undefined;
-  return {
-    "@type": "PostalAddress",
-    streetAddress: street,
-    addressLocality: locale === "ar" ? "عمّان" : "Amman",
-    addressCountry: "JO",
-  };
 }
 
 function contactPoints(settings: Settings) {
@@ -94,7 +88,6 @@ export function websiteNode(locale: Locale, settings: Settings) {
 export function physicianNode(locale: Locale, settings: Settings) {
   const profiles = socialProfiles(settings);
   const phones = phoneNumbers(settings);
-  const address = postalAddress(settings, locale);
 
   return {
     "@type": "Physician",
@@ -113,10 +106,6 @@ export function physicianNode(locale: Locale, settings: Settings) {
     medicalSpecialty: ["InternalMedicine", "Nephrology", "Hypertension"],
     // Only asserted when the hospital profile is the recorded source.
     ...(doctor.languagesSource ? { knowsLanguage: [...LANGUAGE_CODES] } : {}),
-    availableService: doctor.specialties.map((specialty) => ({
-      "@type": "MedicalProcedure",
-      name: specialty[locale],
-    })),
     hasCredential: doctor.qualifications.map((qualification) => ({
       "@type": "EducationalOccupationalCredential",
       credentialCategory: "certification",
@@ -124,7 +113,6 @@ export function physicianNode(locale: Locale, settings: Settings) {
     })),
     ...(phones.length > 0 ? { telephone: phones[0] } : {}),
     ...(phones.length > 0 ? { contactPoint: contactPoints(settings) } : {}),
-    ...(address ? { address } : {}),
     ...(profiles.length > 0 ? { sameAs: profiles } : {}),
     workLocation: { "@id": CLINIC_ID },
   };
@@ -133,7 +121,6 @@ export function physicianNode(locale: Locale, settings: Settings) {
 export function clinicNode(locale: Locale, settings: Settings) {
   const profiles = socialProfiles(settings);
   const phones = phoneNumbers(settings);
-  const address = postalAddress(settings, locale);
   const clinicLabel = locale === "ar" ? "العيادة" : "Clinic";
 
   return {
@@ -154,7 +141,6 @@ export function clinicNode(locale: Locale, settings: Settings) {
     physician: { "@id": PHYSICIAN_ID },
     ...(phones.length > 0 ? { telephone: phones[0] } : {}),
     ...(phones.length > 0 ? { contactPoint: contactPoints(settings) } : {}),
-    ...(address ? { address } : {}),
     ...(settings.contact.mapsPlaceUrl ? { hasMap: settings.contact.mapsPlaceUrl } : {}),
     ...(profiles.length > 0 ? { sameAs: profiles } : {}),
   };

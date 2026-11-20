@@ -193,10 +193,9 @@ export function whatsappHref(
 /**
  * Call and WhatsApp options for the clinic's published lines.
  *
- * A channel is only active when the number exists — mobile and landline are
- * published on the clinic's supplied branding. WhatsApp is confirmed
- * (October 2026) and shows a chat action with a prefilled message; opening
- * it never confirms a booking.
+ * A channel is only active when the number exists and independent written
+ * confirmation is on record. Mobile and landline are published from the
+ * clinic's supplied branding; WhatsApp stays disabled until confirmed.
  */
 export default function ContactOptions({
   contact,

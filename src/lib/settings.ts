@@ -33,11 +33,7 @@ export type Settings = {
     landlineIntl: string | null;
     /** WhatsApp number (international). Only used when whatsappEnabled. */
     whatsapp: string | null;
-    /**
-     * WhatsApp activation flag. The clinic confirmed WhatsApp on the mobile
-     * number 0799101101 / +962799101101 (October 2026), so this is true.
-     * Opening WhatsApp never confirms a booking — it only starts a chat.
-     */
+    /** WhatsApp activation flag. Independent confirmation is not on record. */
     whatsappEnabled: boolean;
     /** Localized prefilled message for the wa.me link. */
     whatsappMessage: Localized | null;
@@ -103,7 +99,7 @@ export const defaultSettings: Settings = {
     landlineIntl: "+96265685354",
     // Prepared for later activation; NOT confirmed as a working WhatsApp line.
     whatsapp: "+962799101101",
-    whatsappEnabled: true,
+    whatsappEnabled: false,
     whatsappMessage: {
       ar: "مرحبًا، أود الاستفسار عن المواعيد المتاحة لدى الدكتور طارق أبو حويج.",
       en: "Hello, I would like to enquire about the available appointment times with Dr Tariq Abu Hweij.",
@@ -148,24 +144,13 @@ export function mergeWithDefaults(raw: unknown): Settings {
   if (typeof raw !== "object" || raw === null) return defaultSettings;
   const data = raw as Partial<Settings>;
   const contact = { ...defaultSettings.contact, ...(data.contact ?? {}) };
-  // A legacy settings file without the WhatsApp flag must stay disabled.
-  if (typeof contact.whatsappEnabled !== "boolean") contact.whatsappEnabled = false;
-  // WhatsApp is confirmed (October 2026) but can be turned off in the
-  // dashboard if the clinic ever asks for it.
-  // Legacy files without the doctor block fall back to the verified defaults.
+  // Independent confirmation is not on record, so public WhatsApp links stay
+  // disabled regardless of the stored value (defense in depth).
+  contact.whatsappEnabled = false;
   const doctor = data.doctor ?? defaultSettings.doctor;
-  const qualificationRows = Array.isArray(doctor.qualifications)
-    ? doctor.qualifications
-        .filter((q) => q && ((q.ar && q.ar.trim()) || (q.en && q.en.trim())))
-        // Backfill the missing language so a row never renders blank.
-        .map((q) => {
-          const ar = (q.ar ?? "").trim();
-          const en = (q.en ?? "").trim();
-          return { ar: ar || en, en: en || ar };
-        })
-    : [];
-  const qualifications =
-    qualificationRows.length > 0 ? qualificationRows : defaultSettings.doctor.qualifications;
+  // Verified qualifications are locked to the source ledger; unsaved CMS
+  // edits can never publish an unsourced credential.
+  const qualifications = defaultSettings.doctor.qualifications;
   return {
     ...defaultSettings,
     ...data,

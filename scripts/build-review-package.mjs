@@ -160,7 +160,7 @@ async function main() {
 <header>
   <div class="inner">
     <h1>حزمة مراجعة المقالات الطبية</h1>
-    <p>الدكتور طاري أبو حويج — ${seeded.length} مقالات منشورة وموافَق عليها طبياً</p>
+    <p>الدكتور طاري أبو حويج — ${seeded.length} مقالات محجوزة بانتظار المراجعة الطبية (غير منشورة)</p>
     <p>تاريخ الإعداد: ${generated} · هذه الوثيقة خاصة ولا تُنشر على الموقع</p>
   </div>
 </header>
@@ -175,7 +175,7 @@ async function main() {
   ${sections}
 </main>
 <footer>
-  <p>المقالات منشورة وموافَق عليها طبياً (تأكيد العميل في 14 أكتوبر 2026): ولا تُنسب إلى الدكتور كمؤلف أو مُراجع، ولا تُضاف بيانات منظمة خاصة بالمقال قبل الاعتماد. تسجيل الموافقة الطبية يتم من لوحة التحكم ويُختم تلقائياً بتاريخ القرار.</p>
+  <p>المقالات محجوزة بانتظار المراجعة الطبية؛ لم يُسجَّل أي قرار موافقة، ولا تظهر للزوار أو في خريطة الموقع. لا تُنسب إلى الدكتور كمؤلف أو مُراجع، ولا تُضاف بيانات منظمة خاصة بالمقال قبل تسجيل الموافقة. تسجيل الموافقة الطبية يتم من لوحة التحكم ويُختم تلقائياً بتاريخ القرار.</p>
 </footer>
 </body>
 </html>
@@ -185,7 +185,7 @@ async function main() {
 
   const checklistMd = `# Doctor review package — ${generated}
 
-${seeded.length} articles are **published and medically approved** — the client confirmed all 10 on 14 October 2026.
+${seeded.length} articles are **held as drafts with pending medical review**. No physician approval has been recorded; they are not publicly reachable or included in the sitemap.
 Review status is a separate state from publication: publication never implies
 medical approval, and an approval only exists once the doctor records it (the
 server stamps that decision).
@@ -197,8 +197,8 @@ server stamps that decision).
 2. For each article choose **موافق / Approved** or **بحاجة إلى تعديلات / Needs
    changes** and add notes.
 3. Return the marked package; the site team records each decision in the
-   dashboard, which automatically enables Article structured data for
-   approved articles and unlocks publishing changes.
+    dashboard, which is required before the article can become public or emit
+    BlogPosting structured data.
 
 ## Review checklist (EN)
 

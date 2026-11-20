@@ -43,11 +43,12 @@ describe("content/articles.json", () => {
     }
   });
 
-  it("keeps the 10 medical articles published in both languages", () => {
+  it("keeps the 10 medical articles held as complete drafts in both languages", () => {
     const real = articles.filter((a) => a.isDemo !== true);
     expect(real).toHaveLength(10);
     for (const article of real) {
-      expect(article.status).toBe("published");
+      expect(article.status).toBe("draft");
+      expect(article.publishedAt).toBeNull();
       expect(article.slug.ar).toBeTruthy();
       expect(article.slug.en).toBeTruthy();
       expect(article.title.ar).toBeTruthy();
@@ -81,12 +82,10 @@ describe("content/articles.json", () => {
     }
   });
 
-  it("keeps the medical review state separate from publication", () => {
+  it("does not claim medical approval for held articles", () => {
     for (const article of articles.filter((a) => a.isDemo !== true)) {
-      // Published content still awaits the doctor's decision until one is
-      // recorded — publication alone must never imply medical approval.
-      expect(article.review).toBeTruthy();
-      expect(["pending", "approved", "needs-changes"]).toContain(article.review.status);
+      expect(article.review.status).toBe("pending");
+      expect(article.review.reviewedAt).toBeNull();
     }
   });
 
@@ -100,7 +99,11 @@ describe("content/articles.json", () => {
           const slug = match[1];
           const target = articles.find((a) => a.slug[locale] === slug);
           expect(target, `${article.slug.en} links to unknown slug "${slug}"`).toBeTruthy();
-          expect(isVisibleArticle(target!, "production")).toBe(true);
+          const publiclyVisible =
+            !target!.isDemo &&
+            target!.status === "published" &&
+            target!.review.status === "approved";
+          expect(isVisibleArticle(target!, "production")).toBe(publiclyVisible);
         }
       }
     }

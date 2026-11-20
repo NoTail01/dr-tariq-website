@@ -1,12 +1,5 @@
 import type { NextConfig } from "next";
 
-/**
- * Site URL used for canonical URLs, sitemap and Open Graph tags.
- * Never contains secrets — it is public metadata.
- */
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-
 const isProd = process.env.NODE_ENV === "production";
 
 /**

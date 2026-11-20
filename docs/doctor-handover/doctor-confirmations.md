@@ -46,7 +46,7 @@ without a specialty is correct.
 | Public email | Not published | Does the clinic want a public email address? |
 | Instagram | Not published | Should a clinic Instagram profile be linked? |
 | Facebook | Linked to the existing page | Is `facebook.com/DrTariqAbuHweij/` still the right page? |
-| WhatsApp | Enabled on 0799101101 (confirmed October 2026) | Should the prefilled message be reworded? |
+| WhatsApp | Prepared on 0799101101, disabled until written confirmation | Should the prefilled message be reworded? |
 | Landline | Published as 065685354 | Still correct? |
 
 ## 5. Identity details worth a second look
@@ -61,14 +61,17 @@ without a specialty is correct.
 
 ## 6. Articles — medical review
 
-All **10** articles are published while awaiting medical review, and each one
-carries a visible notice saying so. The doctor is asked to mark each one
-**موافق / Approved** or **بحاجة إلى تعديلات / Needs changes** in the printable
-copy ([`articles-review-copy.html`](./articles-review-copy.html)) or the
-interactive package ([`../doctor-review/index.html`](../doctor-review/index.html)).
+All **10** articles are held as drafts with `review: pending`. No physician
+approval has been recorded, so they are not publicly reachable, not linked
+from the blog or home page, and absent from the sitemap. The doctor is asked
+to mark each one **موافق / Approved** or **بحاجة إلى تعديلات / Needs changes**
+in the printable copy ([`articles-review-copy.html`](./articles-review-copy.html))
+or the interactive package ([`../doctor-review/index.html`](../doctor-review/index.html)).
 
 Once returned, the site team records each decision in the dashboard. The
 server stamps the decision automatically; the browser cannot back-date it.
+Approval is required before an article can become public or emit BlogPosting
+structured data.
 
 ## 7. Before any public launch
 

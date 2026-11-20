@@ -77,7 +77,7 @@ Editable from the dashboard (single system, no duplicate admin):
 | --- | --- |
 | Biography + qualifications (per language) | Settings → "Doctor biography & qualifications" |
 | Contact numbers (mobile/landline, national + international) | Settings → Contact |
-| WhatsApp activation flag + prefilled message | Settings → Contact |
+| WhatsApp number + prefilled message (channel disabled until confirmed) | Settings - Contact (read-only) |
 | Address, working hours (empty stays inactive) | Settings → Contact |
 | Google Maps embed + open-in-Maps link | Settings → Google Maps |
 | Brand color, emblem assets | Settings → Branding |
@@ -98,19 +98,19 @@ never produce a broken link).
 
 ## Publication vs medical review
 
-These are two independent states and the dashboard treats them that way:
+These are two independent states, and public visibility requires both:
 
-- **Publishing** makes an article visible to visitors. It never marks the
-  article as approved, and it is available without medical approval.
+- **Publishing** is a content status. On its own it never exposes an article
+  to visitors and never marks it as approved.
 - **Medical review** is a separate decision (pending / approved / needs
-  changes). It is an explicit action by the doctor or the site team, and the
-  **server** stamps the moment it changes — the browser never supplies the
-  review timestamp, so an approval cannot be back-dated or faked.
+  changes). The **server** stamps the moment it changes, so an approval
+  cannot be back-dated or faked.
 
-A published article whose review is still pending shows a visible "Awaiting
-medical review" badge and note, is credited to the website editorial team
-(never to the doctor), and emits no `BlogPosting` structured data. The
-`BlogPosting` block is emitted only once the review is `approved`.
+The 10 prepared medical articles are held as drafts with `review: pending`:
+physician approval has not been confirmed. They are absent from public pages,
+the sitemap and `BlogPosting` structured data. Once a recorded approval
+exists, an article can be published and will then emit `BlogPosting` data;
+it is always credited to the website editorial team, never to the doctor.
 
 ## Persistence
 

@@ -123,8 +123,8 @@ labels the submission as transmitted.
 
 ## 7. Admin authentication
 
-`src/lib/admin-auth.ts` uses a signed session cookie compared against
-`ADMIN_TOKEN`:
+`src/lib/admin-auth.ts` uses an HttpOnly session cookie holding a SHA-256
+  digest of `ADMIN_TOKEN`, compared with a timing-safe equality check:
 
 - `isDashboardEnabled()` returns `false` in production unless `ADMIN_TOKEN`
   is set — there is no open development dashboard in a production build;

@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 import { getVisibleArticles } from "@/lib/articles";
 import { readSettings } from "@/lib/settings";
-import { SITE_URL, getSiteMode } from "@/lib/site";
+import { SITE_URL, getSiteMode, isIndexableSite } from "@/lib/site";
 
 /**
  * Sitemap: public pages in both languages plus genuinely published,
@@ -13,6 +13,8 @@ import { SITE_URL, getSiteMode } from "@/lib/site";
  * request time, so the sitemap stays stable between crawls.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  if (!isIndexableSite()) return [];
+
   const mode = getSiteMode();
   const settings = await readSettings();
   const settingsStamp = new Date(settings.updatedAt);

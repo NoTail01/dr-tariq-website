@@ -16,7 +16,7 @@ import { getAnalyticsConfig } from "@/lib/analytics";
 import { plexArabic } from "@/lib/font";
 import { phoneLink } from "@/lib/settings";
 import { readSettings } from "@/lib/settings";
-import { SITE_URL } from "@/lib/site";
+import { isIndexableSite, SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -40,6 +40,9 @@ export async function generateMetadata({
       template: dict.meta.titleTemplate,
     },
     description: dict.meta.defaultDescription,
+    robots: isIndexableSite()
+      ? { index: true, follow: true }
+      : { index: false, follow: false, nocache: true },
     ...(config.searchConsoleVerification
       ? { verification: { google: config.searchConsoleVerification } }
       : {}),

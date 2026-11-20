@@ -62,34 +62,26 @@ describe("publication vs medical review", () => {
     if (result.ok) expect(result.value.review.status).toBe("pending");
   });
 
-  it("keeps every stored article published and reviewable", async () => {
+  it("keeps every stored article held and reviewable", async () => {
     const articles = await readAllArticles();
     const real = articles.filter((a) => a.isDemo !== true);
     expect(real).toHaveLength(10);
     for (const article of real) {
-      // Publication and review are independent: published articles may be
-      // approved (as the 10 medical ones now are) or still pending.
-      expect(article.status).toBe("published");
-      expect(["pending", "approved", "needs-changes"]).toContain(article.review.status);
-      // An approval is a recorded decision; "pending" carries no timestamp.
-      if (article.review.status === "approved") {
-        expect(article.review.reviewedAt).toBeTruthy();
-      } else {
-        expect(article.review.reviewedAt).toBeNull();
-      }
+      expect(article.status).toBe("draft");
+      expect(article.publishedAt).toBeNull();
+      expect(article.review.status).toBe("pending");
+      expect(article.review.reviewedAt).toBeNull();
     }
   });
 
-  it("records the client's approval of all 10 medical articles", async () => {
+  it("does not claim physician approval for any stored article", async () => {
     const articles = await readAllArticles();
     const real = articles.filter((a) => a.isDemo !== true);
     expect(real).toHaveLength(10);
     for (const article of real) {
-      expect(article.review.status).toBe("approved");
-      // A genuine, server-recorded decision time — not an invented date.
-      expect(article.review.reviewedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
-      // The approval is attributed to the client, not fabricated as a review.
-      expect(article.review.notes).toContain("client");
+      expect(article.review.status).toBe("pending");
+      expect(article.review.reviewedAt).toBeNull();
+      expect(article.review.notes).not.toMatch(/approved by the client/i);
     }
   });
 
@@ -139,13 +131,23 @@ describe("publication vs medical review", () => {
   });
 });
 
-describe("published content stays visible regardless of review", () => {
-  it("keeps a pending article visible to visitors", async () => {
+describe("unapproved content stays hidden", () => {
+  it("hides held non-demo articles from visitors", async () => {
     const articles = await readAllArticles();
     const real = articles.filter((a) => a.isDemo !== true);
     for (const article of real) {
-      expect(isVisibleArticle(article, "production")).toBe(true);
+      expect(isVisibleArticle(article, "development")).toBe(false);
+      expect(isVisibleArticle(article, "production")).toBe(false);
     }
+  });
+
+  it("hides a published article while its review is pending", () => {
+    const pending = {
+      status: "published" as const,
+      isDemo: false,
+      review: { status: "pending" as const, notes: null, reviewedAt: null },
+    } as Parameters<typeof isVisibleArticle>[0];
+    expect(isVisibleArticle(pending, "production")).toBe(false);
   });
 
   it("keeps the committed store readable and complete", () => {

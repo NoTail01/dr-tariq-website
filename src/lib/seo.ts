@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 
 import { localizePath, localeInfo, locales, type Locale } from "@/i18n/config";
 import { defaultSettings } from "@/lib/settings";
-import { SITE_URL } from "@/lib/site";
+import { isIndexableSite, SITE_URL } from "@/lib/site";
 
-const DEFAULT_OG_IMAGE = "/images/dr-tariq-portrait.png";
+const DEFAULT_OG_IMAGE = "/images/dr-tariq-og.webp";
 const DEFAULT_OG_WIDTH = 1200;
-const DEFAULT_OG_HEIGHT = 960;
+const DEFAULT_OG_HEIGHT = 630;
 const MAX_TITLE_LENGTH = 65;
 
 type ImageInput =
@@ -121,7 +121,7 @@ export function pageMetadata({
       canonical: url,
       languages,
     },
-    robots: noindex
+    robots: noindex || !isIndexableSite()
       ? { index: false, follow: false, nocache: true }
       : {
           index: true,

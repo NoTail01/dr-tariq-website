@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 
 import { WarningIcon } from "@/components/Icons";
+import { doctor } from "@/content/doctor";
 
 import { apiGet, apiSend } from "@/components/admin/api";
 import { setUnsavedChanges } from "@/components/admin/unsaved-guard";
@@ -55,7 +56,7 @@ function TextField({
 }
 
 export default function SettingsPage() {
-  const { t } = useDashboardLocale();
+  const { t, locale } = useDashboardLocale();
   const [settings, setSettings] = useState<Settings | null>(null);
   const [savedSnapshot, setSavedSnapshot] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -135,7 +136,7 @@ export default function SettingsPage() {
 
   const update = (patch: Partial<Settings>) => setSettings((current) => ({ ...current!, ...patch }));
 
-  const qualifications = settings.doctor.qualifications;
+  const qualifications = doctor.qualifications;
   const brandColorValid = /^#[0-9a-f]{6}$/i.test(settings.branding.brandColor);
 
   return (
@@ -221,76 +222,14 @@ export default function SettingsPage() {
 
           <div>
             <p className="text-sm font-semibold text-navy-900">{t.settings.qualifications}</p>
-            <ul className="mt-3 space-y-3">
-              {qualifications.map((qualification, index) => (
-                <li key={index} className="rounded-xl border border-slate-200 p-3">
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div>
-                      <label
-                        htmlFor={`qual-ar-${index}`}
-                        className="text-xs font-semibold text-slate-500"
-                      >
-                        {t.settings.qualificationAr}
-                      </label>
-                      <input
-                        id={`qual-ar-${index}`}
-                        dir="rtl"
-                        className={inputClass}
-                        value={qualification.ar}
-                        onChange={(event) => {
-                          const next = [...qualifications];
-                          next[index] = { ...qualification, ar: event.target.value };
-                          update({ doctor: { ...settings.doctor, qualifications: next } });
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor={`qual-en-${index}`}
-                        className="text-xs font-semibold text-slate-500"
-                      >
-                        {t.settings.qualificationEn}
-                      </label>
-                      <input
-                        id={`qual-en-${index}`}
-                        dir="ltr"
-                        className={inputClass}
-                        value={qualification.en}
-                        onChange={(event) => {
-                          const next = [...qualifications];
-                          next[index] = { ...qualification, en: event.target.value };
-                          update({ doctor: { ...settings.doctor, qualifications: next } });
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const next = qualifications.filter((_, i) => i !== index);
-                      update({ doctor: { ...settings.doctor, qualifications: next } });
-                    }}
-                    className="mt-2 inline-flex min-h-9 items-center rounded-lg px-2 text-xs font-semibold text-red-600 hover:bg-red-50 hover:text-red-700"
-                  >
-                    {t.common.remove}
-                  </button>
+            <p className="mt-2 text-xs leading-relaxed text-slate-500">{t.settings.qualificationsLocked}</p>
+            <ul className="mt-3 space-y-2">
+              {qualifications.map((qualification) => (
+                <li key={qualification.en} className="rounded-xl border border-slate-200 p-3 text-sm text-ink-700">
+                  {qualification[locale]}
                 </li>
               ))}
             </ul>
-            <button
-              type="button"
-              onClick={() =>
-                update({
-                  doctor: {
-                    ...settings.doctor,
-                    qualifications: [...qualifications, { ar: "", en: "" }],
-                  },
-                })
-              }
-              className="mt-3 rounded-full border border-brand-300 px-4 py-2 text-sm font-semibold text-brand-700 hover:bg-brand-50"
-            >
-              + {t.settings.addQualification}
-            </button>
           </div>
         </div>
       </section>
@@ -388,24 +327,11 @@ export default function SettingsPage() {
             onChange={(value) =>
               update({ contact: { ...settings.contact, whatsapp: value || null } })
             }
-            hint={t.settings.whatsappHint}
+            hint={t.settings.whatsappLocked}
           />
-          <div className="flex items-center gap-3 self-end pb-1.5">
-            <input
-              id="whatsapp-enabled"
-              type="checkbox"
-              className="h-6 w-6 shrink-0 rounded border-slate-300"
-              checked={settings.contact.whatsappEnabled}
-              onChange={(event) =>
-                update({
-                  contact: { ...settings.contact, whatsappEnabled: event.target.checked },
-                })
-              }
-            />
-            <label htmlFor="whatsapp-enabled" className="text-sm font-semibold text-navy-900">
-              {t.settings.whatsappEnable}
-            </label>
-          </div>
+          <p className="self-end pb-1.5 text-xs leading-relaxed text-slate-500">
+            {t.settings.whatsappLocked}
+          </p>
           <TextField
             label={t.settings.email}
             dir="ltr"

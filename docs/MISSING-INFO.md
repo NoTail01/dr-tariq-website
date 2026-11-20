@@ -19,17 +19,17 @@ Three different location wordings are on record:
 - The wordings must never be combined; the published wording stays exactly as
   supplied until the clinic confirms a change in writing.
 
-## 2. WhatsApp availability — resolved (October 2026)
+## 2. WhatsApp availability - not confirmed (held disabled)
 
-- The clinic **confirmed** WhatsApp on the mobile number 0799101101 /
-  +962799101101. `contact.whatsappEnabled` is now `true` and the channel is
-  published on the home page, the appointments page and the mobile bar.
-- The link is `https://wa.me/962799101101` with a localized prefilled message
-  (editable in Settings). Opening the chat never confirms a booking — the
-  wording says so everywhere the button appears.
-- **Action (only if the clinic asks):** untick "WhatsApp active" in Settings →
-  Contact. The button disappears and the footer returns to the plain phone
-  note without any code change.
+- No independent written confirmation exists that WhatsApp works on the
+  mobile number 0799101101 / +962799101101. `contact.whatsappEnabled` is
+  forced to `false` in defaults, stored settings, the public settings API
+  and the admin UI, so no `wa.me` link is rendered anywhere.
+- The prefilled message is retained in Settings for later use but is not
+  published. Opening a chat would not confirm a booking in any case.
+- **Action:** obtain written confirmation from the clinic before enabling
+  the channel. Until then the toggle is read-only and the footer shows the
+  plain phone note.
 
 ## 3. Opening hours
 
@@ -50,9 +50,12 @@ Three different location wordings are on record:
 
 ## 5. Final domain
 
-- The site builds locally; `NEXT_PUBLIC_SITE_URL` still defaults to
-  `http://localhost:3000` (canonical URLs, sitemap and Open Graph tags use it).
-- **Action:** set `NEXT_PUBLIC_SITE_URL` to the final domain before launch.
+- The site builds locally. `NEXT_PUBLIC_SITE_URL` has no safe production default:
+  an unconfigured production build uses `https://unconfigured.invalid`, is
+  `noindex`, and serves an empty sitemap. Local previews use `localhost` but
+  are also noindex unless `NEXT_PUBLIC_ALLOW_LOCAL_SEO=1` is set for QA.
+- **Action:** set `NEXT_PUBLIC_SITE_URL` to the verified HTTPS production
+  domain before launch; previews and staging stay noindex automatically.
 
 ## 6. Supabase + production admin configuration
 

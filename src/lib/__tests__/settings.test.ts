@@ -24,10 +24,8 @@ describe("phoneLink", () => {
 });
 
 describe("defaultSettings", () => {
-  it("enables WhatsApp by default after the clinic confirmed it", () => {
-    // Confirmed October 2026 for +962799101101; can still be turned off
-    // from the dashboard.
-    expect(defaultSettings.contact.whatsappEnabled).toBe(true);
+  it("keeps WhatsApp disabled until independent confirmation", () => {
+    expect(defaultSettings.contact.whatsappEnabled).toBe(false);
     expect(defaultSettings.contact.whatsapp).toBe("+962799101101");
   });
 
@@ -66,7 +64,7 @@ describe("defaultSettings", () => {
 describe("mergeWithDefaults", () => {
   const base: Settings = defaultSettings;
 
-  it("enables WhatsApp for legacy files without the flag", () => {
+  it("keeps WhatsApp disabled for legacy files without the flag", () => {
     const legacy = {
       ...base,
       contact: {
@@ -78,8 +76,7 @@ describe("mergeWithDefaults", () => {
     delete (legacy.contact as Record<string, unknown>).whatsappEnabled;
 
     const merged = mergeWithDefaults(legacy);
-    // Confirmed October 2026 — the flag defaults to on.
-    expect(merged.contact.whatsappEnabled).toBe(true);
+    expect(merged.contact.whatsappEnabled).toBe(false);
     expect(merged.contact.phone).toBe("0799101101");
   });
 
@@ -90,24 +87,18 @@ describe("mergeWithDefaults", () => {
     expect(merged.doctor.qualifications).toHaveLength(3);
   });
 
-  it("drops empty qualification rows and keeps valid ones", () => {
+  it("ignores unsourced qualification edits", () => {
     const merged = mergeWithDefaults({
       ...base,
       doctor: {
         biography: base.doctor.biography,
-        qualifications: [
-          { ar: "البورد الأردني في الأمراض الباطنية", en: "Jordanian Board in Internal Medicine" },
-          { ar: "", en: "" },
-          { ar: "البورد الألماني", en: "" },
-        ],
+        qualifications: [{ ar: "Invented credential", en: "Invented credential" }],
       },
     });
-    expect(merged.doctor.qualifications).toHaveLength(2);
-    // A row with only Arabic keeps the Arabic text in both slots.
-    expect(merged.doctor.qualifications[1]).toEqual({ ar: "البورد الألماني", en: "البورد الألماني" });
+    expect(merged.doctor.qualifications).toEqual(defaultSettings.doctor.qualifications);
   });
 
-  it("falls back to the verified defaults when every qualification is empty", () => {
+  it("keeps verified qualifications when an empty list is stored", () => {
     const merged = mergeWithDefaults({
       ...base,
       doctor: { biography: base.doctor.biography, qualifications: [] },

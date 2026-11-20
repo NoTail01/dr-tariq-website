@@ -11,9 +11,16 @@ import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale, localizePath, locales, type Locale } from "@/i18n/config";
 import { findVisibleArticle, readAllArticles } from "@/lib/articles";
 import Markdown, { extractHeadings } from "@/components/Markdown";
+import { readSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/seo";
 import { getSiteMode, SITE_URL } from "@/lib/site";
-import { breadcrumbNode, jsonLdGraph, ORGANIZATION_ID } from "@/lib/structured-data";
+import {
+  blogId,
+  breadcrumbNode,
+  jsonLdGraph,
+  organizationNode,
+  ORGANIZATION_ID,
+} from "@/lib/structured-data";
 
 type Params = { lang: string; slug: string };
 
@@ -26,17 +33,20 @@ type Params = { lang: string; slug: string };
 export const instant = false;
 
 /**
- * Known slugs are prerendered for both locales. Slugs whose article is not
- * visible (for example demo articles in a production build) call `notFound()`
- * and ship as 404s; unknown slugs render on demand.
+ * Prerender every known slug for both locales, not only the visible ones.
+ * Held articles call notFound() during prerendering, which Next.js ships
+ * as a real 404. A request-time notFound() would keep status 200 under
+ * Cache Components because the static shell is sent first. When there are
+ * no articles yet, one placeholder keeps generateStaticParams non-empty.
  */
 export async function generateStaticParams(): Promise<Params[]> {
   const articles = await readAllArticles();
-  return articles.flatMap((article) =>
+  const params = articles.flatMap((article) =>
     locales
       .map((lang) => ({ lang, slug: article.slug[lang] }))
       .filter((entry) => entry.slug.length > 0),
   );
+  return params.length > 0 ? params : [{ lang: "en", slug: "__held__" }];
 }
 
 export async function generateMetadata({
@@ -88,6 +98,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[s
 
   const locale = lang as Locale;
   const dict = await getDictionary(locale);
+  const settings = await readSettings();
   const mode = getSiteMode();
 
   const article = await findVisibleArticle(locale, slug, mode);
@@ -128,10 +139,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[s
           dateModified: article.updatedAt,
           author: { "@id": ORGANIZATION_ID },
           publisher: { "@id": ORGANIZATION_ID },
-          isPartOf: {
-            "@type": "Blog",
-            "@id": `${SITE_URL}${localizePath(locale, "/blog")}#blog`,
-          },
+          isPartOf: { "@id": blogId(locale) },
           ...(article.coverImage
             ? {
                 image: {
@@ -144,7 +152,20 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[s
       : null;
 
   const jsonLd = jsonLdGraph([
-    ...(articleLd ? [articleLd] : []),
+    ...(articleLd
+      ? [
+          organizationNode(locale, settings),
+          {
+            "@type": "Blog",
+            "@id": blogId(locale),
+            name: dict.blog.title,
+            url: SITE_URL + localizePath(locale, "/blog"),
+            inLanguage: locale,
+            publisher: { "@id": ORGANIZATION_ID },
+          },
+          articleLd,
+        ]
+      : []),
     breadcrumbLd,
   ]);
 

@@ -45,15 +45,9 @@ function doctorBiography(value: unknown): Localized {
   };
 }
 
-/** Bilingual qualification list — max 8 items, empty rows dropped. */
-function doctorQualifications(value: unknown): { ar: string; en: string }[] {
-  if (!Array.isArray(value)) return defaultSettings.doctor.qualifications;
-  const items = value
-    .slice(0, 8)
-    .map((entry) => localized(entry, 200))
-    .filter((entry) => entry.ar || entry.en)
-    .map((entry) => ({ ar: entry.ar || entry.en, en: entry.en || entry.ar }));
-  return items.length > 0 ? items : defaultSettings.doctor.qualifications;
+/** Verified qualifications are source-locked; unsourced CMS edits are ignored. */
+function doctorQualifications(): { ar: string; en: string }[] {
+  return defaultSettings.doctor.qualifications;
 }
 
 /** Google Maps embed URL — only google.com/maps/embed URLs are accepted. */
@@ -120,9 +114,7 @@ export async function PATCH(request: Request) {
     tagline: localized(raw.tagline ?? current.tagline, LIMITS.long),
     doctor: {
       biography: doctorBiography(doctorRaw.biography ?? currentDoctor.biography),
-      qualifications: doctorQualifications(
-        doctorRaw.qualifications ?? currentDoctor.qualifications,
-      ),
+      qualifications: doctorQualifications(),
     },
     contact: {
       phone: nullableContact(contactRaw.phone, "phone"),
@@ -130,8 +122,8 @@ export async function PATCH(request: Request) {
       landline: nullableContact(contactRaw.landline, "phone"),
       landlineIntl: nullableContact(contactRaw.landlineIntl, "phone"),
       whatsapp: nullableContact(contactRaw.whatsapp, "whatsapp"),
-      // Only an explicit boolean changes activation; confirmed Oct 2026.
-      whatsappEnabled: contactRaw.whatsappEnabled === true,
+      // Public WhatsApp stays disabled until independent written confirmation.
+      whatsappEnabled: false,
       whatsappMessage: nullableLocalized(contactRaw.whatsappMessage, 400),
       email: nullableContact(contactRaw.email, "email"),
       address: nullableLocalized(contactRaw.address, LIMITS.long),

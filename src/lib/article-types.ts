@@ -11,8 +11,9 @@ export type ArticleStatus = "draft" | "published";
 
 /**
  * Medical approval state — tracked independently of publication.
- * The 10 prepared articles are stored as drafts with `pending` review so
- * the doctor can approve or request changes before anything goes public.
+ * The 10 prepared articles are held as drafts with `pending` review: no
+ * physician approval has been confirmed, so nothing goes public until a
+ * recorded approval exists.
  */
 export type ReviewStatus = "pending" | "approved" | "needs-changes";
 

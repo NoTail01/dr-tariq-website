@@ -9,8 +9,8 @@
  *    second run updates instead of duplicating;
  *  - only these seeded articles are touched — demo and unrelated
  *    articles are left exactly as they are;
- *  - existing ids, previous review decisions and previous publication
- *    dates are preserved; nothing is fabricated.
+ *  - existing ids and traceable source data are preserved; seeded articles
+ *    are always held as drafts with pending medical review, never published.
  *
  * Usage: node scripts/import-articles.mjs [--dry-run]
  */
@@ -40,6 +40,9 @@ const AUTHOR = {
   ar: "فريق تحرير موقع الدكتور طارق أبو حويج",
   en: "Dr Tariq Abu Hweij website editorial team",
 };
+
+const PENDING_NOTE =
+  "Physician approval not confirmed; held for medical review and excluded from public pages and the sitemap until a recorded approval exists.";
 
 const seeds = [
   ...SEED_ARTICLES.map(withClosing),
@@ -83,8 +86,8 @@ async function main() {
     const category = isArticleCategory(seed.category) ? seed.category : "guides";
     const match = bySlug.get(seed.slug);
     if (match) {
-      // Update in place: keep id, existing review decision and the original
-      // publication date; publish now if it was still a draft.
+      // Update in place: keep id and traceable source data. Seeds stay held
+      // for medical review; no stored state can publish or approve them.
       const index = merged.findIndex((a) => a.id === match.id);
       merged[index] = {
         ...match,
@@ -97,9 +100,9 @@ async function main() {
         seo: seed.seo,
         sourceUrl: seed.sourceUrl,
         author: AUTHOR,
-        status: "published",
-        publishedAt: match.publishedAt ?? now,
-        review: match.review ?? { status: "pending", notes: null, reviewedAt: null },
+        status: "draft",
+        publishedAt: null,
+        review: { status: "pending", notes: PENDING_NOTE, reviewedAt: null },
         updatedAt: now,
       };
       updated += 1;
@@ -107,7 +110,7 @@ async function main() {
     } else {
       merged.push({
         id: randomUUID(),
-        status: "published",
+        status: "draft",
         isDemo: false,
         slug: { ar: seed.slug, en: seed.slug },
         title: seed.title,
@@ -118,8 +121,8 @@ async function main() {
         seo: seed.seo,
         author: AUTHOR,
         sourceUrl: seed.sourceUrl,
-        review: { status: "pending", notes: null, reviewedAt: null },
-        publishedAt: now,
+        review: { status: "pending", notes: PENDING_NOTE, reviewedAt: null },
+        publishedAt: null,
         updatedAt: now,
       });
       created += 1;

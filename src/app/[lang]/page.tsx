@@ -39,8 +39,7 @@ export async function generateMetadata({
     locale: lang,
     path: "/",
     title: dict.meta.seo.home.title,
-    description: dict.meta.seo.home.description,
-    image: "/images/dr-tariq-portrait.png",
+    description: dict.meta.seo.home.description
   });
 }
 

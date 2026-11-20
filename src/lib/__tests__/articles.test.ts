@@ -56,10 +56,16 @@ describe("isVisibleArticle", () => {
     expect(isVisibleArticle(demo, "production")).toBe(false);
   });
 
-  it("shows real published articles everywhere", () => {
+  it("shows approved real articles everywhere", () => {
     const real = article();
     expect(isVisibleArticle(real, "development")).toBe(true);
     expect(isVisibleArticle(real, "production")).toBe(true);
+  });
+
+  it("hides published real articles until medical approval is recorded", () => {
+    const pending = article({ review: { status: "pending", notes: null, reviewedAt: null } });
+    expect(isVisibleArticle(pending, "development")).toBe(false);
+    expect(isVisibleArticle(pending, "production")).toBe(false);
   });
 });
 

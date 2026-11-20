@@ -15,6 +15,7 @@ import { pageMetadata } from "@/lib/seo";
 import { getSiteMode, SITE_URL } from "@/lib/site";
 import { readSettings } from "@/lib/settings";
 import {
+  blogId,
   breadcrumbNode,
   jsonLdGraph,
   organizationNode,
@@ -192,7 +193,7 @@ export default async function BlogPage({ params, searchParams }: PageProps<"/[la
     organizationNode(locale, settings),
     {
       "@type": "Blog",
-      "@id": pageUrl + "#blog",
+      "@id": blogId(locale),
       name: dict.blog.title,
       description: dict.blog.description,
       url: pageUrl,
