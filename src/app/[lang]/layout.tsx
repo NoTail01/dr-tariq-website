@@ -15,7 +15,7 @@ import { isLocale, localeInfo, locales, localizePath, type Locale } from "@/i18n
 import { getAnalyticsConfig } from "@/lib/analytics";
 import { plexArabic } from "@/lib/font";
 import { phoneLink } from "@/lib/settings";
-import { readSettings } from "@/lib/settings";
+import { readPublicSettings } from "@/lib/settings";
 import { isIndexableSite, SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -71,7 +71,7 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
 
   const locale = lang as Locale;
   const dict = await getDictionary(locale);
-  const settings = await readSettings();
+  const settings = await readPublicSettings();
   const analytics = getAnalyticsConfig();
   const info = localeInfo[locale];
 

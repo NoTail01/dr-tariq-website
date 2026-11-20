@@ -1,3 +1,4 @@
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 import { guardAdmin } from "@/lib/admin-api";
@@ -79,6 +80,7 @@ export async function PATCH(request: Request, { params }: Params) {
   articles[index] = updated;
   try {
     await writeArticles(articles);
+    revalidateTag("supabase-articles", { expire: 0 });
   } catch (error) {
     if (error instanceof PersistenceBlockedError) {
       return NextResponse.json(
@@ -107,6 +109,7 @@ export async function DELETE(_request: Request, { params }: Params) {
     // Backend-aware: a backend requires an explicit row delete, because
     // writeArticles only upserts the rows it is given.
     await deleteArticle(id);
+    revalidateTag("supabase-articles", { expire: 0 });
   } catch (error) {
     if (error instanceof PersistenceBlockedError) {
       return NextResponse.json(

@@ -8,10 +8,14 @@ import { ArrowRightIcon } from "@/components/Icons";
 import { DevBadge } from "@/components/PlaceholderImage";
 import { Section } from "@/components/Layout";
 import { getDictionary } from "@/i18n/dictionaries";
-import { isLocale, localizePath, locales, type Locale } from "@/i18n/config";
-import { findVisibleArticle, readAllArticles } from "@/lib/articles";
+import { isLocale, localizePath, type Locale } from "@/i18n/config";
+import { findPublicVisibleArticle, readPublicArticles } from "@/lib/articles";
 import Markdown, { extractHeadings } from "@/components/Markdown";
-import { readSettings } from "@/lib/settings";
+import {
+  buildArticleStaticParams,
+  isValidationOnlyArticleSlug,
+} from "@/lib/article-static-params";
+import { readPublicSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/seo";
 import { getSiteMode, SITE_URL } from "@/lib/site";
 import {
@@ -40,13 +44,7 @@ export const instant = false;
  * no articles yet, one placeholder keeps generateStaticParams non-empty.
  */
 export async function generateStaticParams(): Promise<Params[]> {
-  const articles = await readAllArticles();
-  const params = articles.flatMap((article) =>
-    locales
-      .map((lang) => ({ lang, slug: article.slug[lang] }))
-      .filter((entry) => entry.slug.length > 0),
-  );
-  return params.length > 0 ? params : [{ lang: "en", slug: "__held__" }];
+  return buildArticleStaticParams(await readPublicArticles());
 }
 
 export async function generateMetadata({
@@ -58,7 +56,9 @@ export async function generateMetadata({
   if (!isLocale(lang)) return {};
 
   const dict = await getDictionary(lang);
-  const article = await findVisibleArticle(lang, slug, getSiteMode());
+  const article = isValidationOnlyArticleSlug(slug)
+    ? null
+    : await findPublicVisibleArticle(lang, slug, getSiteMode());
 
   if (!article) {
     return { title: dict.common.notFoundTitle, robots: { index: false, follow: false } };
@@ -94,14 +94,14 @@ export async function generateMetadata({
 
 export default async function ArticlePage({ params }: PageProps<"/[lang]/blog/[slug]">) {
   const { lang, slug } = await params;
-  if (!isLocale(lang)) notFound();
+  if (!isLocale(lang) || isValidationOnlyArticleSlug(slug)) notFound();
 
   const locale = lang as Locale;
   const dict = await getDictionary(locale);
-  const settings = await readSettings();
+  const settings = await readPublicSettings();
   const mode = getSiteMode();
 
-  const article = await findVisibleArticle(locale, slug, mode);
+  const article = await findPublicVisibleArticle(locale, slug, mode);
   if (!article) notFound();
 
   const articleUrl = `${SITE_URL}${localizePath(locale, `/blog/${article.slug[locale]}`)}`;

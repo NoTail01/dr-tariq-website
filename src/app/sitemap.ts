@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
-import { getVisibleArticles } from "@/lib/articles";
-import { readSettings } from "@/lib/settings";
+import { getPublicVisibleArticles } from "@/lib/articles";
+import { readPublicSettings } from "@/lib/settings";
 import { SITE_URL, getSiteMode, isIndexableSite } from "@/lib/site";
 
 /**
@@ -16,11 +16,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!isIndexableSite()) return [];
 
   const mode = getSiteMode();
-  const settings = await readSettings();
+  const settings = await readPublicSettings();
   const settingsStamp = new Date(settings.updatedAt);
   const pages = ["/", "/about", "/blog", "/book"];
 
-  const articles = await getVisibleArticles(mode);
+  const articles = await getPublicVisibleArticles(mode);
   const approved = articles.filter(
     (article) =>
       !article.isDemo &&

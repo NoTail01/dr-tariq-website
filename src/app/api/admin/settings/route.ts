@@ -1,3 +1,4 @@
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 import { guardAdmin } from "@/lib/admin-api";
@@ -158,6 +159,7 @@ export async function PATCH(request: Request) {
 
   try {
     await writeSettings(next);
+    revalidateTag("supabase-site_settings", { expire: 0 });
   } catch (error) {
     if (error instanceof PersistenceBlockedError) {
       return NextResponse.json(

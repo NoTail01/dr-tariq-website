@@ -20,7 +20,7 @@ import {
   CLINIC_ID,
 } from "@/lib/structured-data";
 import { phoneLink } from "@/lib/settings";
-import { readSettings } from "@/lib/settings";
+import { readPublicSettings } from "@/lib/settings";
 
 /** Both locales are known at build time so the page is prerendered. */
 export function generateStaticParams() {
@@ -50,7 +50,7 @@ export default async function BookPage({ params }: PageProps<"/[lang]/book">) {
 
   const locale = lang as Locale;
   const dict = await getDictionary(locale);
-  const settings = await readSettings();
+  const settings = await readPublicSettings();
 
   const pageUrl = SITE_URL + localizePath(locale, "/book");
   const jsonLd = jsonLdGraph([

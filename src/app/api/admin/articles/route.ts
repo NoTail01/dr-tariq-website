@@ -1,3 +1,4 @@
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 import { guardAdmin } from "@/lib/admin-api";
@@ -49,6 +50,7 @@ export async function POST(request: Request) {
 
   try {
     await writeArticles([...existing, article]);
+    revalidateTag("supabase-articles", { expire: 0 });
   } catch (error) {
     if (error instanceof PersistenceBlockedError) {
       return NextResponse.json(

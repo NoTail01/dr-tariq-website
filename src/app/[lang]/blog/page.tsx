@@ -8,12 +8,12 @@ import JsonLd from "@/components/JsonLd";
 import { EmptyState, Section, SectionHeading } from "@/components/Layout";
 import Reveal from "@/components/Reveal";
 import { ARTICLE_CATEGORIES, type Article, type ArticleCategory } from "@/lib/article-types";
-import { getVisibleArticles } from "@/lib/articles";
+import { getPublicVisibleArticles } from "@/lib/articles";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale, localizePath, locales, type Locale } from "@/i18n/config";
 import { pageMetadata } from "@/lib/seo";
 import { getSiteMode, SITE_URL } from "@/lib/site";
-import { readSettings } from "@/lib/settings";
+import { readPublicSettings } from "@/lib/settings";
 import {
   blogId,
   breadcrumbNode,
@@ -131,7 +131,7 @@ async function ArticleList({
     : null;
 
   const mode = getSiteMode();
-  const all = await getVisibleArticles(mode);
+  const all = await getPublicVisibleArticles(mode);
 
   const counts: Record<ArticleCategory, number> = { demo: 0, guides: 0, news: 0 };
   for (const article of all) counts[article.category] += 1;
@@ -177,10 +177,10 @@ export default async function BlogPage({ params, searchParams }: PageProps<"/[la
 
   const locale = lang as Locale;
   const dict = await getDictionary(locale);
-  const settings = await readSettings();
+  const settings = await readPublicSettings();
 
   const pageUrl = SITE_URL + localizePath(locale, "/blog");
-  const articles = await getVisibleArticles(getSiteMode());
+  const articles = await getPublicVisibleArticles(getSiteMode());
   const approved = articles.filter(
     (article) =>
       !article.isDemo &&

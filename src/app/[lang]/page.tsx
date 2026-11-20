@@ -13,10 +13,10 @@ import { whatsappHref } from "@/components/ContactOptions";
 import { doctor } from "@/content/doctor";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale, localizePath, type Locale } from "@/i18n/config";
-import { getVisibleArticles } from "@/lib/articles";
+import { getPublicVisibleArticles } from "@/lib/articles";
 import { pageMetadata } from "@/lib/seo";
 import { phoneLink } from "@/lib/settings";
-import { readSettings } from "@/lib/settings";
+import { readPublicSettings } from "@/lib/settings";
 import { getSiteMode } from "@/lib/site";
 import {
   clinicNode,
@@ -51,9 +51,9 @@ export default async function HomePage({
 
   const locale = lang as Locale;
   const dict = await getDictionary(locale);
-  const settings = await readSettings();
+  const settings = await readPublicSettings();
   const mode = getSiteMode();
-  const articles = await getVisibleArticles(mode);
+  const articles = await getPublicVisibleArticles(mode);
 
   const articleLabels = {
     readMore: dict.common.readMore,

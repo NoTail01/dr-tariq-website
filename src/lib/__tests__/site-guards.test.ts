@@ -109,6 +109,20 @@ describe("non-indexable output", () => {
     vi.stubEnv("VERCEL_ENV", "");
     expect(await sitemap()).toEqual([]);
   });
+
+  it("never publishes validation, demo or pending article URLs", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("NEXT_PUBLIC_SITE_MODE", "production");
+    vi.stubEnv("NEXT_PUBLIC_ALLOW_LOCAL_SEO", "");
+    vi.stubEnv("VERCEL_ENV", "production");
+    vi.stubEnv("VERCEL_URL", "");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://dr-tariq.example");
+
+    const entries = await sitemap();
+    expect(entries.length).toBeGreaterThan(0);
+    expect(entries.some((entry) => entry.url.includes("__held__"))).toBe(false);
+    expect(entries.some((entry) => entry.url.includes("/blog/"))).toBe(false);
+  });
 });
 
 describe("structured-data safety", () => {

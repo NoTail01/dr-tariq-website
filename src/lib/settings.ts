@@ -3,7 +3,12 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 import { assertWritable } from "./persistence";
-import { isSupabaseConfigured, supabaseSelect, supabaseUpsert } from "./supabase";
+import {
+  isSupabaseConfigured,
+  supabaseSelect,
+  supabaseSelectCached,
+  supabaseUpsert,
+} from "./supabase";
 import type { Localized } from "./article-types";
 
 /** Supabase table holding the single settings row (see supabase/migrations). */
@@ -167,10 +172,11 @@ export function mergeWithDefaults(raw: unknown): Settings {
   };
 }
 
-export async function readSettings(): Promise<Settings> {
+export async function readSettings(options: { cached?: boolean } = {}): Promise<Settings> {
   if (isSupabaseConfigured()) {
     try {
-      const rows = await supabaseSelect<{ id: string; data: Partial<Settings> }>(
+      const select = options.cached ? supabaseSelectCached : supabaseSelect;
+      const rows = await select<{ id: string; data: Partial<Settings> }>(
         SETTINGS_TABLE,
         "select=id,data&limit=1",
       );
@@ -220,4 +226,9 @@ export function phoneLink(national: string | null, intl: string | null): string 
   if (!href) return null;
   const digits = href.replace(/[^\d+]/g, "");
   return digits ? `tel:${digits}` : null;
+}
+
+/** Cacheable public settings read for prerendered pages, metadata and sitemap. */
+export function readPublicSettings(): Promise<Settings> {
+  return readSettings({ cached: true });
 }

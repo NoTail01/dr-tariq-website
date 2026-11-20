@@ -7,6 +7,8 @@
  * client bundle.
  */
 
+import { cacheLife, cacheTag } from "next/cache";
+
 const DEFAULT_TIMEOUT_MS = 10_000;
 
 /** Raw configuration as found in the environment. */
@@ -89,17 +91,42 @@ async function requestJson<T>(
   }
 }
 
-/** `GET /rest/v1/<table>?<query>` */
+/** Shared REST row selection used by both fresh and cached reads. */
+async function selectRows<T>(table: string, query: string): Promise<T[]> {
+  const { status, body } = await requestJson<T[]>("/rest/v1/" + table + "?" + query);
+  if (status < 200 || status >= 300) {
+    throw new Error("Supabase read failed (" + status + ") for " + table);
+  }
+  return Array.isArray(body) ? body : [];
+}
+
+/** Fresh, uncached REST read - used by authenticated admin routes. */
 export async function supabaseSelect<T>(
   table: string,
   query = "select=*",
 ): Promise<T[]> {
-  const { status, body } = await requestJson<T[]>(`/rest/v1/${table}?${query}`);
-  if (status < 200 || status >= 300) {
-    throw new Error(`Supabase read failed (${status}) for ${table}`);
-  }
-  return Array.isArray(body) ? body : [];
+  return selectRows<T>(table, query);
 }
+
+/**
+ * Cached public REST read.
+ *
+ * Cache Components must resolve public data during prerendering. A no-store
+ * fetch would turn every public route into a runtime-only stream, and the
+ * uncached read above is intentional for admin routes that need fresh rows.
+ * use cache gives the public snapshot a short lifetime and a table tag that
+ * admin writes can invalidate immediately.
+ */
+export async function supabaseSelectCached<T>(
+  table: string,
+  query = "select=*",
+): Promise<T[]> {
+  'use cache';
+  cacheLife('minutes');
+  cacheTag("supabase-" + table);
+  return selectRows<T>(table, query);
+}
+
 
 /**
  * Upsert rows with `Prefer: resolution=merge-duplicates`. Idempotent: the

@@ -3,7 +3,13 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 import { assertWritable } from "./persistence";
-import { isSupabaseConfigured, supabaseDelete, supabaseSelect, supabaseUpsert } from "./supabase";
+import {
+  isSupabaseConfigured,
+  supabaseDelete,
+  supabaseSelect,
+  supabaseSelectCached,
+  supabaseUpsert,
+} from "./supabase";
 import type { Article, ArticleReview } from "./article-types";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
@@ -11,6 +17,9 @@ const ARTICLES_FILE = path.join(CONTENT_DIR, "articles.json");
 
 /** Supabase table name for articles (see supabase/migrations). */
 const SUPABASE_TABLE = "articles";
+
+/** Authenticated admin reads stay fresh; public prerendered reads are cached. */
+type ReadOptions = { cached?: boolean };
 
 /**
  * Review state for a stored article.
@@ -42,10 +51,11 @@ function normalizeReview(raw: unknown): ArticleReview {
  * When Supabase is configured the same function reads the remote table
  * instead — the caller is already async either way.
  */
-export async function readAllArticles(): Promise<Article[]> {
+export async function readAllArticles(options: ReadOptions = {}): Promise<Article[]> {
   if (isSupabaseConfigured()) {
     try {
-      const rows = await supabaseSelect<{ id: string; data: Article }>(
+      const select = options.cached ? supabaseSelectCached : supabaseSelect;
+      const rows = await select<{ id: string; data: Article }>(
         SUPABASE_TABLE,
         "select=id,data",
       );
@@ -157,8 +167,11 @@ export function isVisibleArticle(article: Article, mode: "development" | "produc
   return article.review.status === "approved";
 }
 
-export async function getVisibleArticles(mode: "development" | "production"): Promise<Article[]> {
-  const all = await readAllArticles();
+export async function getVisibleArticles(
+  mode: "development" | "production",
+  options: ReadOptions = {},
+): Promise<Article[]> {
+  const all = await readAllArticles(options);
   return all
     .filter((a) => isVisibleArticle(a, mode))
     .sort((a, b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? ""));
@@ -168,7 +181,31 @@ export async function findVisibleArticle(
   locale: "ar" | "en",
   slug: string,
   mode: "development" | "production",
+  options: ReadOptions = {},
 ): Promise<Article | null> {
-  const visible = await getVisibleArticles(mode);
+  const visible = await getVisibleArticles(mode, options);
   return visible.find((a) => a.slug[locale] === slug) ?? null;
+}
+
+/**
+ * Cacheable variants for public pages, metadata, static params and sitemap.
+ * They keep Supabase reads inside the static shell under Cache Components;
+ * admin routes continue to call the fresh variants above.
+ */
+export function readPublicArticles(): Promise<Article[]> {
+  return readAllArticles({ cached: true });
+}
+
+export function getPublicVisibleArticles(
+  mode: "development" | "production",
+): Promise<Article[]> {
+  return getVisibleArticles(mode, { cached: true });
+}
+
+export function findPublicVisibleArticle(
+  locale: "ar" | "en",
+  slug: string,
+  mode: "development" | "production",
+): Promise<Article | null> {
+  return findVisibleArticle(locale, slug, mode, { cached: true });
 }
