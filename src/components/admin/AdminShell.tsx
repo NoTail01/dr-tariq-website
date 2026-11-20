@@ -10,7 +10,7 @@ import { useDashboardLocale } from "./useDashboardLocale";
 export type AdminSession = {
   enabled: boolean;
   authenticated: boolean;
-  mode: "development" | "token";
+  mode: "credentials" | "disabled";
 };
 
 const navItems: { href: string; labelKey: "overview" | "articles" | "newArticle" | "settings" }[] = [
@@ -99,7 +99,7 @@ function AdminShellInner({ children }: { children: ReactNode }) {
         }
       })
       .catch(() => {
-        if (!cancelled) setSession({ enabled: false, authenticated: false, mode: "token" });
+        if (!cancelled) setSession({ enabled: false, authenticated: false, mode: "disabled" });
       });
 
     return () => {
@@ -124,7 +124,9 @@ function AdminShellInner({ children }: { children: ReactNode }) {
 
   async function signOut() {
     if (dirty && !window.confirm(t.editor.discardConfirm)) return;
-    await fetch("/api/admin/logout", { method: "POST" }).catch(() => undefined);
+    await fetch("/api/admin/logout", { method: "POST", credentials: "same-origin" }).catch(
+      () => undefined,
+    );
     setUnsavedChanges(false);
     router.replace("/admin/login");
     router.refresh();
@@ -142,7 +144,7 @@ function AdminShellInner({ children }: { children: ReactNode }) {
               <div>
                 <p className="text-sm font-bold text-navy-900">{t.shell.brand}</p>
                 <p className="text-xs text-slate-500">
-                  {session?.mode === "development" ? t.shell.devMode : t.shell.authMode}
+                  {session?.mode === "credentials" ? t.shell.authMode : t.shell.disabledMode}
                 </p>
               </div>
             </div>

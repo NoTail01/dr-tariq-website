@@ -61,22 +61,22 @@ Three different location wordings are on record:
 
 - Booking submissions and image uploads remain local-only; the request form
   states clearly that nothing is sent.
-- Articles, settings and uploads persist to the **local filesystem** only —
+- Articles, settings and uploads persist to the local filesystem only -
   on Vercel the filesystem is ephemeral, so content writes would be lost.
 - **Action:** activate the backend per `docs/SUPABASE.md`
-  (`appointment_requests` table, Storage, admin auth), then set
-  `ADMIN_TOKEN` for the production dashboard.
+  (`appointment_requests` table, Storage), then set `ADMIN_USERNAME`
+  and `ADMIN_PASSWORD_HASH` using `npm run setup:admin`.
 
-## 7. Production authentication — tested
+## 7. Production authentication
 
-Verified on a production build (`next build && next start`):
-
-- Without `ADMIN_TOKEN`: every `/api/admin/*` read and write returns 403.
-- With `ADMIN_TOKEN`: login requires the exact token (wrong token → 401),
-  the session cookie is `HttpOnly; Secure; SameSite=lax`, and a forged
-  `local-development` cookie is rejected with 401 on every protected
-  endpoint (no development bypass in production).
-- No token or service-role key appears in any client bundle.
+- The dashboard is disabled until both server-only credential variables are
+  set. Every `/api/admin/*` read and write returns 403 in that state.
+- Login accepts a username and password, verifies the password with bcrypt,
+  and returns the same generic 401 message for either bad field.
+- The session cookie is HMAC-signed, expires after 8 hours, and is
+  `HttpOnly; Secure; SameSite=lax` in production. There is no development bypass.
+- Login is rate-limited, state-changing requests require a same-origin
+  `Origin` header, and no credential appears in any client bundle.
 
 ## 8. Map verification (browser, 2026-10-12)
 

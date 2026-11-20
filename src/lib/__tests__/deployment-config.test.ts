@@ -2,7 +2,6 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
-import { adminSessionValue } from "@/lib/admin-session";
 import { pageMetadata } from "@/lib/seo";
 
 const migration = readFileSync(
@@ -42,14 +41,6 @@ describe("SEO metadata", () => {
       description: "الصفحة الرئيسية",
     });
     expect(meta.openGraph?.locale).toBe("ar_JO");
-  });
-});
-
-describe("Admin session", () => {
-  it("stores only a deterministic token hash in the cookie", () => {
-    expect(adminSessionValue("secret")).toBe(
-      "2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b",
-    );
   });
 });
 

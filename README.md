@@ -5,7 +5,7 @@ Bilingual (Arabic / English) website for Dr Tariq Abu Hweij, built with Next.js.
 - **Public site** — `/en` (LTR) and `/ar` (RTL): home, about, blog, booking.
   Root `/` redirects to the preferred language.
 - **Admin dashboard** — `/admin`: article editor, settings, media uploads.
-  Open in `next dev`; disabled in production unless `ADMIN_TOKEN` is set.
+  Requires server-only `ADMIN_USERNAME` and `ADMIN_PASSWORD_HASH` in every environment; see `docs/ADMIN-AUTH.md`.
 - **Backend-optional** — booking submissions and uploads run locally until
   Supabase credentials are configured (`docs/SUPABASE.md`).
 
@@ -17,7 +17,7 @@ npm run dev
 ```
 
 - Site: http://localhost:3000
-- Dashboard (development only): http://localhost:3000/admin
+- Dashboard: http://localhost:3000/admin (configure credentials first)
 
 ## Scripts
 
@@ -60,11 +60,12 @@ brand reference and lives in `src/app/globals.css` as `brand-*` tokens.
 - `docs/MISSING-INFO.md` — launch checklist (address conflict, hours, logo, domain, backend).
 - `docs/GOOGLE.md` — optional GA4 / GTM / Search Console / Maps setup.
 - `docs/SUPABASE.md` — activating the article/settings/upload/booking backend.
+- `docs/ADMIN-AUTH.md` — dashboard credentials, sessions and Vercel variables.
 - `docs/doctor-review/` — private, printable review package for the 10 articles.
 - `docs/doctor-handover/` — review checklist, printable article copy, and the
   confirmations the clinic must return (address/floor, hours, …).
 
-## Dashboard (`/admin`, development or with `ADMIN_TOKEN`)
+## Dashboard (`/admin`, username + password)
 
 The dashboard is used by clinic staff, so its chrome carries an **AR/EN
 language switch** (persisted per browser, shared across all pages) —

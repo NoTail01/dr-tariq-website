@@ -53,11 +53,11 @@ clinic has not yet confirmed — those items are in
 
 | # | Check | Result |
 | --- | --- | --- |
-| 31 | Dashboard requires authentication in production | Pass |
-| 32 | Production dashboard is fully disabled without `ADMIN_TOKEN` (403 everywhere) | Pass |
-| 33 | Wrong token is rejected with 401 | Pass |
+| 31 | Dashboard requires username + password authentication | Pass |
+| 32 | Dashboard is fully disabled until both credential variables are set (403 everywhere) | Pass |
+| 33 | Wrong username or password is rejected with a generic 401 | Pass |
 | 34 | Session cookie is `HttpOnly; Secure; SameSite=lax` | Pass |
-| 35 | A forged development cookie is rejected in production | Pass |
+| 35 | Forged or expired session cookies are rejected | Pass |
 | 36 | Drafts are never visible to visitors | Pass |
 | 37 | Publishing alone never exposes an article; approval is required for public visibility | Pass |
 | 38 | Approval is a separate action that records its own timestamp | Pass |

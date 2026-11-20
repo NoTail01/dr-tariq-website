@@ -9,8 +9,8 @@ import { validateArticleInput, type Article } from "@/lib/article-types";
 type Params = { params: Promise<{ id: string }> };
 
 /** GET /api/admin/articles/[id] — single article (authenticated only). */
-export async function GET(_request: Request, { params }: Params) {
-  const denied = await guardAdmin();
+export async function GET(request: Request, { params }: Params) {
+  const denied = await guardAdmin(request);
   if (denied) return denied;
 
   const { id } = await params;
@@ -25,7 +25,7 @@ export async function GET(_request: Request, { params }: Params) {
 
 /** PATCH /api/admin/articles/[id] — update title/body/status/slug/SEO… */
 export async function PATCH(request: Request, { params }: Params) {
-  const denied = await guardAdmin();
+  const denied = await guardAdmin(request);
   if (denied) return denied;
 
   const { id } = await params;
@@ -95,8 +95,8 @@ export async function PATCH(request: Request, { params }: Params) {
 }
 
 /** DELETE /api/admin/articles/[id] */
-export async function DELETE(_request: Request, { params }: Params) {
-  const denied = await guardAdmin();
+export async function DELETE(request: Request, { params }: Params) {
+  const denied = await guardAdmin(request);
   if (denied) return denied;
 
   const { id } = await params;

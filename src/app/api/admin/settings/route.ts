@@ -73,8 +73,8 @@ function assetPath(value: unknown): string | null {
 }
 
 /** GET /api/admin/settings — site settings (authenticated only). */
-export async function GET() {
-  const denied = await guardAdmin();
+export async function GET(request: Request) {
+  const denied = await guardAdmin(request);
   if (denied) return denied;
 
   const settings = await readSettings();
@@ -86,7 +86,7 @@ export async function GET() {
 
 /** PATCH /api/admin/settings — validated update of public site settings. */
 export async function PATCH(request: Request) {
-  const denied = await guardAdmin();
+  const denied = await guardAdmin(request);
   if (denied) return denied;
 
   let payload: unknown;

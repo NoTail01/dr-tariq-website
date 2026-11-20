@@ -123,26 +123,24 @@ labels the submission as transmitted.
 
 ## 7. Admin authentication
 
-`src/lib/admin-auth.ts` uses an HttpOnly session cookie holding a SHA-256
-  digest of `ADMIN_TOKEN`, compared with a timing-safe equality check:
+The dashboard uses a server-only username and bcrypt password hash. See
+`docs/ADMIN-AUTH.md` for the setup script and the exact Vercel variables.
 
-- `isDashboardEnabled()` returns `false` in production unless `ADMIN_TOKEN`
-  is set — there is no open development dashboard in a production build;
-- `guardAdmin()` rejects every `/api/admin/*` call with 403 in that case;
-- with a token, login requires the exact token, and the cookie is
-  `HttpOnly; Secure; SameSite=lax`;
-- the service-role key is never sent to the browser.
+- `isDashboardEnabled()` returns false unless both `ADMIN_USERNAME`
+  and a valid `ADMIN_PASSWORD_HASH` are configured, in every environment;
+  there is no open development dashboard.
+- `guardAdmin()` rejects every `/api/admin/*` call with 403
+  when disabled or 401 without a valid signed session, and checks the
+  same-origin `Origin` header on state-changing requests.
+- A successful login returns an HMAC-signed, 8-hour session cookie with
+  `HttpOnly; SameSite=Lax; Secure` (Secure in deployed environments).
+- Proxy and a protected server layout both verify that cookie before any
+  dashboard page content renders.
+- The Supabase service-role key is never sent to the browser.
 
-Supabase Auth replaces this layer like this:
-
-1. Replace the cookie check in `expectedSession()` with a `supabase.auth.getUser()`
-   call using the `Authorization: Bearer` header.
-2. Keep `isDashboardEnabled()` returning `false` when no provider is
-   configured, so the dashboard is never open in production.
-3. Store the Supabase JWT server-side instead of `ADMIN_TOKEN`.
-
-Until that migration is done, production access requires `ADMIN_TOKEN`
-(`src/app/admin/login` exchanges it for the session cookie).
+Supabase Auth can replace this layer later: swap the cookie check in
+`getAuthenticatedSession()` for a `supabase.auth.getUser()` call and keep
+the fail-closed enable check when no provider is configured.
 
 ## Privacy
 

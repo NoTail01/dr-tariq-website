@@ -1,54 +1,66 @@
-import { createHash, timingSafeEqual } from "node:crypto";
-
+import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-import { ADMIN_SESSION_COOKIE, expectedAdminSession } from "./admin-session";
+import {
+  adminPasswordHash,
+  adminUsername,
+  isAdminAuthConfigured,
+} from "./admin-config";
+import {
+  ADMIN_SESSION_COOKIE,
+  verifyAdminSession,
+  type AdminSessionPayload,
+} from "./admin-session";
 
 export { ADMIN_SESSION_COOKIE } from "./admin-session";
+export { isAdminAuthConfigured, isDashboardEnabled } from "./admin-config";
+
+const encoder = new TextEncoder();
+const MAX_BCRYPT_PASSWORD_BYTES = 72;
+
+function constantTimeEqualText(a: string, b: string): boolean {
+  const left = encoder.encode(a);
+  const right = encoder.encode(b);
+  const length = Math.max(left.length, right.length);
+  let difference = left.length ^ right.length;
+  for (let index = 0; index < length; index += 1) {
+    difference |= (left[index] ?? 0) ^ (right[index] ?? 0);
+  }
+  return difference === 0;
+}
 
 /**
- * Access rules for the dashboard:
- *
- * - local development (`next dev`): open, no password (mock dashboard);
- * - production builds: completely disabled unless `ADMIN_TOKEN` is set, and
- *   then only for a request carrying a matching signed session cookie.
- *
- * Supabase Auth replaces this layer when the backend is activated —
- * see docs/SUPABASE.md.
+ * Verify the submitted username and password against server-only environment
+ * variables. A bcrypt comparison always runs when configured, even for a
+ * wrong username, so the two failure cases are not distinguishable by timing.
  */
-export function isDashboardEnabled(): boolean {
-  if (process.env.ADMIN_ENABLED === "false") return false;
-  if (process.env.NODE_ENV !== "production") return true;
-  return Boolean(process.env.ADMIN_TOKEN);
+export async function verifyCredentials(username: string, password: string): Promise<boolean> {
+  if (!isAdminAuthConfigured()) return false;
+
+  const passwordBytes = encoder.encode(password).length;
+  if (passwordBytes === 0 || passwordBytes > MAX_BCRYPT_PASSWORD_BYTES) return false;
+
+  const passwordMatches = await bcrypt.compare(password, adminPasswordHash());
+  const usernameMatches = constantTimeEqualText(username.trim(), adminUsername());
+  return usernameMatches && passwordMatches;
 }
 
-function digest(value: string): Buffer {
-  return createHash("sha256").update(value).digest();
-}
-
-export function verifyToken(candidate: string, expected: string): boolean {
-  if (!candidate || !expected) return false;
-  return timingSafeEqual(digest(candidate), digest(expected));
-}
-
-/** Expected value of the session cookie for the current environment. */
-function expectedSession(): string | null {
-  return expectedAdminSession();
-}
-
-export function sessionCookieValue(): string | null {
-  return expectedSession();
+/** Read the signed session carried by the current request. */
+export async function getAuthenticatedSession(): Promise<AdminSessionPayload | null> {
+  if (!isAdminAuthConfigured()) return null;
+  const store = await cookies();
+  const value = store.get(ADMIN_SESSION_COOKIE)?.value;
+  return verifyAdminSession(value);
 }
 
 export async function isAuthenticated(): Promise<boolean> {
-  if (!isDashboardEnabled()) return false;
-  // Local development stays open: the mock dashboard never needs a cookie.
-  // Production still requires the signed session cookie (set by /api/admin/login).
-  if (process.env.NODE_ENV !== "production") return true;
-  const expected = expectedSession();
-  if (!expected) return false;
-  const store = await cookies();
-  const candidate = store.get(ADMIN_SESSION_COOKIE)?.value ?? "";
-  if (!candidate) return false;
-  return verifyToken(candidate, expected);
+  return (await getAuthenticatedSession()) !== null;
+}
+
+/** Server-side gate for protected dashboard pages. */
+export async function requireAdminSession(): Promise<AdminSessionPayload> {
+  const session = await getAuthenticatedSession();
+  if (!session) redirect("/admin/login");
+  return session;
 }

@@ -1,60 +1,85 @@
 import { NextResponse } from "next/server";
 
+import { isDashboardEnabled, verifyCredentials } from "@/lib/admin-auth";
+import { assertSameOrigin } from "@/lib/admin-csrf";
+import { checkLoginRateLimit } from "@/lib/admin-login";
 import {
   ADMIN_SESSION_COOKIE,
-  isDashboardEnabled,
-  sessionCookieValue,
-  verifyToken,
-} from "@/lib/admin-auth";
+  adminSessionCookieOptions,
+  createAdminSession,
+} from "@/lib/admin-session";
 
-/**
- * POST /api/admin/login — token based sign-in.
- *
- * Development: accepted without a token (mock dashboard, local only).
- * Production:  requires `ADMIN_TOKEN`; a signed session cookie is set.
- * Supabase Auth replaces this when the backend is activated.
- */
+// POST /api/admin/login - username and password sign-in.
+const GENERIC_ERROR = {
+  ok: false,
+  reason: "invalid",
+  message: "Invalid username or password.",
+};
+
 export async function POST(request: Request) {
+  const csrfDenied = assertSameOrigin(request);
+  if (csrfDenied) return csrfDenied;
+
   if (!isDashboardEnabled()) {
     return NextResponse.json(
-      { ok: false, reason: "disabled", message: "Dashboard is disabled." },
+      {
+        ok: false,
+        reason: "disabled",
+        message: "The dashboard is not configured in this environment.",
+      },
       { status: 403 },
     );
   }
 
-  let body: { token?: unknown } = {};
+  const rate = checkLoginRateLimit(request);
+  if (!rate.allowed) {
+    return NextResponse.json(
+      {
+        ok: false,
+        reason: "rate_limited",
+        message: "Too many sign-in attempts. Please try again later.",
+      },
+      {
+        status: 429,
+        headers: { "Retry-After": String(rate.retryAfterSeconds) },
+      },
+    );
+  }
+
+  let body: { username?: unknown; password?: unknown } = {};
   try {
     body = await request.json();
   } catch {
-    /* empty body */
+    // A malformed body counts as a failed sign-in.
   }
 
-  const submitted = typeof body.token === "string" ? body.token : "";
-  const expected = process.env.ADMIN_TOKEN ?? "";
+  const username = typeof body.username === "string" ? body.username : "";
+  const password = typeof body.password === "string" ? body.password : "";
 
-  const devMode = process.env.NODE_ENV !== "production";
-
-  if (!devMode) {
-    if (!expected || !verifyToken(submitted, expected)) {
-      return NextResponse.json(
-        { ok: false, reason: "invalid", message: "Invalid access token." },
-        { status: 401 },
-      );
-    }
+  let authenticated = false;
+  try {
+    authenticated = await verifyCredentials(username, password);
+  } catch {
+    // Never leak hashing/configuration errors to the client.
+    return NextResponse.json(
+      { ok: false, reason: "error", message: "Sign-in is temporarily unavailable." },
+      { status: 500 },
+    );
   }
 
-  const cookieValue = sessionCookieValue();
-  const response = NextResponse.json({ ok: true, mode: devMode ? "development" : "token" });
-
-  if (cookieValue) {
-    response.cookies.set(ADMIN_SESSION_COOKIE, cookieValue, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: devMode ? false : true,
-      path: "/",
-      maxAge: 60 * 60 * 12,
-    });
+  if (!authenticated) {
+    return NextResponse.json(GENERIC_ERROR, { status: 401 });
   }
 
-  return response;
+  try {
+    const session = await createAdminSession();
+    const response = NextResponse.json({ ok: true, mode: "credentials" });
+    response.cookies.set(ADMIN_SESSION_COOKIE, session, adminSessionCookieOptions());
+    return response;
+  } catch {
+    return NextResponse.json(
+      { ok: false, reason: "error", message: "Sign-in is temporarily unavailable." },
+      { status: 500 },
+    );
+  }
 }

@@ -58,7 +58,7 @@ const STORAGE_BUCKET = "uploads";
  * SVG uploads are rejected in both modes because they can carry scripts.
  */
 export async function POST(request: Request) {
-  const denied = await guardAdmin();
+  const denied = await guardAdmin(request);
   if (denied) return denied;
 
   const formData = await request.formData().catch(() => null);

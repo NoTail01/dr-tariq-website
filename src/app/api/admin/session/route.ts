@@ -1,13 +1,11 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-import { isDashboardEnabled, isAuthenticated } from "@/lib/admin-auth";
+import { isAuthenticated, isDashboardEnabled } from "@/lib/admin-auth";
 
-/** GET /api/admin/session — used by the dashboard UI to gate itself. */
+// GET /api/admin/session - used by the dashboard UI to gate itself.
 export async function GET() {
-  // Always read the request cookies so this endpoint is never statically
-  // cached: its answer (enabled / authenticated) depends on the runtime
-  // environment and each request's session cookie.
+  // Always read request cookies so this endpoint is never statically cached.
   await cookies();
 
   const enabled = isDashboardEnabled();
@@ -17,7 +15,7 @@ export async function GET() {
     {
       enabled,
       authenticated,
-      mode: process.env.NODE_ENV !== "production" ? "development" : "token",
+      mode: enabled ? "credentials" : "disabled",
     },
     { headers: { "Cache-Control": "no-store" } },
   );

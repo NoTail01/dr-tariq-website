@@ -7,8 +7,8 @@ import { readAllArticles, writeArticles } from "@/lib/articles";
 import { makeId, validateArticleInput, type Article } from "@/lib/article-types";
 
 /** GET /api/admin/articles — every article, drafts included (authenticated only). */
-export async function GET() {
-  const denied = await guardAdmin();
+export async function GET(request: Request) {
+  const denied = await guardAdmin(request);
   if (denied) return denied;
 
   const articles = await readAllArticles();
@@ -20,7 +20,7 @@ export async function GET() {
 
 /** POST /api/admin/articles — create an article after server-side validation. */
 export async function POST(request: Request) {
-  const denied = await guardAdmin();
+  const denied = await guardAdmin(request);
   if (denied) return denied;
 
   let payload: unknown;

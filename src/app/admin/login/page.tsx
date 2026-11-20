@@ -4,24 +4,32 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
 
-import { useDashboardLocale } from "@/components/admin/useDashboardLocale";
+import { useDashboardLocale } from "../../../components/admin/useDashboardLocale";
 
 export default function AdminLoginPage() {
   const { locale, t } = useDashboardLocale();
   const router = useRouter();
-  const [token, setToken] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [devMode, setDevMode] = useState<boolean | null>(null);
+  const [enabled, setEnabled] = useState<boolean | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
     fetch("/api/admin/session", { cache: "no-store" })
       .then((response) => response.json())
-      .then((data: { authenticated: boolean; mode: string; enabled: boolean }) => {
-        setDevMode(data.mode === "development");
+      .then((data: { authenticated: boolean; enabled: boolean }) => {
+        if (cancelled) return;
+        setEnabled(data.enabled);
         if (data.authenticated) router.replace("/admin/articles");
       })
-      .catch(() => setDevMode(false));
+      .catch(() => {
+        if (!cancelled) setEnabled(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [router]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -33,17 +41,25 @@ export default function AdminLoginPage() {
       const response = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({ username, password }),
       });
-      const body = (await response.json().catch(() => null)) as { ok?: boolean } | null;
+      const body = (await response.json().catch(() => null)) as {
+        ok?: boolean;
+        reason?: string;
+      } | null;
 
       if (!response.ok || !body?.ok) {
-        setError(
-          response.status === 403 ? t.login.disabled : t.login.invalidToken,
-        );
+        if (body?.reason === "disabled" || response.status === 403) {
+          setError(t.login.disabled);
+        } else if (body?.reason === "rate_limited" || response.status === 429) {
+          setError(t.login.rateLimited);
+        } else {
+          setError(t.login.invalidCredentials);
+        }
         return;
       }
 
+      setPassword("");
       router.replace("/admin/articles");
       router.refresh();
     } catch {
@@ -66,28 +82,43 @@ export default function AdminLoginPage() {
           </div>
         </div>
 
-        {devMode === true ? (
-          <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-            {t.login.devNotice}{" "}
-            <Link href="/admin/articles" className="inline-flex min-h-11 items-center font-semibold underline">
-              {t.login.articlesLink}
-            </Link>
-          </div>
-        ) : (
+        {enabled === false ? (
+          <p role="alert" className="mt-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            {t.login.disabled}
+          </p>
+        ) : enabled === true ? (
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <div>
-              <label htmlFor="admin-token" className="block text-sm font-semibold text-navy-900">
-                {t.login.token}
+              <label htmlFor="admin-username" className="block text-sm font-semibold text-navy-900">
+                {t.login.username}
               </label>
               <input
-                id="admin-token"
+                id="admin-username"
+                name="username"
+                type="text"
+                autoComplete="username"
+                required
+                value={username}
+                onChange={(event) => setUsername(event.target.value)}
+                className="mt-2 min-h-12 w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-brand-600"
+                placeholder={t.login.usernamePlaceholder}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="admin-password" className="block text-sm font-semibold text-navy-900">
+                {t.login.password}
+              </label>
+              <input
+                id="admin-password"
+                name="password"
                 type="password"
                 autoComplete="current-password"
                 required
-                value={token}
-                onChange={(event) => setToken(event.target.value)}
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
                 className="mt-2 min-h-12 w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-brand-600"
-                placeholder={t.login.tokenPlaceholder}
+                placeholder={t.login.passwordPlaceholder}
               />
             </div>
 
@@ -105,8 +136,10 @@ export default function AdminLoginPage() {
               {busy ? t.login.signingIn : t.login.signIn}
             </button>
 
-            <p className="text-xs leading-relaxed text-slate-500">{t.login.prodHint}</p>
+            <p className="text-xs leading-relaxed text-slate-500">{t.login.secureHint}</p>
           </form>
+        ) : (
+          <p className="mt-6 text-sm text-slate-500">{t.common.loading}</p>
         )}
 
         <div className="mt-6 border-t border-slate-100 pt-4">

@@ -1,9 +1,9 @@
-import { timingSafeEqual } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
 import { NextResponse, type NextRequest } from "next/server";
-import { ADMIN_SESSION_COOKIE, expectedAdminSession } from "@/lib/admin-session";
+import { isAdminAuthConfigured } from "@/lib/admin-config";
+import { ADMIN_SESSION_COOKIE, verifyAdminSession } from "@/lib/admin-session";
 import { defaultLocale, type Locale } from "@/i18n/config";
 
 /**
@@ -65,23 +65,17 @@ function knownArticleSlugs(): Set<string> | null {
   }
 }
 
-/** Redirect unauthenticated production requests away from dashboard pages. */
-function guardAdminPages(request: NextRequest): NextResponse | null {
+/** Redirect unauthenticated requests away from dashboard pages. */
+async function guardAdminPages(request: NextRequest): Promise<NextResponse | null> {
   const loginUrl = new URL("/admin/login", request.url);
 
   // The login page must remain reachable so an operator can authenticate.
   if (request.nextUrl.pathname === "/admin/login") return null;
-  if (process.env.NODE_ENV !== "production") return null;
-  if (process.env.ADMIN_ENABLED === "false") return NextResponse.redirect(loginUrl);
+  if (!isAdminAuthConfigured()) return NextResponse.redirect(loginUrl);
 
-  const expected = expectedAdminSession();
-  if (!expected) return NextResponse.redirect(loginUrl);
-
-  const candidate = request.cookies.get(ADMIN_SESSION_COOKIE)?.value ?? "";
-  const valid =
-    /^[a-f0-9]{64}$/.test(candidate) &&
-    timingSafeEqual(Buffer.from(candidate, "hex"), Buffer.from(expected, "hex"));
-  return valid ? null : NextResponse.redirect(loginUrl);
+  const value = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+  const session = await verifyAdminSession(value);
+  return session ? null : NextResponse.redirect(loginUrl);
 }
 
 /**
@@ -97,7 +91,7 @@ export async function proxy(request: NextRequest) {
 
   // Dashboard pages are guarded here; /api/admin/* routes guard themselves.
   if (pathname === "/admin" || pathname.startsWith("/admin/")) {
-    return guardAdminPages(request) ?? undefined;
+    return (await guardAdminPages(request)) ?? undefined;
   }
 
   // Unknown article slugs never reach the page renderer: the prerendered
