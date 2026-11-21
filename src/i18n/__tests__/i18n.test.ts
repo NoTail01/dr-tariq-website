@@ -60,6 +60,13 @@ describe("i18n dictionaries", () => {
       expect(arDict.nav[key].length).toBeGreaterThan(0);
     }
   });
+
+  it("explains the qualifications order in both locales", async () => {
+    const arDict = await getDictionary("ar");
+    const enDict = await getDictionary("en");
+    expect(arDict.about.qualificationsNote).toContain("الألمانية أولاً");
+    expect(enDict.about.qualificationsNote).toContain("German certifications are shown first");
+  });
 });
 
 describe("locale path helpers", () => {

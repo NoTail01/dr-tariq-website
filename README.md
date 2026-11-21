@@ -32,10 +32,10 @@ npm run dev
 ## Identity & content policy
 
 All doctor facts are verified against sources listed in
-`src/content/SOURCES.md` (Specialty Hospital doctor profile + the supplied
-brand reference image). Nothing is invented: the German Board is published
-without naming its specialty, and no reviews or success rates are ever
-published.
+`src/content/SOURCES.md` (Specialty Hospital doctor profile, the supplied
+brand reference image and the client certificate list instruction). Nothing is
+invented: the German certifications are listed with their exact specialties,
+and no reviews or success rates are ever published.
 
 The clinic **confirmed WhatsApp** on the mobile number (October 2026), so
 `wa.me/962799101101` is published with a localized prefilled message — while

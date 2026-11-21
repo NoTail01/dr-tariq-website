@@ -14,16 +14,20 @@
     },
     "qualifications": [
       {
+        "ar": "البورد الألماني في الأمراض الباطنية",
+        "en": "German Board in Internal Medicine"
+      },
+      {
+        "ar": "البورد الألماني في أمراض الكلى وزراعة الكلى وضغط الدم",
+        "en": "German Board in Nephrology, Kidney Transplantation and Hypertension"
+      },
+      {
         "ar": "البورد الأردني في الأمراض الباطنية",
         "en": "Jordanian Board in Internal Medicine"
       },
       {
         "ar": "البورد الأردني في أمراض الكلى",
         "en": "Jordanian Board in Nephrology"
-      },
-      {
-        "ar": "البورد الألماني",
-        "en": "German Board"
       }
     ]
   },

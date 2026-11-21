@@ -81,7 +81,7 @@ export const en = {
       "Dr Tariq Abu Hweij holds the Jordanian Board in Internal Medicine and the Jordanian Board in Nephrology, as well as the German Board. Read the full profile for qualifications, memberships and specialties.",
     aboutLink: "Read the full profile",
     qualificationsTitle: "Qualifications",
-    qualificationsIntro: "Board certifications verified on the hospital doctor profile page.",
+    qualificationsIntro: "Board certifications listed for Dr Tariq Abu Hweij.",
     membershipsTitle: "Memberships",
     membershipsIntro: "Memberships are published exactly as stated by each source.",
     servicesTitle: "Specialties",
@@ -129,10 +129,8 @@ export const en = {
     bioTitle: "Biography",
     portraitNote: "Dr Tariq Abu Hweij — consultant in internal medicine and nephrology.",
     qualificationsTitle: "Qualifications",
-    qualificationsIntro:
-      "Certifications as listed on the Specialty Hospital doctor profile page.",
-    qualificationsNote:
-      "The German Board is listed on the hospital page without naming its exact specialty or issuing organization; none is added here.",
+    qualificationsIntro: "Board certifications listed for Dr Tariq Abu Hweij.",
+    qualificationsNote: "German certifications are shown first, followed by the Jordanian certifications.",
     membershipsTitle: "Memberships",
     membershipsNotes: [
       "Member of the German Association for Internal Medicine and Cardiology — as stated on the supplied clinic branding.",

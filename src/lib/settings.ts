@@ -92,9 +92,13 @@ export const defaultSettings: Settings = {
       en: "Dr Tariq Abu Hweij is a consultant in internal medicine, nephrology, kidney transplantation and hypertension. He holds the Jordanian Board in Internal Medicine and the Jordanian Board in Nephrology, as well as the German Board. He treats internal medicine and kidney cases, is a member of the German Association for Internal Medicine and Cardiology, and a member of the German and Jordanian medical associations. The clinic is located behind the Specialty Hospital in Al-Riyad Medical Complex, first floor.",
     },
     qualifications: [
+      { ar: "البورد الألماني في الأمراض الباطنية", en: "German Board in Internal Medicine" },
+      {
+        ar: "البورد الألماني في أمراض الكلى وزراعة الكلى وضغط الدم",
+        en: "German Board in Nephrology, Kidney Transplantation and Hypertension",
+      },
       { ar: "البورد الأردني في الأمراض الباطنية", en: "Jordanian Board in Internal Medicine" },
       { ar: "البورد الأردني في أمراض الكلى", en: "Jordanian Board in Nephrology" },
-      { ar: "البورد الألماني", en: "German Board" },
     ],
   },
   contact: {

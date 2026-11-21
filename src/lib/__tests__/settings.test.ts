@@ -50,14 +50,27 @@ describe("defaultSettings", () => {
     expect(defaultSettings.contact.mapsEmbedUrl).toContain("0x151ca194f8b5c4f5%3A0x590913a16577b185");
   });
 
-  it("carries a bilingual biography and the three verified boards", () => {
+  it("carries a bilingual biography and the four verified boards in order", () => {
     expect(defaultSettings.doctor.biography.ar.length).toBeGreaterThan(50);
     expect(defaultSettings.doctor.biography.en.length).toBeGreaterThan(50);
-    expect(defaultSettings.doctor.qualifications).toHaveLength(3);
-    for (const qualification of defaultSettings.doctor.qualifications) {
-      expect(qualification.ar.length).toBeGreaterThan(0);
-      expect(qualification.en.length).toBeGreaterThan(0);
-    }
+    expect(defaultSettings.doctor.qualifications).toEqual([
+      {
+        ar: "البورد الألماني في الأمراض الباطنية",
+        en: "German Board in Internal Medicine",
+      },
+      {
+        ar: "البورد الألماني في أمراض الكلى وزراعة الكلى وضغط الدم",
+        en: "German Board in Nephrology, Kidney Transplantation and Hypertension",
+      },
+      {
+        ar: "البورد الأردني في الأمراض الباطنية",
+        en: "Jordanian Board in Internal Medicine",
+      },
+      {
+        ar: "البورد الأردني في أمراض الكلى",
+        en: "Jordanian Board in Nephrology",
+      },
+    ]);
   });
 });
 
@@ -84,7 +97,7 @@ describe("mergeWithDefaults", () => {
     const legacy = { siteName: base.siteName, tagline: base.tagline } as Record<string, unknown>;
     const merged = mergeWithDefaults(legacy);
     expect(merged.doctor.biography.en).toBe(base.doctor.biography.en);
-    expect(merged.doctor.qualifications).toHaveLength(3);
+    expect(merged.doctor.qualifications).toHaveLength(4);
   });
 
   it("ignores unsourced qualification edits", () => {
@@ -103,6 +116,6 @@ describe("mergeWithDefaults", () => {
       ...base,
       doctor: { biography: base.doctor.biography, qualifications: [] },
     });
-    expect(merged.doctor.qualifications).toHaveLength(3);
+    expect(merged.doctor.qualifications).toHaveLength(4);
   });
 });

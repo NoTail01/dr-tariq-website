@@ -12,6 +12,7 @@ Sources used:
 - **[S4] Supplied brand reference image:** `public/images/dr-tariq-brand-reference.png` (client-supplied, 2026-10-11).
 - **[S5] Supplied portrait photograph:** `public/images/dr-tariq-portrait.png` (client-supplied, 2026-10-11).
 - **[S6] Client brief for this website** (2026-10-11): name spelling, professional title translation, Maps embed URL.
+- **[S7] Client certificate list instruction** (2026-11-21): exact bilingual wording and display order for the German and Jordanian certifications.
 
 ## Verified facts and their sources
 
@@ -22,9 +23,10 @@ Sources used:
 | Professional title (AR) | استشاري أمراض الباطنية والكلى وزراعة الكلى وضغط الدم | S4 | Printed on the supplied branding |
 | Professional title (EN) | Consultant in Internal Medicine, Nephrology, Kidney Transplantation and Hypertension | S6 | Client-supplied translation |
 | Hospital title (AR) | استشاري أمراض الكلى | S1 | Shorter title on the hospital page — both statements kept, neither overwritten |
-| Qualification 1 | البورد الأردني في الأمراض الباطنية / Jordanian Board in Internal Medicine | S1 | |
-| Qualification 2 | البورد الأردني في أمراض الكلى / Jordanian Board in Nephrology | S1 | |
-| Qualification 3 | البورد الألماني / German Board | S1 | Exact specialty and issuing organization NOT stated on S1 — must not be invented |
+| Qualification 1 | البورد الألماني في الأمراض الباطنية / German Board in Internal Medicine | S7 | |
+| Qualification 2 | البورد الألماني في أمراض الكلى وزراعة الكلى وضغط الدم / German Board in Nephrology, Kidney Transplantation and Hypertension | S7 | |
+| Qualification 3 | البورد الأردني في الأمراض الباطنية / Jordanian Board in Internal Medicine | S1 | |
+| Qualification 4 | البورد الأردني في أمراض الكلى / Jordanian Board in Nephrology | S1 | |
 | Conditions treated | امراض الباطني والكلى / internal medicine and kidney cases | S1 | |
 | Membership A | عضو الجمعية الألمانية لأمراض الباطنية والقلب / Member of the German Association for Internal Medicine and Cardiology | S4 | Branding statement — kept DISTINCT from Membership B |
 | Membership B | عضو نقابة الأطباء الألمانية ونقابة الأطباء الأردنية / German and Jordanian medical associations | S1 | Hospital page statement — kept DISTINCT from Membership A |

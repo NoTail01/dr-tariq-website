@@ -30,14 +30,14 @@ No verified opening hours exist in any source. The site therefore publishes
 **Required (both languages):** the confirmed weekly schedule, and whether it
 changes on Fridays/Saturdays, so it can be entered in Settings → Contact.
 
-## 3. English title for the German Board
+## 3. German Board specialties — CONFIRMED
 
-The site publishes "البورد الألماني" as **"German Board"**, without naming a
-specialty, because no source names it.
+The site publishes two German certifications, in this order:
 
-**Required:** the exact specialty of the German Board in English (e.g.
-Internal Medicine / Nephrology) — or confirmation that "German Board"
-without a specialty is correct.
+1. البورد الألماني في الأمراض الباطنية — German Board in Internal Medicine
+2. البورد الألماني في أمراض الكلى وزراعة الكلى وضغط الدم — German Board in Nephrology, Kidney Transplantation and Hypertension
+
+**Status:** confirmed by the client certificate list instruction (2026-11-21).
 
 ## 4. Optional channels
 

@@ -40,6 +40,9 @@ const BRAND_IMAGE =
 /** Client-supplied portrait (public/images/dr-tariq-portrait.png). */
 const PORTRAIT_FILE =
   "Client-supplied photograph (public/images/dr-tariq-portrait.png), Oct 2026";
+/** Client instruction for the certificates section. */
+const CLIENT_CERTIFICATIONS =
+  "Client instruction for the certificates section (Nov 2026)";
 /** Client-provided text/directions in the site brief. */
 const CLIENT_BRIEF = "Client brief for this website (Oct 2026)";
 
@@ -102,8 +105,18 @@ export const doctor = {
     source: PORTRAIT_FILE,
   } as { url: string | null; verified: boolean; source: string | null },
 
-  /** Qualifications exactly as listed on the hospital doctor profile. */
+  /** Board certifications published on the site. */
   qualifications: [
+    {
+      ar: "البورد الألماني في الأمراض الباطنية",
+      en: "German Board in Internal Medicine",
+      source: CLIENT_CERTIFICATIONS,
+    },
+    {
+      ar: "البورد الألماني في أمراض الكلى وزراعة الكلى وضغط الدم",
+      en: "German Board in Nephrology, Kidney Transplantation and Hypertension",
+      source: CLIENT_CERTIFICATIONS,
+    },
     {
       ar: "البورد الأردني في الأمراض الباطنية",
       en: "Jordanian Board in Internal Medicine",
@@ -112,13 +125,6 @@ export const doctor = {
     {
       ar: "البورد الأردني في أمراض الكلى",
       en: "Jordanian Board in Nephrology",
-      source: HOSPITAL_PAGE,
-    },
-    {
-      // The hospital page states "شهادة البورد الألماني" without naming the
-      // exact specialty or issuing organization — do not invent them.
-      ar: "البورد الألماني",
-      en: "German Board",
       source: HOSPITAL_PAGE,
     },
   ] as Array<{ ar: string; en: string; source: string }>,
