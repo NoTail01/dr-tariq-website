@@ -130,7 +130,6 @@ export const en = {
     portraitNote: "Dr Tariq Abu Hweij — consultant in internal medicine and nephrology.",
     qualificationsTitle: "Qualifications",
     qualificationsIntro: "Board certifications listed for Dr Tariq Abu Hweij.",
-    qualificationsNote: "German certifications are shown first, followed by the Jordanian certifications.",
     membershipsTitle: "Memberships",
     membershipsNotes: [
       "Member of the German Association for Internal Medicine and Cardiology — as stated on the supplied clinic branding.",

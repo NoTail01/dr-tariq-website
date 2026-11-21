@@ -138,9 +138,6 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
                   </li>
                 ))}
               </ul>
-              <p className="mt-4 text-xs leading-relaxed text-ink-500 break-words-safe">
-                {dict.about.qualificationsNote}
-              </p>
             </div>
 
             <div className="rounded-3xl border border-brand-100 bg-white p-6">

@@ -130,7 +130,6 @@ export const ar: Dictionary = {
     portraitNote: "الدكتور طارق أبو حويج — استشاري أمراض الباطنية والكلى.",
     qualificationsTitle: "المؤهلات العلمية",
     qualificationsIntro: "شهادات البورد المدرجة للدكتور طارق أبو حويج.",
-    qualificationsNote: "تُعرض الشهادات الألمانية أولاً، تليها الشهادات الأردنية.",
     membershipsTitle: "العضويات",
     membershipsNotes: [
       "عضو الجمعية الألمانية لأمراض الباطنية والقلب — كما ورد في الهوية المصرّح بها للعيادة.",
